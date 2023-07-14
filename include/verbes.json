@@ -1,0 +1,109 @@
+{
+    "titre": "Le conjugueur en Darija Marocain",
+    "Auteur": "Alexis Dupuis",
+	"Licence":"Creative Commons CC BY",
+    "items": [
+		{
+			"verbeD": "egg",
+			"verbeF": "faire",
+            "verbeDAR": "ⴳⴳ",
+            "forme": "C1",
+			"R1": "e",
+			"R2": "g",
+			"R3": "g",
+			"R4": ""
+        },
+		{
+			"verbeD": "ekk",
+			"verbeF": "passer",
+            "verbeDAR": "ⴽⴽ",
+            "forme": "C1",
+			"R1": "e",
+			"R2": "k",
+			"R3": "k",
+			"R4": ""
+        },
+		{
+			"verbeD": "ecc",
+			"verbeF": "manger",
+            "verbeDAR": "ⴽⴽ",
+            "forme": "C3",
+			"R1": "e",
+			"R2": "c",
+			"R3": "c",
+			"R4": "e",
+			"R5": "t",
+			"R6": "t"
+        },	
+		{
+			"verbeD": "ejj",
+			"verbeF": "laisser",
+            "verbeDAR": "ⵊⵊ",
+            "forme": "C3",
+			"R1": "j",
+			"R2": "j",
+			"R3": "",
+			"R4": ""
+        },
+		{
+			"verbeD": "eww",
+			"verbeF": "cuire",
+            "verbeDAR": "ⵡⵡ",
+            "forme": "C4",
+			"R1": "w",
+			"R2": "w",
+			"R3": "",
+			"R4": ""
+        },
+		{
+			"verbeD": "ttu",
+			"verbeF": "oublier",
+            "verbeDAR": "ⵜⵜⵓ",
+            "forme": "C-v",
+			"R1": "t",
+			"R2": "t",
+			"R3": "",
+			"R4": ""
+        },
+		{
+			"verbeD": "jju",
+			"verbeF": "piquer",
+            "verbeDAR": "ⵊⵊⵓ",
+            "forme": "C-v",
+			"R1": "j",
+			"R2": "j",
+			"R3": "",
+			"R4": ""
+        },
+		{
+			"verbeD": "ẓẓu",
+			"verbeF": "planter",
+            "verbeDAR": "ⵥⵥⵓ",
+            "forme": "C-v",
+			"R1": "ẓ",
+			"R2": "ẓ",
+			"R3": "",
+			"R4": ""
+        },
+		{
+			"verbeD": "arr",
+			"verbeF": "rendre",
+            "verbeDAR": "ⴰⵔⵔ",
+            "forme": "v-C1",
+			"R1": "a",
+			"R2": "r",
+			"R3": "r",
+			"R4": ""
+        },
+		{
+			"verbeD": "uff",
+			"verbeF": "mouiller",
+            "verbeDAR": "ⵓⴼⴼ",
+            "forme": "v-C2",
+			"R1": "u",
+			"R2": "f",
+			"R3": "f",
+			"R4": ""
+        }				
+	]
+}
