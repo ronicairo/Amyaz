@@ -1,0 +1,161 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{ 'navigation.login'|trans }}
+{% endblock %}
+
+{% block body %}
+	<style>
+		.login-box {
+			width: 100%;
+			max-width: 500px;
+			margin: 0 auto;
+			background: rgba(0, 0, 0, 0.5);
+			box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+			padding: 40px;
+			border-radius: 10px;
+		}
+
+		.login-box h1 {
+			margin: 0 0 30px;
+			color: #fff;
+			text-align: center;
+		}
+
+		.user-box {
+			margin-bottom: 20px;
+		}
+
+		.user-box label {
+			display: block;
+			margin-bottom: 5px;
+			font-size: 16px;
+			color: #fff;
+		}
+
+		.user-box input {
+			width: 100%;
+			padding: 10px;
+			font-size: 16px;
+			color: #fff;
+			border: none;
+			border-bottom: 1px solid #fff;
+			background: transparent;
+			outline: none;
+		}
+
+		.show-password {
+			position: absolute;
+			right: 10px;
+			top: 70%;
+			transform: translateY(-50%);
+			color: #03e9f4;
+			cursor: pointer;
+			font-size: 20px;
+		}
+
+		.checkbox label {
+			font-size: 15px;
+			color: #fff;
+		}
+
+		.checkbox input {
+			margin-right: 5px;
+		}
+
+		.login-box a {
+			color: #03e9f4;
+			text-decoration: none;
+		}
+
+		.btn-outline-light {
+			width: 100%;
+			border: 1px solid #fff;
+			transition: 0.3s;
+		}
+
+
+		.user-box {
+			position: relative;
+		}
+
+		.user-box .show-password {
+			position: absolute;
+			right: 10px;
+			top: 70%;
+			transform: translateY(-50%);
+		}
+	</style>
+
+	<div class="col-11 mx-auto">
+		{% include 'include/flashes.html.twig' %}
+	</div>
+
+	<form method="post">
+		{% if error %}
+			<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+		{% endif %}
+
+		{% if app.user %}
+			<div class="mb-3">
+				{{ 'button.log_as'|trans }}
+				{{ app.user.userIdentifier }},
+				<a href="{{ path('app_logout') }}">{{ 'button.logout'|trans }}</a>.
+			</div>
+		{% endif %}
+
+		<div class="login-box">
+			<h1 class="h3 mb-3 font-weight-normal">{{ 'navigation.login'|trans }}</h1>
+			<div class="user-box">
+				<label for="inputEmail">Email</label>
+				<input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
+			</div>
+			<div class="user-box">
+				<label for="inputPassword">Mot de passe</label>
+				<input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+				<i class="bi bi-eye show-password" id="togglePassword" onclick="togglePasswordVisibility()"></i>
+			</div>
+			<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+			<input type="hidden" id="recaptcha_response" name="recaptcha_response">
+			<div class="checkbox mb-3">
+				<label>
+					<input type="checkbox" name="_remember_me">
+					{{ 'button.remember_me'|trans }}
+				</label>
+			</div>
+			<p>
+				<a href="{{ path('forgotten_password') }}">{{ 'button.password_forgot'|trans }}</a>
+			</p>
+			<p class="text-white">{{ 'button.no_account'|trans }}
+				<a href="{{ path('app_register') }}">{{ 'button.register'|trans }}</a>
+			</p>
+			<button class="btn btn-outline-light" type="submit">
+				{{ 'button.login'|trans }}
+			</button>
+		</div>
+	</form>
+
+	<script>
+		function togglePasswordVisibility() {
+const passwordInput = document.getElementById('inputPassword');
+const toggleIcon = document.getElementById('togglePassword');
+if (passwordInput.type === 'password') {
+passwordInput.type = 'text';
+toggleIcon.classList.remove('bi-eye');
+toggleIcon.classList.add('bi-eye-slash');
+} else {
+passwordInput.type = 'password';
+toggleIcon.classList.remove('bi-eye-slash');
+toggleIcon.classList.add('bi-eye');
+}
+}
+	</script>
+	<script src='https://www.google.com/recaptcha/api.js?render="{{ site_key }}'></script>
+	<script>
+		grecaptcha.ready(function () {
+grecaptcha.execute('{{ site_key }}', {action: 'login'}).then(function (token) {
+document.getElementById('recaptcha_response').value = token;
+});
+});
+	</script>
+{% endblock %}

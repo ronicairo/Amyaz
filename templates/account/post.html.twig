@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'post.title'|trans }}{% endblock %}
+
+{% block body %}
+
+    <h1 class="mt-4 text-center">{{ 'post.title'|trans }}</h1>
+
+{% if posts is empty %}
+			<p class="mt-2" style="text-align: center;">{{ 'pending_request.no_request_logged_in'|trans({'%path_traduction_new%': path('app_traduction_new')})| raw }}</p>
+{% else %}
+    <div class="mt-5 container">
+        <div class="row justify-content-center">
+            <div class="col-12">
+            	<div class="table-responsive">
+                <table class="table table-striped table-bordered text-center">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th class="align-middle">{{ 'post.french_word'|trans }}</th>
+                            <th class="align-middle">{{ 'post.english_word'|trans }}</th>
+                            <th class="align-middle">{{ 'post.rif_singular'|trans }}</th>
+                            <th class="align-middle">{{ 'post.rif_plural'|trans }}</th>
+                            <th class="align-middle">{{ 'post.phonetic_singular'|trans }}</th>
+                            <th class="align-middle">{{ 'post.phonetic_plural'|trans }}</th>
+                            <th class="align-middle">{{ 'post.status'|trans }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for post in posts %}
+                            <tr>
+                                <td>{{ post.wordFR }}</td>
+                                <td>{{ post.wordEN }}</td>
+                                <td>{{ post.singular }}</td>
+                                <td>{{ post.plural }}</td>
+                                <td>{{ post.phoneticSingular }}</td>
+                                <td>{{ post.phoneticPlural }}</td>
+                                <td>
+                                    {% if post.status %}
+                                        {% if post.status.id == 1 %}
+                                            <span style="color: grey;">{{ 'post.pending'|trans }}</span>
+                                        {% elseif post.status.id == 2 %}
+                                            <span style="text-decoration: underline; cursor: pointer; color: red;" data-bs-toggle="modal" data-bs-target="#exampleModal" data-justification="{{ post.justification }}">{{ 'post.decline'|trans }}</span>
+                                        {% elseif post.status.id == 3 %}
+                                            <span style="color: green;">{{ 'post.validate'|trans }}</span>
+                                        {% elseif post.status.id == 4 %}
+                                            <span style="text-decoration: underline; cursor: pointer; color: orange;" data-bs-toggle="modal" data-bs-target="#exampleModal" data-justification="{{ post.justification }}">{{ 'post.change'|trans }}</span>
+                                        {% endif %}
+                                    {% else %}
+                                        <span>{{ 'post.moderator'|trans }}</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">{{ 'post.moderator_explanation'|trans }}</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'post.close'|trans }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const exampleModal = document.getElementById('exampleModal');
+            exampleModal.addEventListener('show.bs.modal', function (event) {
+                // Button that triggered the modal
+                const button = event.relatedTarget;
+                // Extract info from data-* attributes
+                const justification = button.getAttribute('data-justification');
+                // Update the modal's content
+                const modalBody = exampleModal.querySelector('.modal-body');
+                modalBody.textContent = justification;
+            });
+        });
+    </script>
+
+{% endblock %}

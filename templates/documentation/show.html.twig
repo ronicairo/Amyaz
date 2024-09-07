@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Documentation
+{% endblock %}
+
+{% block body %}
+	<h1>Documentation</h1>
+
+	<table class="table">
+		<tbody>
+			<tr>
+				<th>Id</th>
+				<td>{{ documentation.id }}</td>
+			</tr>
+			<tr>
+				<th>Titre FR</th>
+				<td>{{ documentation.titleFr }}</td>
+			</tr>
+			<tr>
+				<th>Titre EN</th>
+				<td>{{ documentation.titleEn }}</td>
+			</tr>
+			<tr>
+				<th>Contenu FR</th>
+				<td>{{ documentation.contentFr }}</td>
+			</tr>
+			<tr>
+				<th>Contenu EN</th>
+				<td>{{ documentation.contentEn }}</td>
+			</tr>
+			<tr>
+				<th>File</th>
+				<td>{{ documentation.file }}</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<a href="{{ path('documentation_index') }}">{{ 'button.back_list'|trans }}</a>
+
+	<a href="{{ path('documentation_edit', {'id': documentation.id}) }}">{{ 'button.edit'|trans }}</a>
+
+	{{ include('documentation/_delete_form.html.twig') }}
+{% endblock %}

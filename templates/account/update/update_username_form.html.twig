@@ -1,0 +1,81 @@
+{% extends 'base.html.twig' %}
+
+{% form_theme form 'form/_form_errors.html.twig' %}
+
+{% block title %}{{ 'title.edit_username'|trans }}{% endblock %}
+
+{% block body %}
+    <style>
+        .edit-username-box {
+           	width: 100%;
+			max-width: 500px;
+			margin: 0 auto;
+			padding: 40px;
+			background: rgba(0, 0, 0, 0.5);
+			box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+			border-radius: 10px;
+        }
+
+        @media(min-width: 768px) {
+            .edit-username-box {
+                max-width: 60%;
+            }
+        }
+
+        .edit-username-box h1 {
+            margin: 0 0 30px;
+            padding: 0;
+            color: #fff;
+            text-align: center;
+        }
+
+        .edit-username-box .user-box {
+            position: relative;
+        }
+
+        .edit-username-box .user-box input {
+            width: 100%;
+            padding: 2px 0;
+            font-size: 16px;
+            color: #fff;
+            margin-bottom: 30px;
+            border: none;
+            border-bottom: 1px solid #fff;
+            outline: none;
+            background: transparent;
+        }
+
+        .edit-username-box .user-box label {
+            position: relative;
+            top: 0;
+            left: 0;
+            padding: 10px 0;
+            font-size: 16px;
+            color: #fff;
+            pointer-events: none;
+            transition: 0.5s;
+        }
+
+        .edit-username-box .user-box input:focus ~ label,
+        .edit-username-box .user-box input:valid ~ label {
+            top: -20px;
+            left: 0;
+   
+            font-size: 12px;
+        }
+
+       
+
+    </style>
+
+    <div class="edit-username-box">
+        <h1 class="h3 mb-3 font-weight-normal">{{ 'title.edit_username'|trans }}</h1>
+
+        {{ form_start(form) }}
+            <div class="user-box">
+                {{ form_row(form.username) }}
+            </div>
+            <button class="d-block mt-4 mx-auto btn btn-outline-light col-7" type="submit" class="btn btn-primary">{{ 'button.confirm'|trans }}</button>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

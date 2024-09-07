@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{% if app.request.locale == 'en' %}
+		{{ grammarSheet.titleEn|raw }}
+	{% else %}
+		{{ grammarSheet.titleFr|raw }}
+	{% endif %}
+{% endblock %}
+
+{% block body %}
+
+	<div class="col-11 mx-auto">
+		{% include 'include/flashes.html.twig' %}
+	</div>
+
+	<div class="container">
+		<h1 class="display-3">
+			{% if app.request.locale == 'en' %}
+				{{ grammarSheet.titleEn|raw }}
+			{% else %}
+				{{ grammarSheet.titleFr|raw }}
+			{% endif %}
+		</h1>
+		<p class="lead">
+			{% if app.request.locale == 'en' %}
+				{{ grammarSheet.subtitleEn|raw }}
+			{% else %}
+				{{ grammarSheet.subtitleFr|raw }}
+			{% endif %}
+		</p>
+	</div>
+
+	<div class="container px-4 py-5" id="featured-3">
+		<div>
+			{% if app.request.locale == 'en' %}
+				{{ grammarSheet.contentEn|raw }}
+			{% else %}
+				{{ grammarSheet.contentFr|raw }}
+			{% endif %}
+		</div>
+	</div>
+	<div class="container px-4 py-5" id="featured-3">
+		{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MODERATOR') %}
+			<a href="{{ path('grammarsheet_edit', {'id': grammarSheet.id}) }}">{{ 'button.edit'|trans }}</a>
+
+			<form action="{{ path('grammarsheet_delete', {'id': grammarSheet.id}) }}" method="post" onsubmit="return confirm('Are you sure you want to delete this item?');">
+				<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ grammarSheet.id) }}">
+				<button type="submit" class="btn btn-danger">Delete</button>
+			</form>
+		</div>
+	{% endif %}
+
+{% endblock %}

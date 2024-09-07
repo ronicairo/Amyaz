@@ -1,0 +1,28 @@
+# see https://symfony.com/doc/current/reference/configuration/framework.html
+framework:
+    translator:
+        default_path: '%kernel.project_dir%/translations'
+    secret: '%env(APP_SECRET)%'
+    csrf_protection: true
+    messenger:
+        transports:
+            async: '%env(MESSENGER_TRANSPORT_DSN)%'
+        routing:
+            'App\Message\SendNewsletterMessage': sync
+    rate_limiter:
+        login:
+            policy: 'sliding_window'
+            limit: 5
+            interval: '15 minutes'
+
+    # Note that the session will be started ONLY if you read or write from it.
+    session: true
+
+    #esi: true
+    #fragments: true
+
+when@test:
+    framework:
+        test: true
+        session:
+            storage_factory_id: session.storage.factory.mock_file

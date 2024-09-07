@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>{{ 'p.request_reset_password'|trans }}
+		</title>
+		<style>
+			body {
+				font-family: Arial, sans-serif;
+				margin: 0;
+				padding: 20px;
+				background-color: #f6f6f6;
+			}
+			.email-container {
+				max-width: 600px;
+				margin: 0 auto;
+				background-color: #ffffff;
+				padding: 20px;
+				border: 1px solid #e9e9e9;
+				border-radius: 10px;
+			}
+			.email-header {
+				text-align: center;
+				margin-bottom: 20px;
+			}
+			.email-header img {
+				max-width: 150px;
+			}
+			.email-body {
+				font-size: 16px;
+				line-height: 1.6;
+			}
+			.email-footer {
+				margin-top: 20px;
+				font-size: 14px;
+				color: #999999;
+				text-align: center;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="email-container">
+			<div class="email-header">
+				<img src="cid:logo_amyaz" alt="Logo Amyaz" width="60" height="50">
+			</div>
+			<div class="email-body">
+				<p>{{ 'p.hello'|trans }}
+					{{ user.username }},</p>
+				<p>{{ 'p.reset_password_link'|trans }}
+				</p>
+				<p>
+					<a href="{{ url|raw }}">{{ url|raw }}</a>
+				</p>
+				<p>{{ 'p.thanks'|trans }}.</p>
+			</div>
+			<div class="email-footer">
+				<p>&copy;
+					{{ "now"|date("Y") }}
+					{{ 'p.footer_droit'|trans }}
+				</p>
+			</div>
+		</div>
+	</body>
+</html>

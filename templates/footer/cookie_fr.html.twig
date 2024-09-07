@@ -1,0 +1,87 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Politique relative aux cookies
+{% endblock %}
+
+{% block body %}
+
+	<style>
+		.container {
+			max-width: 800px;
+			margin: 30px auto;
+			padding: 20px;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		}
+
+		h1 {
+			text-align: center;
+		}
+
+		h2 {
+			color: #333;
+			margin-top: 20px;
+		}
+
+		p {
+			margin: 10px 0;
+		}
+
+		a {
+			color: #007BFF;
+			text-decoration: none;
+		}
+
+		a:hover {
+			text-decoration: underline;
+		}
+	</style>
+
+ <h1>Politique relative aux Cookies</h1>
+	 <div class="container">
+    
+        <p>Nous utilisons des cookies sur notre site Web pour améliorer votre expérience de navigation, analyser l'utilisation de notre site et vous offrir des publicités personnalisées. Cette politique vous explique ce que sont les cookies, les types de cookies que nous utilisons, et comment vous pouvez gérer vos préférences en matière de cookies.</p>
+        
+        <h2>1. Qu'est-ce qu'un cookie ?</h2>
+        <p>Un cookie est un petit fichier texte qui est stocké sur votre appareil (ordinateur, smartphone, tablette) lorsque vous visitez un site Web. Les cookies permettent au site Web de reconnaître votre appareil et de mémoriser certaines informations, comme vos préférences ou les éléments que vous avez ajoutés à votre panier.</p>
+        
+        <h2>2. Types de Cookies que Nous Utilisons</h2>
+        <br>
+        <h4>Cookies Essentiels</h4>
+        <p>Ces cookies sont nécessaires au fonctionnement de notre site Web. Ils vous permettent de naviguer sur le site et d'utiliser ses fonctionnalités, comme l'accès aux zones sécurisées.</p>
+        
+        <h4>Cookies de Performance</h4>
+        <p>Ces cookies collectent des informations sur la façon dont les visiteurs utilisent notre site Web, comme les pages les plus visitées. Nous utilisons ces informations pour améliorer notre site.</p>
+        
+        <h4>Cookies Fonctionnels</h4>
+        <p>Ces cookies permettent à notre site de se souvenir de vos choix, comme votre nom d'utilisateur ou votre langue préférée, afin d'améliorer votre expérience de navigation.</p>
+        
+        <h2>3. Comment Gérer Vos Cookies</h2>
+        <p>Vous pouvez gérer vos préférences en matière de cookies en modifiant les paramètres de votre navigateur. La plupart des navigateurs vous permettent de bloquer ou de supprimer les cookies. Veuillez consulter les paramètres de votre navigateur pour plus d'informations.</p>
+        <p>Veuillez noter que si vous choisissez de désactiver les cookies, certaines fonctionnalités de notre site peuvent ne pas fonctionner correctement.</p>
+        
+        <h2>4. Modifications de la Politique Relative aux Cookies</h2>
+        <p>Nous pouvons mettre à jour cette politique de temps à autre pour refléter les changements apportés à nos cookies ou pour d'autres raisons opérationnelles, légales ou réglementaires. Nous vous encourageons à consulter régulièrement cette page pour rester informé de nos pratiques en matière de cookies.</p>
+        
+        <h2>5. Contact</h2>
+        <p>Si vous avez des questions concernant notre politique relative aux cookies, veuillez nous contacter à l'adresse suivante :
+        <a href="mailto:amyaz@contact.fr">amyaz@contact.fr</a></p>
+        <br>
+        <button class="btn btn-outline-dark rounded-pill" id="reset-consent">Réinitialiser le consentement</button>
+
+    </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+    // Code existant pour afficher le pop-up
+
+    // Gestionnaire de clic pour le bouton "Réinitialiser le consentement"
+    document.getElementById('reset-consent').addEventListener('click', function () {
+        deleteCookie('cookie_consent');
+        // Optionnel : Vous pouvez également forcer l'affichage du pop-up
+        document.getElementById('cookie-consent-popup').style.display = 'block';
+    });
+
+    // Fonction pour supprimer un cookie
+    function deleteCookie(name) {
+        document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
+    }})</script>
+{% endblock %}

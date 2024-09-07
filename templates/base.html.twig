@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="{{ app.request.locale }}">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="description" content="{{ 'meta.description'|trans }}">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Security-Policy">
+		<title>
+			{% block title %}
+				{{ 'meta.title'|trans }}
+			{% endblock %}
+		</title>
+		<link rel="icon" type="image/png" href="{{ asset('/img/favicon.png')}}">
+
+
+		{% block stylesheets %}
+			{{ encore_entry_link_tags('app') }}
+		{% endblock %}
+
+		<!-- CSS Libraries -->
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@100..800&family=DM+Serif+Display:ital@0;1&family=Roboto+Slab:wght@100..900&display=swap" rel="stylesheet">
+	<style>
+	.grecaptcha-badge {
+    	visibility: hidden;}
+	</style>
+	</head>
+	<body>
+		{% include "include/nav.html.twig" %}
+
+		<main id="back">
+			{% block body %}{% endblock %}
+		</main>
+
+		<div id="cookie-consent-popup" style="display: none;">
+			<div class="cookie-consent-content">
+				<p>{{ 'cookie.title'|trans|raw }}</p>
+				<button id="accept-cookies">{{ 'cookie.accept'|trans }}</button>
+				<button id="decline-cookies">{{ 'cookie.refuse'|trans }}</button>
+			</div>
+		</div>
+
+		{% include "include/footer.html.twig" %}
+
+		{% block javascripts %}
+			{{ encore_entry_script_tags('app') }}
+		{% endblock %}
+
+		<!-- JavaScript Libraries -->
+		<script src="https://www.google.com/recaptcha/api.js?render=6Lf65RUqAAAAAImNdFrcv6eBcZTN9NPAYwXPHQWx"></script>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+
+		<script>
+			document.addEventListener('DOMContentLoaded', function () {
+if (!getCookie('cookie_consent')) {
+var consentPopup = document.getElementById('cookie-consent-popup');
+consentPopup.style.display = 'block';
+}
+
+document.getElementById('accept-cookies').addEventListener('click', function () {
+setCookie('cookie_consent', 'true', 365);
+document.getElementById('cookie-consent-popup').style.display = 'none';
+});
+
+document.getElementById('decline-cookies').addEventListener('click', function () {
+document.getElementById('cookie-consent-popup').style.display = 'none';
+});
+
+function setCookie(name, value, days) {
+var expires = "";
+if (days) {
+var date = new Date();
+date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+expires = "; expires=" + date.toUTCString();
+}
+document.cookie = name + "=" + (
+value || ""
+) + expires + "; path=/";
+}
+
+function getCookie(name) {
+var nameEQ = name + "=";
+var ca = document.cookie.split(';');
+for (var i = 0; i < ca.length; i++) {
+var c = ca[i].trim();
+if (c.indexOf(nameEQ) === 0) 
+return c.substring(nameEQ.length, c.length);
+
+}
+return null;
+}
+});
+		</script>
+
+		<script>
+			$(function () {
+$('[data-toggle="tooltip"]').tooltip();
+});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,251 @@
+meta:
+    description: "Découvrez notre dictionnaire en ligne Français-Rifain, un outil complet pour apprendre et maîtriser la langue rifaine. Accédez à des fiches de grammaire détaillées, des méthodes d'apprentissage de l'alphabet rifain et une riche documentation sur la culture rifaine. Améliorez votre connaissance du rifain avec des ressources fiables et éducatives."
+    title: "Amyaz - Dictionnaire Rifain"
+
+home:
+    welcome_message: 'Bienvenue sur <span style="  color: #F26766;">Amyaz</span> !<br> Ton dictionnaire Français-Rifain.'
+    search_results: "Résultats de la recherche :"
+    search_bar: "Rechercher"
+    no_results_logged_in: "Aucun résultat trouvé.<br><a style=\"text-decoration:none; color:#F26766\" href=\"%path_traduction_new%\">Demander une traduction.</a>"
+    no_results_guest: "Aucun résultat trouvé.<br><a style=\"text-decoration:none; color: #F26766\" href=\"%path_app_login%\">Se connecter pour demander une traduction.</a>"
+    learn_alphabet: "Apprendre l'alphabet"
+    alphabet_description: "La langue rifaine peut s'écrire avec l'alphabet latin berbère mais aussi en tifinagh qui est l'alphabet traditionel du berbère."
+    latin_berber: "Berbère Latin"
+    tifinagh: "Tifinagh"
+    tifinagh_singular: "ⴰⵎⵢⵉⵡⵏ"
+    tifinagh_plural: "ⴰⵎⴰⴳⵓⵜ"
+    tifinagh_verb: "ⵙ ⵜⴼⵉⵏⴰⴳ"
+    singular: "singulier"
+    plural: "pluriel"
+    comment: "Publier"
+    avis: "Un commentaire ?"
+    grammaire_guide: "Guide de grammaire"
+    grammaire_guide_sous_titre: "Exercez-vous à la grammaire berbère rifaine avec quelques modules simples."
+    post: "Posté par"
+
+navigation:
+    home: 'Dictionnaire'
+    learning: 'Apprentissage'
+    berber_latin: 'Alphabet Berbère Latin'
+    berber_traditional: 'Alphabet Traditionnel Berbère'
+    grammar: 'Grammaire'
+    documentation: 'Documentation'
+    participation: 'Mot manquants ?'
+    login: 'Connexion'
+    profile: 'Mon profil'
+    logout: 'Déconnexion'
+    dashboard: 'Tableau de bord'
+
+post:
+    rifain_word: "Rifain"
+    title: "Mes Traductions"
+    word_requests: "Demande de traduction"
+    french_word: "Français"
+    english_word: "Anglais"
+    rif_singular: "Rifain (singulier)"
+    rif_plural: "Rifain (pluriel)"
+    phonetic_singular: "Tifinagh (singulier)"
+    phonetic_plural: "Tifinagh (pluriel)"
+    phonetic: "TIFINAGH"
+    status: "Statut"
+    pending: "En attente"
+    decline: "Refusé"
+    validate: "Validé"
+    change: "Modifié"
+    moderator: "MODÉRATEUR"
+    moderator_explanation: "Explication du modérateur"
+    close: "Fermer"
+    list_word: "Liste de mots"
+    no_found: "Aucun mot trouvé."
+    alert_request: "Vos demandes ayant été refusées par le modérateur seront supprimé de ce tableau dans un délai d'une semaine."
+    new_trad_admin: "Ajout d'une traduction"
+    new_trad: "Demande de traduction"
+    champ_obligatoire: "Les champs suvis de * ont un caractère obligatoire."
+    requested_by: "Posté par"
+    no_user: "Utilisateur supprimé"
+    worday: "Mot du jour"
+    no_worday: "Aucun mot du jour pour aujourd'hui"
+
+category:
+    title: "Catégorie de document"
+
+pending_request:
+    title: "Demande de traduction en attente"
+    no_request_pending: "Aucune demande de traduction en attente"
+    no_request_logged_in: "Aucune demande de traduction trouvée.<br><a style=\"text-decoration:none; color: #03e9f4\" href=\"%path_traduction_new%\">Demander une traduction.</a>"
+
+documentation:
+    add: "Ajouter un document"
+    title: "Centre de documentation de la langue rifaine"
+    resume: "Amyaz met à disposition des internautes l'ensemble des publications relatives à la langue rifaine.<br> Ces publications sont pour l'essentiel des dictionnaires de langue rifaine, des manuels de conjugaison et d'apprentissage, et des romans, journaux et magasines d'expression rifaine.<br>L'objectif est de collecter dans un même endroit ces publications."
+
+button:
+    back_list: "Revenir à la liste"
+    create_new: "Créer"
+    edit: "Modifier"
+    delete: "Supprimer"
+    show: "Voir"
+    confirm: "Confirmer"
+    pdf: "Cliquez ici pour télécharger le fichier PDF"
+    remember_me: "Se souvenir de moi"
+    login: "Se connecter"
+    logout: "Se déconnecter"
+    no_account: "Pas de compte ?"
+    already_account: "Vous avez un compte ?"
+    register: "S'inscrire"
+    password_forgot: "Mot de passe oublié"
+    log_as: "Vous êtes connecté en tant que"
+    activate_account: "Activer mon compte"
+
+account-user:
+    title: "Détails de l'utilisateur"
+    date_creation: "Date de création"
+    no_comments: "Aucun commentaire."
+    no_translation: "Aucune traduction."
+    delete_user: "Supprimer l'utilisateur"
+
+article:
+    particule_d: "Particule D"
+    negation: "Négation"
+
+footer:
+    subscribe_newsletter: "Ne manquez jamais une mise à jour sur les richesses de la langue rifaine !<br>Abonnez-vous à notre newsletter pour recevoir les dernières traductions directement dans votre boîte mail."
+    subscribe: "S'inscrire"
+    se_connecter: "Se connecter"
+    se_deconnecter: "Se déconnecter"
+    mentions_legales: "Mentions légales"
+    about_us: "À propos"
+    cookies: "Cookies"
+    accueil: "Accueil"
+
+cookie:
+    title: "Nous utilisons des cookies pour améliorer votre expérience. En continuant à visiter ce site, vous acceptez notre utilisation des cookies."
+    accept: "Accepter"
+    refuse: "Refuser"
+
+form:
+    name: "Nom"
+    not_blank: "Ce champ ne peut etre vide."
+    min_message: "Votre email doit comporter au minimum {{ limit }} caractères.(email : {{ value }})"
+    max_message: "Votre email doit comporter au maximum {{ limit }} caractères.(email : {{ value }})"
+    min_comment: "Votre commentaire doit comporter au minimum {{ limit }} caractères.(commentaire : {{ value }})"
+    max_comment: "Votre commentaire doit comporter au maximum {{ limit }} caractères.(commentaire : {{ value }})"
+    valid_email: "Veuillez saisir un email valide."
+    abonner: "S'abonner"
+    validate: "Valider"
+    rechercher_titre: "Rechercher par titre"
+    choisir_categorie: "Catégorie"
+    rechercher: "Rechercher"
+    filtrer: "Filtrer"
+    new_mail : "Nouvelle adresse email"
+    repeat_mail: "Répétez l'email"
+    create: "Créer"
+    edit: "Modifier"
+    name_category: "Nom de la catégorie"
+    password: "Mot de passe"
+    password_repeat: "Répétez le mot de passe"
+    password_not_same: "Les mots de passe ne sont pas identiques."
+    new_password: "Nouveau mot de passe"
+    new_username: "Nouveau nom d'utilisateur"
+    current_password: "Mot de passe actuel"
+    min_password: "Votre mot de passe doit comporter au minimum {{ limit }} caractères.(mot de passe : {{ value }})"
+    max_password: "Votre mot de passe doit comporter au maximum {{ limit }} caractères.(mot de passe : {{ value }})"
+    min_username: "Votre nom doit comporter au minimum {{ limit }} caractères.(nom : {{ value }})"
+    max_username: "Votre nom doit comporter au maximum {{ limit }} caractères.(nom : {{ value }})"
+    regex_password: "Votre mot de passe doit contenir au moins une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial."
+    regex_commentaire: "Vous ne pouvez insérer du code HTML dans votre commentaire."
+    edit_grammar: "Modifier une fiche de grammaire"
+    create_grammar: "Créer une fiche de grammaire"
+
+title:
+    edit_traduction: "Modifier la traduction"
+    edit_password: "Modifier mon mot de passe"
+    edit_username: "Modifier mon nom d'utilisateur"
+    edit_profile: "Modifier mon profil"
+    edit_email: "Modifier mon email"
+    edit_category: "Modifier une catégorie"
+    edit_profile_picture: "Modifier ma photo de profil"
+    reset_password:  "Réinitialisation du mot de passe"
+    choose_password: "Définissez votre mot de passe"
+    email_newsletter: "Votre liste des mots rifain de la semaine"
+    verifier_compte: "Verification de votre compte Amyaz"
+    delete_my_account: "Supprimer mon compte"
+    create_doc: "Créer une nouvelle documentation"
+    create_category: "Créer une nouvelle catégorie"
+    create_documentation: "Créer une nouvelle documentation"
+
+addflash:
+    obligation_connexion: "Vous devez être connecté pour accéder à cette fonctionnalité."
+    verification_compte: "Vous devez vérifier votre compte pour accéder à cette fonctionnalité.<br><a href='%resend_verification_url%'>Cliquez ici</a> pour renvoyer l'e-mail de vérification."
+    attente_validation: "Votre mot sera ajouté ou complété dans le dictionnaire après validation du modérateur. <a href='%status_url%'>Voir statut</a>."
+    traduction_ajouter: "Votre traduction a bien été ajoutée au dictionnaire."
+    traduction_supprimer: "La traduction a bien été supprimée."
+    compte_supprimer: "Votre compte a bien été supprimé."
+    compte_supprimer_echec: "Mot de passe incorrect. La suppression du compte a échoué."
+    restreindre_acces: "Vous n'avez pas les droits pour accéder à cette page."
+    connexion_acces: "Vous devez vous connecter pour accéder à cette page."
+    username_update_success: "Votre nom d'utilisateur a bien été modifié."
+    picture_update_success: "Votre photo de profil a bien été modifiée."
+    email_update_success: "Votre email a bien été modifié."
+    password_echec: "Le mot de passe actuel n'est pas valide"
+    password_success: "Votre mot de passe a bien été mis à jour"
+    email_not_same: "Les adresses emails ne sont pas identiques"
+    comment_success: "Votre commentaire a bien été envoyé."
+    already_subscribed: "Vous avez déjà souscrit à notre newsletter avec cette adresse email."
+    subscribed_success: "Vous êtes maintenant abonné à notre newsletter!"
+    unsubscribed_success: "Vous avez été désinscrit de la newsletter."
+    email_not_found: "Adresse-email non trouvée."
+    email_non_specifie: "Adresse e-mail non spécifiée."
+    comment_deleted_success: "Le commentaire a bien été supprimé."
+    documentation_update_success: "La documentation a bien été modifiée avec succès !"
+    documentation_create_success: "La documentation a bien été crée avec succès !"
+    documentation_delete_success: "La documentation a bien été supprimée avec succès !"
+    file_upload_error: "Le fichier n'a pas pu être téléchargé."
+    already_connected: "Vous êtes déjà connecté."
+    activation_email_sent: "Un email d'activation a été envoyé. Veuillez vérifier votre boîte de réception."
+    account_already_verified: "Votre compte est déjà vérifié."
+    email_verified_success: "Votre adresse email a bien été vérifiée."
+    no_verification_needed_or_not_logged_in: "Vous n'avez pas besoin de vérifier votre compte ou vous n'êtes pas connecté."
+    verification_email_sent: "Un e-mail de vérification vous a été envoyé par mail."
+    reset_email_sent: "Un email de réinitialisation vous a été envoyé !"
+    email_not_recognized: "Il n'existe aucun compte lié à cette adresse email."
+    jeton_invalide: "Jeton invalide"
+    traduction_already_exist: "Le mot %mot% existe déjà."
+    only_one_comment: "Vous avez déjà posté un commentaire."
+    email_already_use: "Cette adresse email est déjà liée à un compte."
+
+p:
+    hello: "Bonjour"
+    thanks: "Merci"
+    reset_password_link: "Pour réinitialiser votre mot de passe, veuillez cliquer sur le lien suivant :"
+    footer_droit: "Amyaz. Tous droits réservés."
+    request_reset_password: "Votre demande de réinitialisation de mot de passe"
+    link_activate_email: "Veuillez cliquer sur le lien suivant pour activer votre compte Amyaz :"
+    thank_subscribe: "Merci de votre abonnement à notre newsletter."
+    unsubscribe_newsletter: "Se désinscrire de la newsletter"
+    footer_subscribe: "Vous recevez cet email car vous êtes abonné à notre newsletter."
+    title_mail_newsletter: "Voici 10 mots pour aujourd'hui"
+    current_email: "Mon email actuel"
+    no_result: "Aucun résultat trouvé"
+    
+account:
+    add: "Ajouter une traduction"
+    ask: "Demander une traduction"
+    my_request_translation: "Mes demandes de traduction"
+    grammar_learn: "Fiches de grammaire"
+    show_user: "Voir les utilisateurs"
+    pending_request: "Demande en attente"
+    list_word: "Liste de mots"
+    category_doc: "Catégories de documentation"
+
+grammar:
+    title: "La grammaire en rifain"
+    p1: "Pour parler et écrire correctement le rifain, il est important de connaître les principales règles de la grammaire berbère."
+    p2: "Nos fiches de grammaire comportent systématiquement une règle de grammaire et des exemples concrets. De plus, un quizz est disponible pour chaque fiche afin que vous puissiez vous exercer."
+    h2: "Fiches grammaire"
+    no_fiche: "Aucune fiche de grammaire disponible"
+
+td:
+    create: "Crée le"
+    name: "Nom"
+    update: "Modifié le"

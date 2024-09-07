@@ -1,0 +1,759 @@
+{% extends 'base.html.twig' %}
+
+{% form_theme form 'form/_form_errors.html.twig' %}
+{% form_theme formNews 'form/_form_errors.html.twig' %}
+
+{% block title %}
+	{{ 'meta.title'|trans }}
+{% endblock %}
+
+{% block body %}
+	<style>
+		.search-form {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.search-form input:focus {
+			outline: none;
+			box-shadow: none;
+		}
+
+		.search-form > div {
+			position: relative;
+			display: flex;
+			box-shadow: 5px 5px 5px 2px rgba(0, 0, 0, 0.5);
+			border-radius: 20px;
+			width: 100%;
+			max-width: 700px;
+			overflow: hidden;
+		}
+
+		.search-form select {
+			padding: 12.5px;
+			font-size: 16px;
+			border: none;
+			background-color: rgba(255, 255, 255, 0.8);
+			border-radius: 20px 0 0 20px;
+			flex: 1;
+			max-width: 100px;
+			appearance: none;
+			background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAiIGhlaWdodD0iNiIgdmlld0JveD0iMCAwIDEwIDYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTSAwLjQ1NzAzOTM5LDEuMzk2MDMgTCAxLjI5MzY4MywwLjU1MDI4NTcgTCA1LDAuNTUwMjg1NyBMIDguNzA2MzIsMC41NTAyODU3IEwgOS41NDI5NiwwLjU1MDI4NTcgTCA1LDQuNTc4OTcgWiIgZmlsbD0iIzAwMCIvPjwvc3ZnPg==');
+			background-repeat: no-repeat;
+			background-position: right 10px center;
+			color: #000;
+		}
+
+		.search-form select::-ms-expand {
+			display: none;
+		}
+
+		.search-form input[type="text"] {
+			padding: 10px;
+			font-size: 16px;
+			border-radius: 0;
+			border: 1px solid rgba(255, 255, 255, 0.8);
+			background-color: rgba(255, 255, 255, 0.8);
+			flex: 2;
+			min-width: 0;
+		}
+
+		.search-button {
+			padding: 10px 20px;
+			font-size: 16px;
+			background-color: rgba(0, 0, 0, 0.7);
+			color: white;
+			border: none;
+			cursor: pointer;
+			transition: background-color 0.3s ease;
+			border-radius: 0 20px 20px 0;
+		}
+
+		.search-form button:hover {
+			background-color: #A0BBD4;
+		}
+
+		@media(max-width: 400px) {
+			.search-form select,
+			.search-form input[type="text"],
+			.search-form button {
+				font-size: 12px;
+			}
+
+			.search-form select {
+				min-width: 50px;
+				color: black !important;
+				background-color: rgba(255, 255, 255, 0.8) !important;
+			}
+
+			.search-form input[type="text"] {
+				padding: 6px;
+			}
+
+			.search-form .search-button {
+				padding: 6px 12px;
+			}
+
+		}
+
+		h2 {
+			font-family: 'DM Serif Display', serif;
+		}
+
+
+		.comment-box {
+			margin: 0 auto; /* Ensure the comment box is centered */
+		}
+
+		.commentaire {
+			margin: 10px 0; /* Space between comments */
+		}
+
+		.row.justify-content-center {
+			justify-content: center;
+		}
+
+		.col-12.col-md-6 {
+			max-width: 500px; /* Ensure columns don’t get too wide */
+			padding-left: 15px;
+			padding-right: 15px;
+		}
+
+		.pagination-container {
+			text-align: center;
+		}
+
+
+		.comment-box,
+		.commentaire {
+			background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5));
+			box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+			border: 1px solid #333;
+			border-radius: 20px;
+			max-width: 100%;
+			padding: 20px;
+			margin-bottom: 20px;
+		}
+
+		.comment-box {
+			width: 100%; /* Ensure the comment form takes the full width */
+			max-width: 500px; /* Keep it from becoming too wide */
+			margin: 0 auto; /* Center it horizontally */
+		}
+
+		.commentaire {
+			margin: 10px 0; /* Space between comments */
+		}
+
+		.row.justify-content-center.align-items-center {
+			display: flex;
+			align-items: center; /* Align the comment form with the middle of the comments section */
+		}
+
+		.col-12.col-md-6 {
+			max-width: 500px; /* Keep the columns the same width */
+		}
+
+		.profile-img {
+			width: 50px;
+			height: 50px;
+			border-radius: 50%;
+			object-fit: cover;
+			border: 1px solid white;
+		}
+
+		.comment-box h3 {
+			margin: 0 0 30px;
+			padding: 0;
+			color: #ffffff;
+			text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+			text-align: center;
+		}
+
+		.comment-box .user-box {
+			position: relative;
+			margin-bottom: 20px;
+		}
+
+		#comment_opinion {
+			width: 100%;
+			padding: 10px;
+			font-size: 16px;
+			color: #fff;
+			border: none;
+			border-bottom: 1px solid #fff;
+			background: transparent;
+			box-shadow: none;
+			outline: none;
+		}
+		.newsletter-box {
+			position: relative;
+			background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5));
+			box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+			width: 100%;
+			color: white;
+			margin: 30px auto auto;
+			border: 1px solid #333;
+			border-radius: 20px;
+			padding: 20px;
+			box-sizing: border-box;
+		}
+
+		.newsletter-box .subscribe-box {
+			margin: 20px;
+		}
+
+		.newsletter-box .subscribe-box input {
+			width: 100%;
+			font-size: 16px;
+			text-align: center;
+			color: white;
+			border: none;
+			border-bottom: 1px solid white;
+			background: transparent;
+			box-shadow: none;
+			outline: none
+		}
+
+		.card-container {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			margin-top: 30px;
+
+		}
+
+		.underline-title,
+		.underline-title > p {
+			text-decoration: underline;
+			margin: 0;
+		}
+
+		/* Par défaut, les flèches sont positionnées comme d'habitude */
+		.carousel-control-prev,
+		.carousel-control-next {
+			width: 5%; /* Réduire la taille de la zone de clic pour éviter les chevauchements */
+		}
+
+		.carousel-control-prev-icon {
+			background-image: url("data:image/svg+xml;charset=utf8, %3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E") !important;
+		}
+
+		.carousel-control-next-icon {
+			background-image: url("data:image/svg+xml;charset=utf8, %3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E") !important;
+		}
+
+		.carousel-control-prev-icon,
+		.carousel-control-next-icon {
+			width: 100%;
+			height: 100%;
+		}
+
+		/* Ajustements spécifiques pour les petits écrans */
+		@media(max-width: 768px) {
+			/* Déplacez les flèches de navigation plus vers l'extérieur */
+			.carousel-control-prev {
+				left: -10px; /* Ajuster cette valeur pour éloigner la flèche du bouton */
+			}
+
+			.carousel-control-next {
+				right: -10px; /* Ajuster cette valeur pour éloigner la flèche du bouton */
+			}
+
+			/* Optionnel: réduire la taille des icônes de flèche */
+			.carousel-control-prev-icon,
+			.carousel-control-next-icon {
+				width: 50px;
+				height: 50px;
+			}
+		}
+
+
+		.no-border {
+			border: none;
+			background: transparent;
+		}
+
+		.custom-card {
+			transition: border-color 0.3s ease;
+		}
+
+		.custom-card:hover {
+			box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+		}
+
+		.card {
+			background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5));
+			box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+			border: 1px solid #333;
+			border-radius: 20px;
+			width: 100%;
+			color: #ffffff;
+			padding: 0;
+			position: relative;
+			text-align: center;
+			margin: 20px;
+		}
+
+		.btn-custom-size {
+			font-size: 1.25rem;
+		}
+
+		.search-form .keyboard-icon {
+			background-color: rgba(255, 255, 255, 0.8);
+			cursor: pointer;
+			font-size: 20px;
+			padding: 8px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			z-index: 1001;
+		}
+
+		.keyboard-icon {
+			cursor: pointer;
+			color: black !important;
+			background-color: rgba(255, 255, 255, 0.8);
+			border: none;
+			font-size: 20px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.rifain-characters {
+			display: none;
+			position: absolute;
+			background-color: #A0BBD4;
+			border-radius: 0;
+			padding: 8px;
+			z-index: 1000;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+		}
+
+		.rifain-characters span {
+			cursor: pointer;
+			margin: 3px;
+			padding-left: 4px;
+			padding-bottom: 4px;
+			font-size: 16px;
+			display: inline-block;
+		}
+
+		.alert-custom {
+			background: rgba(0, 0, 0, 0.5);
+			box-sizing: border-box;
+			box-shadow: 0 15px 20px rgba(0, 0, 0, 0.6);
+			border: 1px solid black;
+			border-radius: 15px;
+		}
+
+		main {
+			flex: 1;
+			margin-bottom: 0;
+		}
+
+		.worday {
+			background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5));
+			box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+			border: 1px solid #333;
+			border-radius: 20px;
+			max-width: 600px;
+			padding: 20px;
+			margin-bottom: 70px;
+			margin-top: 10px;
+		}
+
+		.worday h2 {
+			color: #dec5a5;
+			text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+		}
+
+		.worday h3 {
+			color: #ffffff;
+			text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+		}
+
+		.worday p {
+			font-family: 'Arial', sans-serif;
+			color: #f0e6d6;
+		}
+
+		span {
+			font-family: 'Arial', sans-serif;
+		}
+		.profile-img {
+			width: 50px;
+			/* Augmenté pour plus de visibilité */
+			height: 50px;
+			/* Augmenté pour plus de visibilité */
+			border-radius: 50%;
+			object-fit: cover;
+			border: 1px solid #ddd;
+		}
+
+		h1.dynamic-font-size {
+			font-family: 'DM Serif Display', serif;
+			text-align: center;
+			max-width: 650px;
+			margin: 0 auto;
+			font-size: 5.5vw; /* Taille de police proportionnelle à la largeur de l'écran */
+		}
+
+		/* Limite maximale de la taille de la police */
+		@media(min-width: 700px) {
+			h1.dynamic-font-size {
+				font-size: 2.3rem; /* Taille maximale définie pour les grands écrans */
+			}
+		}
+	</style>
+
+	<main>
+		<div class="col-11 mx-auto">
+			{% include 'include/flashes.html.twig' %}
+		</div>
+
+		{# MESSAGE ACCUEIL #}
+		<h1 class="dynamic-font-size" style="font-family: 'DM Serif Display' , serif;text-align: center; max-width: 650px; margin: 0 auto;">
+			{{ 'home.welcome_message'|trans|raw }}
+		</h1>
+
+		<h3 style="text-align: center; margin-top: 50px; margin-bottom: 50px; font-size: 3rem;font-family: 'MaPolice', sans-serif;">ⴰⵎⴰⵡⴰⵍ ⵙ ⵜⵎⴰⵣⵉⵖⵜ</h3>
+
+		{# BARRE DE RECHERCHE #}
+		<form id="searchForm" method="GET" action="{{ path('show_home') }}" class="search-form">
+			<div style="position: relative;">
+				<select name="lang" id="lang">
+					{% if app.request.locale == 'en' %}
+						<option value="en-rif" {% if app.request.query.get('lang') == 'en-rif' %} selected {% endif %}>EN - RIF</option>
+						<option value="rif-en" {% if app.request.query.get('lang') == 'rif-en' %} selected {% endif %}>RIF - EN</option>
+					{% else %}
+						<option value="fr-rif" {% if app.request.query.get('lang') == 'fr-rif' %} selected {% endif %}>FR - RIF</option>
+						<option value="rif-fr" {% if app.request.query.get('lang') == 'rif-fr' %} selected {% endif %}>RIF - FR</option>
+					{% endif %}
+				</select>
+				<input type="text" name="q" id="search-input" placeholder="{{ 'home.search_bar'|trans }}..." maxlength="30" value="{{ sanitizedSearchTerm|raw }}" required>
+				<button type="button" class="keyboard-icon" id="toggle-keyboard">
+					<i class="bi bi-keyboard"></i>
+				</button>
+				<div class="rifain-characters" id="rifain-characters">
+					<span>ɛ</span>
+					<span>ḍ</span>
+					<span>ṛ</span>
+					<span>ṣ</span>
+					<span>ḥ</span>
+					<span>ɣ</span>
+					<span>ǧ</span>
+					<span>ẓ</span>
+					<span>ṭ</span>
+					<span>ř</span>
+					<span>č</span>
+				</div>
+				<button type="submit" class="search-button">
+					<i class="bi bi-search"></i>
+				</button>
+			</div>
+		</form>
+
+		{% if error %}
+			<div style="color:#890000;" class="mt-2 error-message text-center">{{ error }}</div>
+		{% endif %}
+
+
+		{# CARD #}
+		{% if traductions is not empty %}
+			<h4 style="text-align: center; margin-top: 30px">{{ 'home.search_results'|trans }}</h4>
+			<div class="card-container row mt-0">
+				{% for traduction in pagination %}
+					<div class="card col-11 col-md-9 col-lg-6 custom-card" style="background: rgba(0, 0, 0, 0.624); border: 1px solid black;">
+						{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MODERATOR') %}
+							<button style="color: #fff" type="button" class="btn btn-sm position-absolute top-0 mt-2 me-2" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal{{ traduction.id }}">
+								&times;
+							</button>
+							<button style="color: #fff; right: 0; margin-right: 1rem;" type="button" class="btn btn-sm position-absolute top-0 mt-2 me-2">
+								<a href="{{ path('app_traduction_edit', {'id': traduction.id}) }}">
+									<i class="bi bi-pencil" style="color: white;"></i>
+								</a>
+							</button>
+						{% endif %}
+						<div class="card-body">
+							{% set grammar = app.request.query.get('lang') in ['fr-rif', 'rif-fr'] ? traduction.grammarFR : traduction.grammarEN %}
+							<p class="card-text">{{ grammar }}</p>
+							<h5 class="card-title">
+								{% if app.request.query.get('lang') == 'fr-rif' %}
+									{{ traduction.wordFR }}
+								{% elseif app.request.query.get('lang') in ['rif-fr', 'rif-en'] %}
+									{% if traduction.plural %}
+										<span>
+											{{ 'home.singular'|trans }}:
+											{{ traduction.singular }}
+										</span>
+										<br>
+										<span style="margin-top: 10px; display: block;">
+											{{ 'home.plural'|trans }}:
+											{{ traduction.plural }}
+										</span>
+									{% else %}
+										<span>{{ traduction.singular }}</span>
+									{% endif %}
+								{% elseif app.request.query.get('lang') in ['en-rif', 'rif-en'] %}
+									{{ traduction.wordEN }}
+								{% endif %}
+							</h5>
+							<h6 class="card-subtitle mb-2" style="color: #dec5a5;">
+								<span style="margin-top: 10px; display: block; text-transform: lowercase; font-size: 20px;">
+									{% if app.request.query.get('lang') == 'fr-rif' %}
+
+										{% if traduction.plural %}
+											<span>
+												{{ 'home.singular'|trans }}:
+												{{ traduction.singular }}
+											</span>
+											<br>
+											<span style="margin-top: 10px; display: block;">
+												{{ 'home.plural'|trans }}:
+												{{ traduction.plural }}
+											</span>
+										{% endif %}
+										{% if traduction.singular and not traduction.plural %}
+											<span style="margin-top: 20px; display: block;">
+												{{ traduction.singular }}
+											</span>
+										{% endif %}
+
+									{% elseif app.request.query.get('lang') == 'rif-fr' %}
+										{{ traduction.wordFR }}
+									{% elseif app.request.query.get('lang') == 'en-rif' %}
+										{% if traduction.plural %}
+											<span>
+												{{ 'home.singular'|trans }}:
+												{{ traduction.singular }}
+											</span>
+											<br>
+											<span style="margin-top: 10px; display: block;">
+												{{ 'home.plural'|trans }}:
+												{{ traduction.plural }}
+											</span>
+										{% endif %}
+										{% if traduction.singular and not traduction.plural %}
+											<span style="margin-top: 20px; display: block;">
+												{{ traduction.singular }}
+											</span>
+										{% endif %}
+									{% elseif app.request.query.get('lang') == 'rif-en' %}
+										{{ traduction.wordEN }}
+									{% endif %}
+									<hr class="mb-0">
+								</span>
+								<br>
+								{% if traduction.phoneticPlural %}
+									<span>
+										{{ 'home.tifinagh_singular'|trans }}:
+										{{ traduction.phoneticSingular }}
+									</span>
+									<br>
+									<span style="margin-top: 10px; display: block;">
+										{{ 'home.tifinagh_plural'|trans }}:
+										{{ traduction.phoneticPlural }}
+									</span>
+								{% endif %}
+								{% if traduction.phoneticSingular and not traduction.phoneticPlural %}
+									<span style="margin-top: 20px; display: block;">
+										{{ 'home.tifinagh_verb'|trans }}
+										:
+										{{ traduction.phoneticSingular }}
+									</span>
+								{% endif %}
+
+							</h6>
+						</div>
+					</div>
+					<!-- Confirmation suppression traduction -->
+					<div class="modal fade" id="confirmDeleteModal{{ traduction.id }}" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="confirmDeleteModalLabel">Confirmation de suppression</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+								</div>
+								<div class="modal-body">
+									Êtes-vous sûr de vouloir supprimer cette traduction ?
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+									<form action="{{ path('app_traduction_delete', {'id': traduction.id}) }}" method="post">
+										<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ traduction.id) }}">
+										<button type="submit" class="btn btn-danger">Supprimer</button>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+
+				{% if app.session.flashBag.has('success') %}
+					<div class="alert alert-success" role="alert">
+						{{ app.session.flashBag.get('success')[0] }}
+					</div>
+				{% endif %}
+
+			</div>
+			<div id="pagination-container" class="pagination justify-content-center mt-4">
+				{{ knp_pagination_render(pagination) }}
+			</div>
+		{% elseif traductions is empty and app.request.query.get('q') is not null %}
+			{% if is_granted('ROLE_USER') %}
+				<p class="mt-2" style="text-align: center;">{{ 'home.no_results_logged_in'|trans({'%path_traduction_new%': path('app_traduction_new')})|raw }}</p>
+			{% else %}
+				<p class="mt-2" style="text-align: center;">{{ 'home.no_results_guest'|trans({'%path_app_login%': path('app_login')})|raw }}</p>
+			{% endif %}
+		{% endif %}
+
+		{# ALPHABET #}
+		<div class="container reveal" style="margin-top: 75px;">
+			<img src="/img/abc.png" class="img-rounded mx-auto d-block" style="width: 80px;" alt="alphabet rif">
+			<div class="p-3 text-center bg-body-tertiary rounded-3">
+				<h2 class="text-body-emphasis">{{ 'home.learn_alphabet'|trans }}</h2>
+				<p class="lead mb-4">
+					{{ 'home.alphabet_description'|trans }}
+				</p>
+				<div class="d-inline-flex justify-content-center mb-5">
+					<button onclick="window.location.href='{{ path('berbere_latin') }}'" class="btn btn-outline-dark btn-md px-4 mx-2" type="button">
+						{{ 'home.latin_berber'|trans }}
+					</button>
+					<button onclick="window.location.href='{{ path('berbere_traditionnel') }}'" class="btn btn-outline-dark btn-md px-4 mx-2" type="button">
+						{{ 'home.tifinagh'|trans }}
+					</button>
+				</div>
+			</div>
+		</div>
+
+		{# MOT DU JOUR SECTION #}
+		<div class="worday mx-auto reveal">
+			<div class="p-4 text-center bg-body-tertiary rounded-3">
+				<h2 class="text-body-emphasis text-white mb-4">{{ 'post.worday'|trans }}</h2>
+				<div class="mt-3 text-white">
+					{% if wordOfTheDay %}
+						{% if app.request.locale == 'fr' %}
+							<p class="lead mb-2" style="font-style: italic;">{{ wordOfTheDay.grammarFR }}</p>
+							<h3 class="mb-3" style="font-size: 2rem; font-weight: bold;">{{ wordOfTheDay.wordFR }}</h3>
+						{% else %}
+							<p class="lead mb-2" style="font-style: italic;">{{ wordOfTheDay.grammarEN }}</p>
+							<h3 class="mb-3" style="font-size: 2rem; font-weight: bold;">{{ wordOfTheDay.wordEN }}</h3>
+						{% endif %}
+						<p class="mb-3" style="font-size: 1.5rem; font-weight: bold; font-family: 'Arial', sans-serif;">{{ wordOfTheDay.singular }}</p>
+					{% else %}
+						<p class="lead">{{ 'post.no_worday'|trans }}</p>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+
+		{# GRAMMAIRE #}
+		<div class="text-center mt-3 reveal">
+			<a href="{{ path('grammar') }}" class="d-block">
+				<img src="/img/book.png" class="img-rounded mx-auto d-block" style="width: 80px;" alt="grammaire rif">
+			</a>
+			<a href="{{ path('grammar') }}" style="color: #212529">
+				<h2 class="text-body-emphasis">{{ 'home.grammaire_guide'|trans }}</h2>
+			</a>
+			<div class="col-lg-6 mx-auto">
+				<p class="lead mb-4">{{ 'home.grammaire_guide_sous_titre'|trans }}</p>
+				<div id="grammarCarousel" class="carousel slide" data-bs-ride="carousel">
+					<div class="carousel-inner">
+						{% for sheet in grammarSheets %}
+							<div class="carousel-item {% if loop.first %}active{% endif %}">
+								<div class="d-flex justify-content-center">
+									<button onclick="window.location.href='{{ path('grammarsheet_show', {'id': sheet.id}) }}'" class="btn btn-outline-dark btn-md px-4 mx-2" type="button">
+										{% if app.request.locale == 'en' %}
+											{{ sheet.titleEn|striptags }}
+										{% else %}
+											{{ sheet.titleFr|striptags }}
+										{% endif %}
+									</button>
+								</div>
+							</div>
+						{% endfor %}
+					</div>
+					<button class="carousel-control-prev no-border" type="button" data-bs-target="#grammarCarousel" data-bs-slide="prev">
+						<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+					</button>
+					<button class="carousel-control-next no-border" type="button" data-bs-target="#grammarCarousel" data-bs-slide="next">
+						<span class="carousel-control-next-icon" aria-hidden="true"></span>
+					</button>
+				</div>
+			</div>
+		</div>
+
+		{# COMMENTAIRE #}
+		<div
+			class="container reveal" style="margin-top: 100px;">
+			<!-- Form and Comments Section -->
+			<div
+				class="row justify-content-center align-items-center">
+				<!-- Comment Form -->
+				<div class="col-12 col-md-6 d-flex justify-content-center">
+					<div class="comment-box align-self-center">
+						<img src="/img/commentaires.png" class="img-rounded mx-auto d-block mb-3" style="width: 80px;" alt="alphabet rif">
+						<h3 class="featurette-heading fw-normal lh-1 text-center my-2">{{ 'home.avis'|trans }}</h3>
+						{{ form_start(form) }}
+						<div class="user-box">
+							{{ form_widget(form.opinion) }}
+							{{ form_errors(form.opinion) }}
+						</div>
+						{{ form_end(form) }}
+					</div>
+				</div>
+
+				<!-- Comments Section -->
+				<div class="col-12 col-md-6 mb-0">
+					<div class="my-5">
+						{% for commentaire in paginationComment %}
+							<div class="commentaire mb-3">
+								<div class="d-flex align-items-center justify-content-between mb-2">
+									<img class="profile-img" src="{{ commentaire.user.picture ? asset('uploads/profile/' ~ commentaire.user.picture) : asset('uploads/profile/default_profile_picture.jpg') }}" alt="user-profile-picture"/>
+									{% if is_granted('ROLE_ADMIN') or commentaire.user == app.user %}
+										<a href="{{ path('hard_delete_commentaire', {'id': commentaire.id}) }}" class="text-decoration-none ms-auto">
+											<i class="bi bi-x-lg text-white"></i>
+										</a>
+									{% endif %}
+								</div>
+								<div class="text-white">
+									<span class="h6 d-block text-white">
+										{{ 'home.post'|trans }}
+										<span style="color:#dec5a5;">{{ commentaire.user.username | escape }}</span>
+										{{ commentaire.createdAt | ago(locale=app.request.locale) }}
+									</span>
+									<p class="mt-2 mb-0">{{ commentaire.opinion | raw | escape }}</p>
+								</div>
+							</div>
+						{% else %}
+							<div class="alert warning" role="alert">
+								<p class="fw-bolder text-white text-center">Aucun commentaire</p>
+							</div>
+						{% endfor %}
+						<div id="pagination-container" class="pagination justify-content-center mt-4">
+							{{ knp_pagination_render(paginationComment) }}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<hr>
+		{# NEWSLETTER #}
+		<div class="reveal" style="margin-top: 10vh;">
+			<div class="newsletter-box">
+				<img src="/img/newsletter.png" class="img-rounded mx-auto d-block mb-3" style="width: 70px;" alt="newsletters rifain">
+				<h4 class="text-center">{{ 'footer.subscribe_newsletter'|trans|raw }}</h4>
+				<div class="subscribe-box d-flex justify-content-center">
+					{{ form_start(formNews) }}
+					{{ form_widget(formNews.email, {'attr': {'class': 'subscribe-input'}}) }}
+					{{ form_errors(formNews.email) }}
+					{{ form_end(formNews) }}
+				</div>
+			</div>
+		</div>
+	</main>
+
+{% endblock %}

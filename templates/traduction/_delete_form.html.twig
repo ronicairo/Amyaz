@@ -1,0 +1,6 @@
+<form method="post" action="{{ path('app_traduction_delete', {'id': traduction.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ traduction.id) }}">
+     <div class="text-center">
+    <button class="btn mt-2" style="color: rgb(251, 77, 77);">{{ 'button.delete'|trans }}</button>
+    </div>
+</form>

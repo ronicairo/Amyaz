@@ -1,0 +1,95 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ category_doc.name }}{% endblock %}
+
+{% block body %}
+    <style>
+        .category-details-box {
+            margin: 20px auto;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+            border-radius: 10px;
+            max-width: 80%;
+        }
+
+        @media(min-width: 768px) {
+            .category-details-box {
+                max-width: 60%;
+            }
+        }
+
+        .category-details-box h1 {
+            color: #fff;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .category-details-box .table {
+            width: 100%;
+            color: #fff;
+        }
+
+        .category-details-box .table th,
+        .category-details-box .table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #fff;
+        }
+
+        .category-details-box .table th {
+            width: 30%;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .category-details-box .table td {
+            color: #e9e9e9;
+        }
+
+        .category-details-box a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            text-align: center;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .category-details-box form {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+
+    <div class="category-details-box">
+        <h1>{{ category_doc.name }}</h1>
+
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th>Id</th>
+                    <td>{{ category_doc.id }}</td>
+                </tr>
+                <tr>
+                    <th>{{ 'td.name'|trans }}</th>
+                    <td>{{ category_doc.name }}</td>
+                </tr>
+                <tr>
+                    <th>{{ 'td.create'|trans }}</th>
+                    <td>{{ category_doc.createdAt ? category_doc.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                </tr>
+                <tr>
+                    <th>{{ 'td.update'|trans }}</th>
+                    <td>{{ category_doc.updatedAt ? category_doc.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        {{ include('category_doc/_delete_form.html.twig') }}
+
+        <a class="d-block mt-4 mx-auto btn btn-outline-light col-5" href="{{ path('category_doc_index') }}">{{ 'button.back_list'|trans }}</a>
+    </div>
+
+{% endblock %}

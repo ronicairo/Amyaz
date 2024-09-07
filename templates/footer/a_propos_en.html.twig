@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}About{% endblock %}
+
+{% block body %}
+
+<style>
+    .container {
+        max-width: 800px;
+        margin: 30px auto;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        text-align: center;
+    }
+
+    h2 {
+        color: #333;
+        margin-top: 20px;
+    }
+
+    p {
+        margin: 10px 0;
+    }
+
+    a {
+        color: #007BFF;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<h1>About us</h1>
+<div class="container">
+    <h2>What is Amyaz?</h2>
+    <p>
+        Amyaz is a platform dedicated to the preservation and promotion of the Rif language, spoken by millions in the Rif region of Morocco.<br>Our mission is to provide an accessible tool for everyone, to facilitate the learning and use of Rifain, while helping to preserve this rich and unique language.
+        Amyaz literally means <strong>"like the yaz"</strong>.<br>The yaz, written as <strong>ⵣ</strong>, is a letter of the Berber alphabet and is one of the symbols of Berber identity as this letter embodies a free man. This letter is found on the Berber flag.
+    </p>
+
+    <img src="/img/flag_berbere.png" class="d-block mb-3" style="width: 80px;" alt="Berber flag">
+
+    <p class="mt-5">Here’s what we offer:</p>
+    <ul>
+        <li><strong>Rifain-French-English Dictionary</strong>: Find translations of Rifain words into French and English, and vice versa. Our database is constantly updated to include new terms and expressions.</li>
+        <li><strong>Documentation and Resources</strong>: Access a vast library of documents on Rifain grammar, vocabulary sheets, and methods for learning the Rifain alphabet.</li>
+        <li><strong>Translation Request Submission</strong>: If you can't find a specific word or expression, you can submit a translation request. Our team of linguists and translators will find the best possible equivalence.</li>
+        <li><strong>Tourist Assistance</strong>: For travelers visiting the Rif, Amyaz offers practical guides to effectively communicate with locals and discover the local culture.</li>
+    </ul>
+</div>
+
+<section>
+    <h2>Why Choose Amyaz?</h2>
+    <ul>
+        <li><strong>Accessibility for Everyone</strong>: Amyaz is designed to be easy to use by everyone, whether you are a native speaker, a language student, or a tourist.</li>
+        <li><strong>Linguistic Preservation</strong>: By using and contributing to Amyaz, you are helping to preserve the Rifain language for future generations.</li>
+        <li><strong>Community and Sharing</strong>: Join a community of users passionate about Rifain. Share your knowledge, ask questions, and learn from others.</li>
+    </ul>
+</section>
+
+<section>
+    <h2>How to Use Amyaz?</h2>
+    <ul>
+        <li><strong>Word Search</strong>: Use our search bar to find translations of words and expressions.</li>
+        <li><strong>Consult the Documentation</strong>: Browse our educational resources to improve your proficiency in Rifain.</li>
+        <li><strong>Submit a Request</strong>: Use the submission form to request specific translations that you cannot find in our database.</li>
+    </ul>
+</section>
+
+</div>
+{% endblock %}

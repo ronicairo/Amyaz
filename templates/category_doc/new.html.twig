@@ -1,0 +1,104 @@
+{% extends 'base.html.twig' %}
+
+{% form_theme form 'form/_form_errors.html.twig' %}
+
+{% block title %}
+{{ 'title.create_category'|trans }}
+{% endblock %}
+
+
+{% block body %}
+
+    <style>
+        .edit-profile-box {
+     	    width: 100%;
+			max-width: 500px;
+			margin: 0 auto;
+			padding: 40px;
+			background: rgba(0, 0, 0, 0.5);
+			box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+			border-radius: 10px;
+        }
+
+        @media(min-width: 768px) {
+            .edit-profile-box {
+                max-width: 60%;
+            }
+        }
+
+        .edit-profile-box h1 {
+            margin: 0 0 30px;
+            padding: 0;
+            color: #fff;
+            text-align: center;
+        }
+
+        .edit-profile-box .user-box {
+            position: relative;
+        }
+
+        .edit-profile-box .user-box input, 
+        .edit-profile-box .user-box select {
+            width: 100%;
+            padding: 2px 0;
+            font-size: 16px;
+            color: #fff;
+            margin-bottom: 30px;
+            border: none;
+            border-bottom: 1px solid #fff;
+            outline: none;
+            background: transparent;
+        }
+
+        .edit-profile-box .user-box label {
+            position: relative;
+            top: 0;
+            left: 0;
+            padding: 10px 0;
+            font-size: 16px;
+            color: #fff;
+            pointer-events: none;
+            transition: 0.5s;
+        }
+
+        .edit-profile-box .user-box input:focus ~ label,
+        .edit-profile-box .user-box input:valid ~ label,
+        .edit-profile-box .user-box select:focus ~ label,
+        .edit-profile-box .user-box select:valid ~ label {
+            top: -20px;
+            left: 0;
+            color: #fff;
+            font-size: 12px;
+        }
+
+        .edit-profile-box a {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .edit-profile-box a:hover {
+            color: #fff;
+        }
+    </style>
+
+    <div class="row">
+        <div class="col-6 mx-auto">
+            {% include 'include/flashes.html.twig' %}
+        </div>
+    </div>
+
+    <div class="edit-profile-box">
+   <h1 class="h3 mb-3 font-weight-normal">{{ 'title.create_category'|trans }}</h1>
+        <div class="user-box">
+        	{{ form_start(form) }}
+			{{ form_row(form.name) }}
+			{{ form_end(form) }}
+
+        </div>
+
+        <a href="{{ path('category_doc_index') }}">{{ 'button.back_list'|trans }}</a>
+    </div>
+{% endblock %}

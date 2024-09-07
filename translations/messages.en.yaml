@@ -1,0 +1,252 @@
+meta:
+    description: "Discover our online French-Riffian dictionary, a comprehensive tool for learning and mastering the Riffian language. Access detailed grammar sheets, methods for learning the Riffian alphabet and a wealth of documentation on Riffian culture. Improve your knowledge of Rifa with reliable, educational resources."
+    title: "Amyaz - Riffian dictionnary"
+
+home:
+    welcome_message: 'Welcome to  <span style="color: #F26766;">Amyaz</span> !<br>Your English-Riffian dictionary.'
+    search_results: "Search Results:"
+    search_bar: "Search"
+    no_results_logged_in: "No results found.<br><a style=\"text-decoration:none; color: #F26766\" href=\"%path_traduction_new%\">Request a word.</a>"
+    no_results_guest: "No results found.<br><a style=\"text-decoration:none; color: #F26766\" href=\"%path_app_login%\">Log in to request a word.</a>"
+    learn_alphabet: "Learn the Alphabet"
+    alphabet_description: "The Riffian language can be written with the Latin Berber alphabet but also in Tifinagh which is the traditional Berber alphabet."
+    latin_berber: "Latin Berber"
+    tifinagh: "Tifinagh"
+    tifinagh_singular: "ⴰⵎⵢⵉⵡⵏ"
+    tifinagh_plural: "ⴰⵎⴰⴳⵓⵜ"
+    tifinagh_verb: "ⵙ ⵜⴼⵉⵏⴰⴳ"
+    singular: "singular"
+    plural: "plural"
+    comment: "Publish"
+    avis: "Any comments?"
+    grammaire_guide: "Grammar guide"
+    grammaire_guide_sous_titre: "Practice Riffian Berber grammar with a few simple modules."
+    post: "Posted by"
+
+navigation:
+    home: 'Dictionary'
+    learning: 'Learning'
+    berber_latin: 'Berber Latin Alphabet'
+    berber_traditional: 'Traditional Berber Alphabet'
+    grammar: 'Grammar'
+    documentation: 'Documentation'
+    participation: 'Missing words?'
+    login: 'Login'
+    profile: 'My profile'
+    logout: 'Logout'
+    dashboard: 'Dashboard'
+
+post:
+    rifain_word: "Riffian word"
+    title: "My Translations"
+    word_requests: "Translation request"
+    french_word: "French"
+    english_word: "English"
+    rif_singular: "Riffian (singular)"
+    rif_plural: "Riffian (plural)"
+    phonetic_singular: "Tifinagh (singular)"
+    phonetic_plural: "Tifinagh (plural)"
+    phonetic: "TIFINAGH"
+    status: "Status"
+    pending: "Pending"
+    decline: "Decline"
+    validate: "Validate"
+    change: "Change"
+    moderator: "MODERATOR"
+    moderator_explanation: "Moderator's Explanation"
+    close: "Close"
+    list_word: "Word List"
+    no_found: "No word found."
+    alert_request: "Requests that have been refused by the moderator will be removed from this table within a week."
+    new_trad_admin: "Add a translation"
+    new_trad: "Translation Request"
+    champ_obligatoire: "Fields followed by * are required"
+    requested_by: "Posted by"
+    no_user: "User deleted"
+    worday: "Word of the Day"
+    no_worday: "No word of the day for today"
+    
+category:
+    title: "Document category"
+
+pending_request:
+    title: "Translation request pending"
+    no_request_pending: "No pending translation requests."
+    no_request_logged_in: "No translation requests found.<br><a style=\"text-decoration:none; color: #F26766\" href=\"%path_traduction_new%\">Ask for a word.</a>"
+
+documentation:
+    add: "Add document"
+    title: "Riffian language documentation"
+    resume: "Amyaz makes available all publications relating to the Rifa language.<br> These publications are mainly Rifa dictionaries, conjugation and learning manuals, and Rifa novels, newspapers and magazines.<br>The aim is to collect these publications in one place."
+
+button:
+    back_list: "Back to list"
+    create_new: "Create New"
+    edit: "Edit"
+    delete: "Delete"
+    show: "Show"
+    confirm: "Confirm"
+    pdf: "This link downloads the PDF file"
+    remember_me: "Remember me"
+    login: "Login"
+    logout: "Logout"
+    no_account: "No account?"
+    already_account: "Already have an account?"
+    register: "Register"
+    password_forgot: "Password forgotten"
+    log_as: "You are logged in as"
+    activate_account: "Activate my account"
+
+account-user:
+    title: "User details"
+    date_creation: "Creation Date"
+    no_comments: "No comments."
+    no_translation: "No translation."
+    delete_user: "Delete user"
+
+article:
+    particule_d: "D particle"
+    negation: "Negation"
+
+footer:
+    subscribe_newsletter: "Never miss an update on the richness of the Riffian language!<br> Subscribe to our newsletter to receive the latest translations straight to your inbox."
+    subscribe: "Subscribe"
+    se_connecter: "Log in"
+    se_deconnecter: "Log out"
+    mentions_legales: "Legal notices"
+    about_us: "About us"
+    cookies: "Cookies"
+    accueil: "Home"
+
+cookie:
+    title: "We use cookies to improve your experience. By continuing to visit this site, you agree to our use of cookies."
+    accept: "Accept"
+    refuse: "Refuse"
+
+form:
+    name: "Name"
+    not_blank: "This field cannot be empty."
+    min_message: "Your email must contain at least {{ limit }} characters.(email : {{ value }})"
+    max_message: "Your email must contain a maximum of {{ limit }} characters.(email : {{ value }})"
+    min_comment : "Your comment must be at least {{ limit }} characters long. (comment: {{ value }})"
+    max_comment : "Your comment must be at most {{ limit }} characters long. (comment: {{ value }})"
+    valid_email: "Please enter a valid email address."
+    abonner: "Subscribe"
+    validate: "Validate"
+    rechercher_titre: "Search by title"
+    choisir_categorie: "Category"
+    rechercher: "Search"
+    filtrer: "Filter"
+    new_mail : "New email"
+    repeat_mail: "Repeat email"
+    create: "Create"
+    edit: "Edit"
+    name_category: "Category name"
+    password: "Password"
+    password_repeat: "Repeat the password"
+    password_not_same: "Passwords do not match."
+    new_password: "New password"
+    new_username: "New username"
+    current_password: "Current password"
+    min_password: "Your password must be at least {{ limit }} characters long. (password: {{ value }})"
+    max_password: "Your password must be at most {{ limit }} characters long. (password: {{ value }})"
+    min_username: "Your username must be at least {{ limit }} characters long. (username: {{ value }})"
+    max_username: "Your username must be at most {{ limit }} characters long. (username: {{ value }})"
+    regex_password: "Your password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character."
+    regex_commentaire: "You cannot insert HTML code in your comment."
+    edit_grammar: "Edit grammar sheet"
+    create_grammar: "Create new grammar sheet"
+
+title:
+    edit_traduction: "Edit translation"
+    edit_password: "Edit password"
+    edit_username: "Edit username"
+    edit_profile: "Edit my profile"
+    edit_email: "Edit my email"
+    edit_category: "Edit category"
+    edit_profile_picture: "Edit profile picture"
+    reset_password: "Password reset"
+    choose_password: "Set your password"
+    email_newsletter: "Your daily dose of words"
+    verifier_compte: "Verification of your Amyaz account"
+    delete_my_account: "Delete my account"
+    create_doc: "Create new documentation"
+    create_category: "Create new category"
+    create_documentation: "Create new documentation"
+
+addflash:
+    obligation_connexion: "You must be logged in to access this feature."
+    verification_compte: "You must verify your account to access this feature. <br><a href='%resend_verification_url%'>Click here</a> to resend the verification email."
+    attente_validation: "Your word will be added or completed in the dictionary after moderator approval. <a href='%status_url%'>See status</a>."
+    traduction_ajouter: "Your translation has been successfully added to the dictionary."
+    traduction_supprimer: "The translation has been removed."
+    compte_supprimer: "Your account has been deleted."
+    compte_supprimer_echec: "Incorrect password. Account deletion failed."
+    restreindre_acces: "You do not have the rights to access this page."
+    connexion_acces: "You need to log in to access this page."
+    username_update_success: "Your username has been successfully updated."
+    picture_update_success: "Your profile picture has been successfully updated."
+    email_update_success: "Your email has been successfully updated."
+    password_echec: "The current password is not valid"
+    password_success: "Your password has been successfully changed"
+    email_not_same: "The email addresses do not match"
+    comment_success: "Your comment has been successfully submitted."
+    already_subscribed: "You have already subscribed to our newsletter with this email address."
+    subscribed_success: "You are now subscribed to our newsletter!"
+    unsubscribed_success: "You have been unsubscribed from the newsletter."
+    email_not_found: "Email not found"
+    email_non_specifie: "Email address not specified."
+    comment_deleted_success: "The comment has been successfully deleted."
+    documentation_update_success: "The documentation has been successfully updated."
+    documentation_create_success: "The documentation has been successfully created."
+    documentation_delete_success: "The documentation has been successfully deleted."
+    file_upload_error: "The file could not be uploaded."
+    already_connected: "You are already logged in."
+    activation_email_sent: "An activation email has been sent. Please check your inbox."
+    account_already_verified: "Your account is already verified."
+    email_verified_success: "Your email address has been successfully verified."
+    no_verification_needed_or_not_logged_in: "You don't need to verify your account or you are not logged in."
+    verification_email_sent: "A verification email has been sent to you."
+    reset_email_sent: "A reset email has been sent to you!"
+    email_not_recognized: "The email is not recognized by our site"
+    jeton_invalide: "Invalid token"
+    traduction_already_exist: "The word %mot% already exist"
+    only_one_comment: "You have already posted a comment"
+    email_already_use: "This email address is already linked to an account"
+
+p:
+    hello: "Hello"
+    thanks: "Thank you"
+    reset_password_link: "For your password reset request, please click on the following link:"
+    footer_droit: "Amyaz. All rights reserved."
+    request_reset_password: "Your password reset request"
+    link_activate_email: "Please click the following link to activate your Amyaz account:"
+    thank_subscribe: "Thank you for subscribing to our newsletter."
+    unsubscribe_newsletter: "Unsubscribe from the newsletter"
+    footer_subscribe: "You are receiving this email because you are subscribed to our newsletter."
+    title_mail_newsletter: "Here are 10 words for today"
+    current_email: "Current email"
+    no_result: "No results found"
+
+account:
+    add: "Add a Translation"
+    ask: "Request a Translation"
+    my_request_translation: "My Translation Requests"
+    grammar_learn: "Grammar Sheets"
+    show_user: "View Users"
+    pending_request: "Pending Request"
+    list_word: "Word List"
+    category_doc: "Documentation Categories"
+
+grammar:
+    title: "Grammar in Riffian"
+    p1: "To speak and write Rifain correctly, it is important to know the main rules of Berber grammar."
+    p2: "Our grammar sheets always include a grammar rule and concrete examples. Additionally, a quiz is available for each sheet so you can practice."
+    h2: "Grammar Sheets"
+    no_fiche: "No grammar sheets available."
+
+td:
+    create: "Created at"
+    name: "Name"
+    update: "Updated at"
+

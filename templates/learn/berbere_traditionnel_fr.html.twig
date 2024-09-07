@@ -1,0 +1,565 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Amyaz - Apprentissage
+{% endblock %}
+
+{% block body %}
+	<style>
+		button {
+			background-color: #ffffff;
+			border: 2px solid #ddd;
+			color: #333;
+			padding: 15px 20px;
+			margin: 10px;
+			border-radius: 8px;
+			cursor: pointer;
+			font-size: 1.2em;
+			transition: background-color 0.3s ease, border-color 0.3s ease;
+		}
+
+		.parent {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			margin-top: 15vh;
+			margin-bottom: 15vh;
+		}
+
+		.containe {
+			background-color: transparent;
+			border-radius: 20px;
+			box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+			text-align: center;
+			justify-content: center;
+			align-items: center;
+		}
+
+
+		button:hover {
+			background-color: #f0f0f0;
+			border-color: #bbb;
+		}
+
+		button:active {
+			background-color: #e0e0e0;
+		}
+
+		/* Style des réponses */
+		.question-box button {
+			background-color: #ffffff;
+			border: 2px solid #ccc;
+			color: #333;
+			font-size: 1.1em;
+			padding: 10px 15px;
+			margin: 10px;
+			border-radius: 8px;
+			cursor: pointer;
+			transition: background-color 0.3s ease, border-color 0.3s ease;
+		}
+
+		.question-box button:hover {
+			background-color: #f0f0f0;
+			border-color: #bbb;
+		}
+
+		.question-box button:active {
+			background-color: #e0e0e0;
+			transform: scale(0.95);
+		}
+
+		/* Animation d'apparition */
+		.question-box {
+			animation: fadeIn 0.5s ease;
+		}
+
+		@keyframes fadeIn {
+			from {
+				opacity: 0;
+				transform: translateY(-20px);
+			}
+
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+		/* Style du message de feedback */
+		.feedback {
+			margin-top: 20px;
+			font-size: 1.2em;
+			font-weight: bold;
+		}
+
+		.correct {
+			color: #28a745;
+		}
+
+		.incorrect {
+			color: #dc3545;
+		}
+	</style>
+	<div class="container">
+		<div class="table-responsive">
+			<h1 class="text-left display-4">L'alphabet traditionnel berbère : le tifinagh</h1>
+			<p class="text-left lead">Le tifinagh est un ancien système d’écriture utilisé depuis l’Antiquité en Afrique du Nord. Toutefois, la zone d'usage de cette écriture s'est considérablement réduite au fil des siècles. Le tifinagh a survécut chez les Berbères touarègues qui étaient les seuls, jusque très récemment, à utiliser cette écriture antique.</p>
+			<p class="text-left lead">Aujourd'hui, le tifinagh est la graphie officielle avec laquelle les institutions marocaines écrivent le berbère. Le tifinagh utilisé au Maroc demeure cependant quelque peu différent du tifinagh utilisés par les Touarègues. En effet, dans un objectif de normalisation du tifinagh, l'Institut royal de la culture amazighe a développé un néo-tifinagh, appelé Tifinagh-Ircam, en s'inspirant fortement de la graphie ancienne.</p>
+		</div>
+	</div>
+
+	<div class="container mt-5">
+
+		<table class="table table-striped table-bordered text-center">
+
+			<thead class="thead-dark">
+				<tr>
+					<th scope="col">Tifinagh</th>
+					<th scope="col">Appelation en français</th>
+					<th scope="col">Valeur phonétique</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>ⴰ</td>
+					<td>ya</td>
+					<td>a</td>
+				</tr>
+				<tr>
+					<td>ⴱ</td>
+					<td>yab</td>
+					<td>b</td>
+				</tr>
+				<tr>
+					<td>ⴷ</td>
+					<td>yad</td>
+					<td>d</td>
+				</tr>
+				<tr>
+					<td>ⴹ</td>
+					<td>yadd</td>
+					<td>ḍ (prononcé comme le "ض" en arabe)</td>
+				</tr>
+				<tr>
+					<td>ⴻ</td>
+					<td>yey</td>
+					<td>e</td>
+				</tr>
+				<tr>
+					<td>ⴼ</td>
+					<td>yaf</td>
+					<td>f</td>
+				</tr>
+				<tr>
+					<td>ⴳ</td>
+					<td>yag</td>
+					<td>g</td>
+				</tr>
+				<tr>
+					<td>ⴳⵯ</td>
+					<td>yagw</td>
+					<td>ɡʷ</td>
+				</tr>
+				<tr>
+					<td>ⵀ</td>
+					<td>yah</td>
+					<td>h</td>
+				</tr>
+				<tr>
+					<td>ⵃ</td>
+					<td>yahh</td>
+					<td>ḥ (prononcé comme le "ح" en arabe)</td>
+				</tr>
+				<tr>
+					<td>ⵉ</td>
+					<td>yi</td>
+					<td>i</td>
+				</tr>
+				<tr>
+					<td>ⵊ</td>
+					<td>yaj</td>
+					<td>j</td>
+				</tr>
+				<tr>
+					<td>ⴽ</td>
+					<td>yak</td>
+					<td>k</td>
+				</tr>
+				<tr>
+					<td>ⴽⵯ</td>
+					<td>yakw</td>
+					<td>kʷ</td>
+				</tr>
+				<tr>
+					<td>ⵍ</td>
+					<td>yal</td>
+					<td>l</td>
+				</tr>
+				<tr>
+					<td>ⵎ</td>
+					<td>yam</td>
+					<td>m</td>
+				</tr>
+				<tr>
+					<td>ⵏ</td>
+					<td>yan</td>
+					<td>n</td>
+				</tr>
+				<tr>
+					<td>ⵇ</td>
+					<td>yaq</td>
+					<td>q (prononcé comme le "ق" en arabe)</td>
+				</tr>
+				<tr>
+					<td>ⵔ</td>
+					<td>yar</td>
+					<td>r</td>
+				</tr>
+				<tr>
+					<td>ⵕ</td>
+					<td>yarr</td>
+					<td>ṛ</td>
+				</tr>
+				<tr>
+					<td>ⵙ</td>
+					<td>yas</td>
+					<td>s</td>
+				</tr>
+				<tr>
+					<td>ⵚ</td>
+					<td>yass</td>
+					<td>ṣ</td>
+				</tr>
+				<tr>
+					<td>ⵜ</td>
+					<td>yat</td>
+					<td>t</td>
+				</tr>
+				<tr>
+					<td>ⵟ</td>
+					<td>yatt</td>
+					<td>ṭ (prononcé comme le "ط" en arabe)</td>
+				</tr>
+				<tr>
+					<td>ⵓ</td>
+					<td>you</td>
+					<td>ou</td>
+				</tr>
+				<tr>
+					<td>ⵡ</td>
+					<td>yaw</td>
+					<td>w</td>
+				</tr>
+				<tr>
+					<td>ⵢ</td>
+					<td>yay</td>
+					<td>y</td>
+				</tr>
+				<tr>
+					<td>ⵣ</td>
+					<td>yaz</td>
+					<td>z</td>
+				</tr>
+				<tr>
+					<td>ⵥ</td>
+					<td>yazz</td>
+					<td>ẓ</td>
+				</tr>
+				<tr>
+					<td>ⵛ</td>
+					<td>yach</td>
+					<td>ch (prononcé comme le "ش" en arabe)</td>
+				</tr>
+				<tr>
+					<td>ⵖ</td>
+					<td>yagh</td>
+					<td>ɣ (prononcé comme le "غ" en arabe)</td>
+				</tr>
+				<tr>
+					<td>ⵄ</td>
+					<td>yaa</td>
+					<td>ɛ (prononcé comme le "ع" en arabe)</td>
+				</tr>
+				<tr>
+					<td>ⵅ</td>
+					<td>yakh</td>
+					<td>x (prononcé comme le "خ" en arabe)</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<div class="parent">
+		<div class="card containe col-8 text-center align-center" style="padding: 30px;">
+			<h2 style="padding: 30px;">Quizz d'apprentissage Tifinagh</h2>
+			<div
+				id="question-box" class="question-box"><!-- Question et réponses seront injectées ici par JavaScript -->
+			</div>
+			<div
+				id="feedback" class="feedback"><!-- Message de feedback sera injecté ici par JavaScript -->
+			</div>
+			<button onclick="generateQuestion()">Nouvelle Question</button>
+		</div>
+	</div>
+
+
+	<div class="container">
+		<p class="text-left lead">Pour apprendre la prononciation des lettres de l'alphabet berbère, consulter les liens Youtube ci-dessous :
+		</p>
+		<p class="text-left lead">1 -
+			<a href="https://www.youtube.com/watch?v=ASkEo4Y9IEI" target="_blank">ⵉⵙⴽⴽⵉⵍⵏ ⵏ ⵜⵎⴰⵣⵉⵖⵜ - #Amazigh #alphabet - الحروف #الامازيغية</a>
+		</p>
+		<p class="text-left lead">2 -
+			<a href="https://www.youtube.com/watch?v=nQHywQialCY" target="_blank">تعلم حروف تيفيناغ بالصوت والصورة</a>
+		</p>
+		<p class="text-left lead">3 -
+			<a href="https://www.youtube.com/watch?v=1TiQ_VymkvU" target="_blank">Tifinagh - Amazigh Alphabet</a>
+		</p>
+	</div>
+</div>
+
+<script>
+	const questions = [
+{
+letter: "ⴰ",
+correct: "a"
+},
+{
+letter: "ⴱ",
+correct: "b"
+},
+{
+letter: "ⴷ",
+correct: "d"
+},
+{
+letter: "ⴹ",
+correct: "ḍ"
+}, {
+letter: "ⴻ",
+correct: "e"
+}, {
+letter: "ⴼ",
+correct: "f"
+}, {
+letter: "ⴳ",
+correct: "g"
+}, {
+letter: "ⴳⵯ",
+correct: "ɡʷ"
+}, {
+letter: "ⵀ",
+correct: "h"
+}, {
+letter: "ⵃ",
+correct: "ḥ"
+}, {
+letter: "ⵉ",
+correct: "i"
+}, {
+letter: "ⵊ",
+correct: "j"
+}, {
+letter: "ⴽ",
+correct: "k"
+}, {
+letter: "ⴽⵯ",
+correct: "kʷ"
+}, {
+letter: "ⵍ",
+correct: "l"
+}, {
+letter: "ⵎ",
+correct: "m"
+}, {
+letter: "ⵏ",
+correct: "n"
+}, {
+letter: "ⵇ",
+correct: "q"
+}, {
+letter: "ⵔ",
+correct: "r"
+}, {
+letter: "ⵕ",
+correct: "ṛ"
+}, {
+letter: "ⵙ",
+correct: "s"
+}, {
+letter: "ⵚ",
+correct: "ṣ"
+}, {
+letter: "ⵜ",
+correct: "t"
+}, {
+letter: "ⵟ",
+correct: "ṭ"
+}, {
+letter: "ⵓ",
+correct: "u"
+}, {
+letter: "ⵡ",
+correct: "w"
+}, {
+letter: "ⵢ",
+correct: "y"
+}, {
+letter: "ⵣ",
+correct: "z"
+}, {
+letter: "ⵥ",
+correct: "ẓ"
+}, {
+letter: "ⵛ",
+correct: "c"
+}, {
+letter: "ⵖ",
+correct: "ɣ"
+}, {
+letter: "ⵄ",
+correct: "ɛ"
+}, {
+letter: "ⵅ",
+correct: "x"
+}
+];
+
+// Liste complète des lettres pour les réponses incorrectes
+const allLetters = [
+"a",
+"b",
+"d",
+"ḍ",
+"e",
+"f",
+"g",
+"ɡʷ",
+"h",
+"ḥ",
+"i",
+"j",
+"k",
+"kʷ",
+"l",
+"m",
+"n",
+"q",
+"r",
+"ṛ",
+"s",
+"ṣ",
+"t",
+"ṭ",
+"u",
+"w",
+"y",
+"z",
+"ẓ",
+"c",
+"ɣ",
+"ɛ",
+"x"
+];
+
+let recentQuestions = [];
+let remainingQuestions = [... questions]; // Clone du tableau pour gérer les 33 premières questions
+let questionCount = 0;
+
+function shuffleArray(array) {
+for (let i = array.length - 1; i > 0; i--) {
+const j = Math.floor(Math.random() * (i + 1));
+[
+array[i], array[j]
+] = [
+array[j], array[i]
+];
+}
+}
+
+function generateQuestion() {
+let randomQuestion;
+
+// Si nous sommes encore dans les 33 premières questions
+if (remainingQuestions.length > 0) { // Choisir une lettre aléatoire parmi celles qui restent
+const randomIndex = Math.floor(Math.random() * remainingQuestions.length);
+randomQuestion = remainingQuestions.splice(randomIndex, 1)[0]; // Enlever la question sélectionnée de la liste
+} else { // À partir de la 34ème question, choisir aléatoirement mais éviter les répétitions récentes
+do {
+randomQuestion = questions[Math.floor(Math.random() * questions.length)];
+} while (recentQuestions.includes(randomQuestion.letter));
+}
+
+// Mettre à jour les questions récentes si on est à partir de la 34ème question
+if (remainingQuestions.length === 0) {
+recentQuestions.push(randomQuestion.letter);
+if (recentQuestions.length > 15) { // Limite à 15 dernières questions
+recentQuestions.shift(); // Retirer la plus ancienne question
+}
+}
+
+let choices = [randomQuestion.correct];
+
+// Ajout des réponses incorrectes
+while (choices.length < 4) {
+const randomWrong = allLetters[Math.floor(Math.random() * allLetters.length)];
+if (! choices.includes(randomWrong)) {
+choices.push(randomWrong);
+}
+}
+
+shuffleArray(choices);
+
+const questionBox = document.getElementById('question-box');
+questionBox.innerHTML = `
+                <h3>Quelle est la lettre latine équivalente à ${
+randomQuestion.letter
+} ?</h3>
+                <button onclick="checkAnswer('${
+choices[0]
+}', '${
+randomQuestion.correct
+}')">${
+choices[0]
+}</button>
+                <button onclick="checkAnswer('${
+choices[1]
+}', '${
+randomQuestion.correct
+}')">${
+choices[1]
+}</button>
+                <button onclick="checkAnswer('${
+choices[2]
+}', '${
+randomQuestion.correct
+}')">${
+choices[2]
+}</button>
+                <button onclick="checkAnswer('${
+choices[3]
+}', '${
+randomQuestion.correct
+}')">${
+choices[3]
+}</button>
+            `;
+
+// Réinitialiser le feedback pour chaque nouvelle question
+document.getElementById('feedback').innerHTML = '';
+
+questionCount++;
+}
+
+function checkAnswer(selected, correct) {
+const feedback = document.getElementById('feedback');
+if (selected === correct) {
+feedback.innerHTML = "<p class='correct'>Bonne réponse !</p>";
+setTimeout(generateQuestion, 2000); // Pause de 2 secondes pour les bonnes réponses
+} else {
+feedback.innerHTML = `<p class='incorrect'>Mauvaise réponse, la bonne était : ${correct}</p>`;
+setTimeout(generateQuestion, 5000); // Pause de 5 secondes pour les mauvaises réponses
+}
+}
+
+window.onload = generateQuestion;
+</script>{% endblock %}

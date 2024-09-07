@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+
+{% form_theme confirmationForm 'form/_form_errors.html.twig' %}
+
+{% block title %}
+	{{ 'title.delete_my_account'|trans }}
+{% endblock %}
+
+{% block body %}
+
+	<style>
+
+		.delete-box .user-box .show-password {
+			position: relative;
+			font-size: 16px;
+			color: #03e9f4;
+			cursor: pointer;
+		}
+
+		.delete-box {
+	   	width: 100%;
+			max-width: 500px;
+			margin: 0 auto;
+			padding: 40px;
+			background: rgba(0, 0, 0, 0.5);
+			box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+			border-radius: 10px;
+		}
+
+		/* Media query for larger screens */
+		@media(min-width: 768px) {
+			.delete-box {
+				max-width: 60%;
+			}
+		}
+		.delete-box h1 {
+			margin: 0 0 30px;
+			padding: 0;
+			color: #fff;
+			text-align: center;
+		}
+
+		.delete-box .mdp-box input {
+			width: 100%;
+			padding: 2px 0;
+			font-size: 16px;
+			color: #fff;
+			margin-bottom: 30px;
+			border: none;
+			border-bottom: 1px solid #fff;
+			outline: none;
+			background: transparent;
+		}
+		.delete-box .mdp-box label {
+			position: relative;
+			top: 0;
+			left: 0;
+			padding: 10px 0;
+			font-size: 16px;
+			color: #fff;
+			pointer-events: none;
+			transition: 0.5s;
+		}
+
+		.delete-box .mdp-box input:focus ~ label,
+		.delete-box .mdp-box input:valid ~ label {
+			top: -20px;
+			left: 0;
+			color: #fff;
+			font-size: 12px;
+		}
+	</style>
+
+
+	<div class="row">
+		<div class="col-6 mx-auto">
+			{% include 'include/flashes.html.twig' %}
+		</div>
+	</div>
+	<div class="delete-box">
+		<h2 class="text-center my-3 text-white">{{ 'title.delete_my_account'|trans }}</h2>
+		
+		
+		{{ form_start(confirmationForm) }}
+
+		<div class="mdp-box">
+			{{ form_row(confirmationForm.password) }}
+		</div>
+		{{ form_end(confirmationForm) }}
+	</div>
+
+{% endblock %}

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>{{ 'title.email_newsletter'|trans }}</title>
+		<style>
+			body {
+				font-family: Arial, sans-serif;
+				margin: 0;
+				padding: 20px;
+				background-color: #f6f6f6;
+			}
+			.email-container {
+				max-width: 600px;
+				margin: 0 auto;
+				background-color: #ffffff;
+				padding: 20px;
+				border: 1px solid #e9e9e9;
+				border-radius: 10px;
+			}
+			.email-header {
+				text-align: center;
+				margin-bottom: 20px;
+			}
+			.email-header img {
+				max-width: 150px;
+			}
+			.email-body {
+				font-size: 16px;
+				line-height: 1.6;
+			}
+			.email-body h1 {
+				font-size: 24px;
+				color: #333333;
+				margin-top: 0;
+			}
+			.word-item {
+				background: #eeeeee;
+				border: 1px solid #dddddd;
+				margin-bottom: 10px;
+				padding: 10px;
+				border-radius: 4px;
+			}
+			.email-footer {
+				margin-top: 20px;
+				font-size: 14px;
+				color: #999999;
+				text-align: center;
+			}
+			.email-footer a {
+				color: #3498db;
+				text-decoration: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="email-container">
+			<div class="email-header">
+				<img src="cid:logo_amyaz" alt="Logo Amyaz" width="60" height="50">
+			</div>
+			<div class="email-body">
+				<h1>{{ 'title.email_newsletter'|trans }}</h1>
+				<p>{{ 'p.hello'|trans }},</p>
+				<p>{{ 'p.title_mail_newsletter'|trans }} :</p>
+				<div>
+					{% for word in words %}
+						<div class="word-item">
+							<p><strong>{{ 'post.french_word'|trans }}: {{ word.wordFR }}</strong></p>
+							<p><strong>{{ 'post.english_word'|trans }}: {{ word.wordEN }}</strong></p>
+							<p><em>{{ 'post.rif_singular'|trans }}:</em> {{ word.singular }}</p>
+							<p><em>{{ 'post.rif_plural'|trans }}:</em> {{ word.plural }}</p>
+							<p><em>{{ 'post.phonetic_singular'|trans }}:</em> {{ word.phonetic_singular }}</p>
+							<p><em>{{ 'post.phonetic_plural'|trans }}:</em> {{ word.phonetic_plural }}</p>
+						</div>
+					{% endfor %}
+				</div>
+				<p>{{ 'p.thank_subscribe'|trans }}</p>
+			</div>
+			<div class="email-footer">
+				<p>{{ 'p.footer_subscribe'|trans }}</p>
+				<p><a href="{{ unsubscribeUrl }}">{{ 'p.unsubscribe_newsletter'|trans }}</a></p>
+				<p>&copy; {{ "now"|date("Y") }} {{ 'p.footer_droit'|trans }}</p>
+			</div>
+		</div>
+	</body>
+</html>

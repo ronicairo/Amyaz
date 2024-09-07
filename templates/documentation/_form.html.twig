@@ -1,0 +1,23 @@
+{% form_theme form 'form/_form_errors.html.twig' %}
+
+<div class="row">
+	<div class="col-5 mx-auto">
+
+		{{ form_start(form) }}
+
+		{{ form_row(form.titleFr) }}
+		{{ form_row(form.titleEn) }}
+		{{ form_row(form.contentFr) }}
+		{{ form_row(form.contentEn) }}
+
+		<div class="row">
+			<div class="col6">{{ form_row(form.file) }}</div>
+		</div>
+		<div class="mb-3 mt-3 text-center" style="color:#d7acaa; font-size:15px;">
+			{{ 'post.champ_obligatoire'|trans }}
+		</div>
+
+		{{ form_end(form) }}
+
+	</div>
+</div>

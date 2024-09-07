@@ -1,0 +1,125 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{ 'navigation.dashboard'|trans }}
+{% endblock %}
+
+{% block body %}
+	<style>
+		.card {
+			position: relative;
+			background: rgba(0, 0, 0, 0.5);
+			box-sizing: border-box;
+			box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+			border: 1px solid black;
+			border-radius: 15px;
+			margin: auto;
+			padding: 20px;
+		}
+
+		.card-body {
+			padding: 20px;
+		}
+
+		.btn-rounded {
+			border-radius: 50px;
+		}
+
+		.btn-lg {
+			padding: 10px 20px;
+		}
+
+		.btn-block {
+			width: 100%;
+			margin-bottom: 10px;
+		}
+
+		.btn-light {
+			background-color: #f8f9fa;
+			color: #343a40;
+			border: 1px solid black;
+		}
+
+		.btn-light:hover {
+			background-color: #e2e6ea;
+		}
+
+		.profile-header {
+			text-align: center; /* Centre le texte */
+		}
+
+		.profile-header img {
+			display: block;
+			margin: 0 auto; /* Centre l'image */
+		}
+
+		.profile-header h6,
+		.profile-header p {
+			margin: 0;
+			padding: 5px 0; /* Espacement vertical */
+		}
+
+		.profile-img {
+			width: 100px; /* Augmenté pour plus de visibilité */
+			height: 100px; /* Augmenté pour plus de visibilité */
+			border-radius: 50%;
+			object-fit: cover;
+			border: 2px solid #ddd;
+		}
+	</style>
+
+	{% include "include/flashes.html.twig" %}
+
+	<section class="vh-50">
+		{% if app.user and (is_granted('ROLE_ADMIN') or is_granted('ROLE_MODERATOR')) %}
+			<div class="container h-50">
+				<div class="row d-flex justify-content-center align-items-center h-100">
+					<div class="col col-md-9 col-lg-7 col-xl-5">
+						<div class="card">
+							<div class="profile-header">
+								<img class="profile-img mt-2" src="{{ app.user.picture ? asset('uploads/profile/' ~ app.user.picture) : asset('uploads/profile/default_profile_picture.jpg') }}" alt="user-profile-picture"/>
+								<h6 class="mt-2 text-white">{{ app.user.username }}</h6>
+							</div>
+							<div class="card-body text-black">
+								<h4 class="text-center text-white mb-2">{{ 'navigation.dashboard'|trans }}</h4>
+								<hr>
+								<a href="{{ path('grammar_index') }}" class="btn btn-light btn-rounded btn-block btn-md">
+									{{ 'account.grammar_learn'|trans }}
+								</a>
+								{% if is_granted('ROLE_ADMIN') %}
+									<a href="{{ path('app_user_index') }}" class="btn btn-light btn-rounded btn-block btn-md">
+										{{ 'account.show_user'|trans }}
+									</a>
+								{% endif %}
+								<a href="{{ path('account_pending_translations') }}" class="btn btn-light btn-rounded btn-block btn-md">
+									{{ 'account.pending_request'|trans }}
+								</a>
+								<a href="{{ path('app_traduction_index') }}" class="btn btn-light btn-rounded btn-block btn-md">
+									{{ 'account.list_word'|trans }}
+								</a>
+								<a href="{{ path('documentation_index') }}" class="btn btn-light btn-rounded btn-block btn-md">
+									Documentation
+								</a>
+								<a href="{{ path('category_doc_index') }}" class="btn btn-light btn-rounded btn-block btn-md">
+									{{ 'account.category_doc'|trans }}
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% else %}
+			<div class="container py-5 h-50">
+				<div class="row d-flex justify-content-center align-items-center h-100">
+					<div class="col col-md-9 col-lg-7 col-xl-5">
+						<div class="card">
+							<div class="card-body text-black text-center">
+								<h4>{{ 'addflash.restreindre_acces'|trans }}</h4>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endif %}
+	</section>
+{% endblock %}

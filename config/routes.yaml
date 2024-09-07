@@ -1,0 +1,24 @@
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
+    
+change_locale:
+    path: /change-locale/{locale}
+    controller: App\Controller\LocaleController::changeLocale
+
+phpinfo:
+    path: /phpinfo
+    controller: App\Controller\DebugController::phpinfo
+    
+traduction_new:
+    path: /traduction/new/{formType}
+    controller: App\Controller\TraductionController::new
+    defaults:
+        formType: 'add'
+    requirements:
+        formType: 'add|request'
+
+api_login_check:
+    path: /api/login_check

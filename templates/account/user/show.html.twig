@@ -1,0 +1,120 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'account-user.title'|trans }}{% endblock %}
+
+{% block body %}
+    <style>
+        .user-details-box {
+            margin: 20px auto;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+            border-radius: 10px;
+            max-width: 80%;
+        }
+
+        @media(min-width: 768px) {
+            .user-details-box {
+                max-width: 60%;
+            }
+        }
+
+        .user-details-box h1 {
+            color: #fff;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .user-details-box h2 {
+            color: #fff;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .user-details-box ul {
+            color: #e9e9e9;
+            padding-left: 0;
+            list-style: none;
+        }
+
+        .user-details-box li {
+            padding: 10px 0;
+            border-bottom: 1px solid #fff;
+        }
+
+        .user-details-box li strong {
+            color: #fff;
+            display: inline-block;
+            min-width: 120px;
+        }
+
+        .user-details-box .text-center p {
+            color: #fff;
+        }
+
+        .user-details-box a, 
+        .user-details-box form button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            text-align: center;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            color: #fff;
+            background: transparent;
+        }
+
+        .user-details-box form {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+    </style>
+
+    <div class="user-details-box">
+        <h1>{{ 'account-user.title'|trans }} {{ user.username }}</h1>
+
+        <h2>Infos</h2>
+        <ul>
+            <li><strong>Email:</strong> {{ user.email }}</li>
+            <li><strong>{{ 'account-user.date_creation'|trans }}:</strong> {{ user.createdAt|date('d/m/Y H:i') }}</li>
+        </ul>
+
+        <h2>Commentaires</h2>
+        {% if comments|length > 0 %}
+            <ul>
+                {% for comment in comments %}
+                    <li>{{ comment.opinion }} <small>(le {{ comment.createdAt|date('d/m/Y H:i') }})</small></li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-center">{{ 'account-user.no_comments'|trans }}</p>
+        {% endif %}
+
+        <h2>Traductions</h2>
+        {% if traductions|length > 0 %}
+            <ul>
+                {% for traduction in traductions %}
+                    <li>{{ traduction.wordFR }} - {{ traduction.wordEN }} <small>(le {{ traduction.createdAt|date('d/m/Y H:i') }})</small></li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-center">{{ 'account-user.no_translation'|trans }}</p>
+        {% endif %}
+        
+        <div class="text-center mt-4">
+            <a href="{{ path('app_user_index') }}" class="btn btn-outline-light">{{ 'button.back_list'|trans }}</a>
+        </div>
+
+        {% if is_granted('ROLE_ADMIN') %}
+            <div class="text-center mt-4">
+                <form id="delete-user-form" action="{{ path('admin_user_delete', {'id': user.id}) }}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+                    <button type="submit" class="btn mt-2" style="color: rgb(251, 77, 77);">{{ 'account-user.delete_user'|trans }}</button>
+                </form>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

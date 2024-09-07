@@ -1,0 +1,116 @@
+@font-face {
+    font-family: 'MaPolice';
+    src: url('/public/fonts/rif.OTF') format('truetype');
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    background: linear-gradient(to bottom, #aacff1,#abd5df, #eaccb1);
+    background-attachment: scroll; /* Fixer le background par rapport à la fenêtre */
+    transition: background-color 1s ease;
+    min-height: 100%;
+}
+
+main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'DM Serif Display', serif;
+    padding: 20px;
+    min-height: 75vh;
+}
+
+body {
+    background-color: transparent !important;
+    margin: 0;
+    padding: 0;
+}
+
+h3 {
+    margin: 10px 0;
+}
+
+h6 {
+    margin: 5px 0;
+    text-transform: uppercase;
+}
+
+p {
+    font-size: 14px;
+    line-height: 21px;
+}
+
+
+/* assets/styles/cookie-consent.css */
+#cookie-consent-popup {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    z-index: 1000;
+}
+
+#cookie-consent-popup p {
+    margin: 0 0 20px;
+    font-size: 16px;
+}
+
+#cookie-consent-popup button {
+    background-color: #4CAF50;
+    border: none;
+    color: rgb(221, 221, 221);
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+#cookie-consent-popup button#decline-cookies {
+    background-color: #f44336;
+}
+
+#cookie-consent-popup button:hover {
+    background-color: #45a049;
+}
+
+#cookie-consent-popup button#decline-cookies:hover {
+    background-color: #e53935;
+}
+
+.form-error {
+    color: rgb(251, 77, 77);
+}
+
+/* SCROLL */
+
+.reveal {
+    position: relative;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: 0.5s all ease;
+}
+
+.reveal.activ {
+    transform: translateY(0);
+    opacity: 1;
+}

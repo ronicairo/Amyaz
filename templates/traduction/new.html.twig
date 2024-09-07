@@ -1,0 +1,159 @@
+{% extends 'base.html.twig' %}
+
+{% form_theme form 'form/_form_errors.html.twig' %}
+
+{% block title %}
+    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MODERATOR') %}
+        {{ 'post.new_trad_admin'|trans }}
+    {% else %}
+        {{ 'post.new_trad'|trans }}
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <style>
+        .form-box {
+          	width: 100%;
+			max-width: 500px;
+			margin: 0 auto;
+			padding: 40px;
+			background: rgba(0, 0, 0, 0.5);
+			box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+			border-radius: 10px;
+        }
+
+        /* Media query for larger screens */
+        @media(min-width: 768px) {
+            .form-box {
+                max-width: 40%;
+            }
+        }
+
+        .form-box h1 {
+            margin: 0 0 30px;
+            padding: 0;
+            color: #fff;
+            text-align: center;
+        }
+
+        .form-box .user-box {
+            position: relative;
+        }
+
+        .form-box .user-box input {
+            width: 100%;
+            padding: 0;
+            font-size: 16px;
+            color: #fff;
+            margin-bottom: 0;
+            border: none;
+            border-bottom: 1px solid #fff;
+            outline: none;
+            background: transparent;
+            transition: border-color 0.3s, background-color 0.3s;
+        }
+
+        .form-box .user-box input:hover {
+            border-bottom: 1px solid #03e9f4;
+        }
+
+        .form-box .user-box label {
+            position: relative;
+            top: 0;
+            left: 0;
+            padding: 5px 0;
+            font-size: 16px;
+            color: #fff;
+            pointer-events: none;
+            transition: 0.5s;
+        }
+
+        .form-box .user-box input:focus ~ label,
+        .form-box .user-box input:valid ~ label {
+            top: -20px;
+            left: 0;
+            color: #03e9f4;
+            font-size: 12px;
+        }
+    </style>
+
+    <div class="col-6 mx-auto">
+        {% include 'include/flashes.html.twig' %}
+    </div>
+
+    <div class="form-box">
+        <h1 class="h3 mb-3 font-weight-normal">
+            {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MODERATOR') %}
+                {{ 'post.new_trad_admin'|trans }}
+            {% else %}
+                {{ 'post.new_trad'|trans }}
+            {% endif %}
+        </h1>
+
+        <div class="mb-3 mt-3 text-center" style="color:#d7acaa; font-size:15px;">
+            {{ 'post.champ_obligatoire'|trans }}
+        </div>
+
+        {{ form_start(form) }}
+
+        {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MODERATOR') %}
+            <div class="user-box">
+                {{ form_row(form.wordFR) }}
+            </div>
+            <div class="user-box">
+                {{ form_row(form.grammarFR) }}
+            </div>
+            <div class="user-box">
+                {{ form_row(form.wordEN) }}
+            </div>
+            <div class="user-box">
+                {{ form_row(form.grammarEN) }}
+            </div>
+            <div class="user-box">
+                {{ form_row(form.singular) }}
+            </div>
+            <div class="user-box">
+                {{ form_row(form.plural) }}
+            </div>
+            <div class="user-box">
+                {{ form_row(form.phoneticSingular) }}
+            </div>
+            <div class="user-box">
+                {{ form_row(form.phoneticPlural) }}
+            </div>
+        {% else %}
+            {% if locale == 'fr' %}
+                <div class="user-box">
+                    {{ form_row(form.wordFR) }}
+                </div>
+                <div class="user-box">
+                    {{ form_row(form.grammarFR) }}
+                </div>
+            {% elseif locale == 'en' %}
+                <div class="user-box">
+                    {{ form_row(form.wordEN) }}
+                </div>
+                <div class="user-box">
+                    {{ form_row(form.grammarEN) }}
+                </div>
+            {% endif %}
+            <div class="user-box">
+                {{ form_row(form.singular) }}
+            </div>
+            <div class="user-box">
+                {{ form_row(form.plural) }}
+            </div>
+            <div class="user-box">
+                {{ form_row(form.phoneticSingular) }}
+            </div>
+            <div class="user-box">
+                {{ form_row(form.phoneticPlural) }}
+            </div>
+        {% endif %}
+        <div class="text-center mt-3">
+            {{ form_row(form.submit) }}
+        </div>
+        {{ form_end(form) }}
+    </div>
+
+{% endblock %}

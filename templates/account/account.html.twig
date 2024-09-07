@@ -1,0 +1,170 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{ 'navigation.profile'|trans }}
+{% endblock %}
+
+{% block body %}
+	<style>
+		.card {
+			position: relative;
+			background: rgba(0, 0, 0, 0.5);
+			box-sizing: border-box;
+			box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+			border: 1px solid black;
+			border-radius: 15px;
+			margin: auto;
+			padding: 20px;
+		}
+
+		.card-body {
+			padding: 20px;
+		}
+
+		.profile-img {
+			width: 100px; /* Augmenté pour plus de visibilité */
+			height: 100px; /* Augmenté pour plus de visibilité */
+			border-radius: 50%;
+			object-fit: cover;
+			border: 2px solid #ddd;
+		}
+
+		.dropdown-menu {
+			min-width: 200px;
+		}
+
+		.dropdown-item {
+			cursor: pointer;
+		}
+
+		#pictureForm {
+			margin-top: 15px;
+			display: none;
+		}
+
+		#pictureForm input[type="file"] {
+			margin-bottom: 10px;
+		}
+
+		.btn-rounded {
+			border-radius: 50px;
+		}
+
+		.btn-lg {
+			padding: 10px 20px;
+		}
+
+		.btn-block {
+			width: 100%;
+			margin-bottom: 10px;
+		}
+
+		.btn-light {
+			background-color: #f8f9fa;
+			color: #343a40;
+			border: 1px solid black;
+		}
+
+		.btn-light:hover {
+			background-color: #e2e6ea;
+		}
+
+		.profile-header {
+			text-align: center; /* Centre le texte */
+		}
+
+		.profile-header img {
+			display: block;
+			margin: 0 auto; /* Centre l'image */
+		}
+
+		.profile-header h6,
+		.profile-header p {
+			margin: 0;
+			padding: 5px 0; /* Espacement vertical */
+		}
+
+		.dropdown-center {
+			display: flex;
+			justify-content: center;
+			margin-top: 10px;
+		}
+
+		.dropdown-menu {
+			position: absolute;
+			left: 50%;
+			transform: translateX(-50%);
+		}
+	</style>
+
+	{% include "include/flashes.html.twig" %}
+
+	<section class="vh-50">
+		{% if app.user %}
+			<div class="container py-3 h-50">
+				<div class="row d-flex justify-content-center align-items-center h-100">
+					<div class="col col-md-9 col-lg-7 col-xl-5">
+						<div class="card">
+							<div class="card-body text-black">
+								<div class="profile-header">
+									<img class="profile-img" src="{{ app.user.picture ? asset('uploads/profile/' ~ app.user.picture) : asset('uploads/profile/default_profile_picture.jpg') }}" alt="user-profile-picture"/>
+									<h6 class="mb-2 mt-3 text-white">{{ app.user.username }}</h6>
+									<p class="mb-1 text-white">{{ app.user.email }}</p>
+									<div class="dropdown-center mt-2">
+										<button class="btn btn-outline-light btn-rounded btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+											{{ 'title.edit_profile'|trans }}
+										</button>
+										<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+											<li>
+												<a class="dropdown-item" href="{{ path('update_password', {'id': app.user.id}) }}">{{ 'title.edit_password'|trans }}</a>
+											</li>
+											<li>
+												<a class="dropdown-item" href="{{ path('update_email', {'id': app.user.id}) }}">{{ 'title.edit_email'|trans }}</a>
+											</li>
+											<li>
+												<a class="dropdown-item" href="{{ path('update_username', {'id': app.user.id}) }}">{{ 'title.edit_username'|trans }}</a>
+											</li>
+											<li>
+												<button class="dropdown-item" type="button" onclick="document.getElementById('pictureForm').style.display = 'block';">{{ 'title.edit_profile_picture'|trans }}</button>
+											</li>
+											<li>
+												<a class="dropdown-item" href="{{ path('app_user_delete', { id: app.user.id }) }}">{{ 'title.delete_my_account'|trans }}</a>
+											</li>
+										</ul>
+									</div>
+									<div id="pictureForm">
+										<form action="{{ path('update_picture', {'id': app.user.id}) }}" method="post" enctype="multipart/form-data">
+											<input type="file" name="picture" accept="image/*">
+											<button type="submit" class="btn btn-dark btn-rounded">{{ 'button.confirm'|trans }}</button>
+										</form>
+									</div>
+								</div>
+								<hr>
+								{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MODERATOR') %}
+									<a href="{{ path('app_traduction_new') }}" class="btn btn-light btn-rounded btn-block btn-lg">
+										{{ 'account.add'|trans }}
+									</a>
+									<a href="{{ path('dashboard') }}" class="btn btn-light btn-rounded btn-block btn-lg">
+										{{ 'navigation.dashboard'|trans }}
+									</a>
+								{% else %}
+									<!-- Sinon, affichez le bouton avec "account.ask" -->
+									<a href="{{ path('app_traduction_new') }}" class="btn btn-light btn-rounded btn-block btn-lg">
+										{{ 'account.ask'|trans }}
+									</a>
+								{% endif %}
+
+								{% if not is_granted('ROLE_ADMIN') and not is_granted('ROLE_MODERATOR') %}
+									<!-- Affichez ce bouton seulement si l'utilisateur n'est ni admin ni modérateur -->
+									<a href="{{ path('account_translations') }}" class="btn btn-light btn-rounded btn-block btn-lg">
+										{{ 'account.my_request_translation'|trans }}
+									</a>
+								{% endif %}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endif %}
+	</section>
+{% endblock %}

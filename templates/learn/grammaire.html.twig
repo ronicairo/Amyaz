@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Amyaz - {{ 'navigation.grammar'|trans|raw }}{% endblock %}
+
+{% block body %}
+    <style>
+        .custom-card {
+            background-color: transparent;
+            border-radius: 20px;
+            box-sizing: border-box;
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .card-text {
+            flex-grow: 1;
+            margin-bottom: 20px;
+        }
+
+        .card-btn {
+            align-self: flex-end;
+            margin-top: auto; /* Ensures the button stays at the bottom */
+        }
+
+        .btn-dark {
+            background-color: #343a40;
+            border-color: #343a40;
+        }
+
+        .btn-dark:hover {
+            background-color: #23272b;
+            border-color: #1d2124;
+        }
+    </style>
+    
+    <div class="container">
+        <h1 class="display-4">{{ 'grammar.title'|trans|raw }}</h1>
+        <p class="lead">{{ 'grammar.p1'|trans|raw }}</p>
+        <p class="lead">{{ 'grammar.p2'|trans|raw }}</p>
+    </div>
+
+    <div class="container px-4 py-5" id="featured-3">
+        <h2 class="pb-2 border-bottom">{{ 'grammar.h2'|trans|raw }}</h2>
+        <div class="row">
+            {% for sheet in grammarSheets %}
+                <div class="col-md-6 mb-4 mt-4">
+                    <div class="custom-card h-100">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">
+                                {% if app.request.locale == 'en' %}
+                                    {{ sheet.titleEn | raw }}
+                                {% else %}
+                                    {{ sheet.titleFr | raw }}
+                                {% endif %}
+                            </h5>
+                            <p class="card-text">
+                                {% if app.request.locale == 'en' %}
+                                    {{ sheet.subtitleEn | raw }}
+                                {% else %}
+                                    {{ sheet.subtitleFr | raw }}
+                                {% endif %}
+                            </p>
+                            <a href="{{ path('grammarsheet_show', {'id': sheet.id}) }}" class="btn btn-dark card-btn">Voir</a>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <p>{{ 'grammar.no_fiche'|trans|raw }}</p>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

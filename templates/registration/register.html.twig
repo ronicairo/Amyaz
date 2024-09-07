@@ -1,0 +1,124 @@
+{% extends 'base.html.twig' %}
+
+{% form_theme registrationForm 'form/_form_errors.html.twig' %}
+
+{% block title %}
+	{{ 'button.register'|trans }}
+{% endblock %}
+
+{% block body %}
+	<style>
+		.register-box {
+			width: 100%;
+			max-width: 500px;
+			margin: 0 auto;
+			padding: 40px;
+			background: rgba(0, 0, 0, 0.5);
+			box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+			border-radius: 10px;
+		}
+
+		.register-box h1 {
+			margin: 0 0 30px;
+			color: #fff;
+			text-align: center;
+		}
+
+		.user-box {
+			margin-bottom: 20px;
+			position: relative; /* Pour positionner l'icône à l'intérieur de l'input */
+		}
+
+		.user-box label {
+			display: block;
+			margin-bottom: 5px;
+			font-size: 16px;
+			color: #fff;
+		}
+
+		.user-box input {
+			width: 100%;
+			padding: 10px;
+			font-size: 16px;
+			color: #fff;
+			border: none;
+			border-bottom: 1px solid #fff;
+			background: transparent;
+			outline: none;
+		}
+
+		.user-box .show-password {
+			position: absolute;
+			right: 10px;
+			top: 50%;
+			transform: translateY(-50%);
+			color: #03e9f4;
+			cursor: pointer;
+			font-size: 20px;
+		}
+
+		.checkbox label {
+			font-size: 15px;
+			color: #fff;
+		}
+
+		.checkbox input {
+			margin-right: 5px;
+		}
+
+		.register-box a {
+			color: #03e9f4;
+			text-decoration: none;
+		}
+	</style>
+
+	<div class="col-11 mx-auto">
+		{% include 'include/flashes.html.twig' %}
+	</div>
+
+	{% for flash_error in app.flashes('verify_email_error') %}
+		<div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+	{% endfor %}
+
+	<div class="register-box">
+		<h1 class="h3 mb-3 font-weight-normal">{{ 'button.register'|trans }}</h1>
+
+		{{ form_errors(registrationForm) }}
+
+		{{ form_start(registrationForm) }}
+		<div class="user-box">
+			{{ form_row(registrationForm.email) }}
+		</div>
+		<div class="user-box">
+			{{ form_row(registrationForm.username) }}
+		</div>
+		<div class="user-box">
+			{{ form_row(registrationForm.password.first) }}
+			<i class="bi bi-eye show-password" id="togglePasswordFirst" onclick="togglePasswordVisibility('first')"></i>
+		</div>
+		<div class="user-box">
+			{{ form_row(registrationForm.password.second) }}
+			<i class="bi bi-eye show-password" id="togglePasswordSecond" onclick="togglePasswordVisibility('second')"></i>
+		</div>
+		<p class="text-white">{{ 'button.already_account'|trans }}
+			<a href="{{ path('app_login') }}">{{ 'button.login'|trans }}</a>
+		</p>
+		{{ form_end(registrationForm) }}
+	</div>
+
+	<script>
+		function togglePasswordVisibility(field) {
+			const passwordInput = document.getElementById('registration_form_password_' + field);
+			const toggleIcon = document.getElementById('togglePassword' + field.charAt(0).toUpperCase() + field.slice(1));
+			if (passwordInput.type === 'password') {
+				passwordInput.type = 'text';
+				toggleIcon.classList.remove('bi-eye');
+				toggleIcon.classList.add('bi-eye-slash');
+			} else {
+				passwordInput.type = 'password';
+				toggleIcon.classList.remove('bi-eye-slash');
+				toggleIcon.classList.add('bi-eye');
+			}
+		}
+	</script>
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% form_theme form 'form/_form_errors.html.twig' %}
+
+{% block title %}{{ 'form.create_grammar'|trans }}
+{% endblock %}
+
+{% block body %}
+	<style>
+		.card {
+			position: relative;
+			background: rgba(0, 0, 0, 0.5);
+			box-sizing: border-box;
+			box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+			border-radius: 10px;
+			margin: auto;
+			padding: 20px;
+		}
+		.form-label-white {
+			color: white;
+		}
+	</style>
+	<div class="container mt-5">
+		<div class="row justify-content-center">
+			<div class="col-md-8">
+				<div class="card">
+					<div class="card-header bg-dark text-white">
+						<h1 class="h4 mb-0">{{ 'form.create_grammar'|trans }}</h1>
+					</div>
+					<div class="card-body">
+						{{ form_start(form) }}
+						<div class="mb-3">
+							{{ form_label(form.titleFr, 'Titre FR', {'label_attr': {'class': 'form-label form-label-white'}}) }}
+							{{ form_widget(form.titleFr, {'attr': {'class': 'form-control'}}) }}
+							{{ form_errors(form.titleFr) }}
+						</div>
+						<div class="mb-3">
+							{{ form_label(form.titleEn, 'Title EN', {'label_attr': {'class': 'form-label form-label-white'}}) }}
+							{{ form_widget(form.titleEn, {'attr': {'class': 'form-control'}}) }}
+							{{ form_errors(form.titleEn) }}
+						</div>
+						<div class="mb-3">
+							{{ form_label(form.subtitleFr, 'Sous-titre FR', {'label_attr': {'class': 'form-label form-label-white'}}) }}
+							{{ form_widget(form.subtitleFr, {'attr': {'class': 'form-control'}}) }}
+							{{ form_errors(form.subtitleFr) }}
+						</div>
+						<div class="mb-3">
+							{{ form_label(form.subtitleEn, 'Subtitle EN', {'label_attr': {'class': 'form-label form-label-white'}}) }}
+							{{ form_widget(form.subtitleEn, {'attr': {'class': 'form-control'}}) }}
+							{{ form_errors(form.subtitleEn) }}
+						</div>
+						<div class="mb-3">
+							{{ form_label(form.contentFr, 'Content FR', {'label_attr': {'class': 'form-label form-label-white'}}) }}
+							{{ form_widget(form.contentFr, {'attr': {'class': 'form-control'}}) }}
+							{{ form_errors(form.contentFr) }}
+						</div>
+						<div class="mb-3">
+							{{ form_label(form.contentEn, 'Content EN', {'label_attr': {'class': 'form-label form-label-white'}}) }}
+							{{ form_widget(form.contentEn, {'attr': {'class': 'form-control'}}) }}
+							{{ form_errors(form.contentEn) }}
+						</div>
+						{{ form_end(form) }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
