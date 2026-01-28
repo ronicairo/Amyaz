@@ -16,83 +16,134 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class TraductionRepository extends ServiceEntityRepository
 {
+
+    private $mapping = array(
+      'fr-rif'  => 'wordFR',
+      'rif-fr' => 'singular',
+      'en-rif' => 'wordEN',
+      'rif-en' => 'singular'
+
+    );
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Traduction::class);
     }
-
+    
+       public function countSingularWords(): int
+    {
+        return $this->createQueryBuilder('t')
+            ->select('count(t.id)')
+            ->where('t.singular IS NOT NULL')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+    
     public function findAllArchived()
     {
         return $this->createQueryBuilder('t')
             ->where('t.deletedAt IS NOT NULL')
-            ->getQuery()
-            ->getResult()
+            ->getQuery() # Permet de récupérer la requête SQL
+            ->getResult() # Permet de récupérer els résultats de la requête
         ;
     }
 
     public function findBySearchTerm($searchTerm, $langOption)
     {
-        $qb = $this->createQueryBuilder('t')
-            ->leftJoin('t.status', 's')
-            ->addSelect('s');
+    $qb = $this->createQueryBuilder('t')
+        ->leftJoin('t.status', 's')
+        ->addSelect('s');
     
-        // Supprimer les espaces au début et à la fin du terme de recherche
-        $trimmedSearchTerm = trim($searchTerm);
+    $word = $this->mapping[$langOption];
     
-        // Ajouter la condition principale en fonction de la langue choisie
-        if ($langOption === 'fr-rif') {
-            $qb->where('TRIM(t.wordFR) = :exactTerm OR TRIM(t.wordFR) LIKE :termStarts OR TRIM(t.wordFR) LIKE :termContains')
-                ->setParameter('exactTerm', $trimmedSearchTerm)
-                ->setParameter('termStarts', $trimmedSearchTerm . '%')
-                ->setParameter('termContains', '%' . $trimmedSearchTerm . '%');
-        } elseif ($langOption === 'rif-fr' || $langOption === 'rif-en') {
-            $qb->where('(TRIM(t.singular) = :exactTerm OR TRIM(t.singular) LIKE :termStarts OR TRIM(t.singular) LIKE :termContains OR TRIM(t.plural) = :exactTerm OR TRIM(t.plural) LIKE :termStarts OR TRIM(t.plural) LIKE :termContains)')
-                ->setParameter('exactTerm', $trimmedSearchTerm)
-                ->setParameter('termStarts', $trimmedSearchTerm . '%')
-                ->setParameter('termContains', '%' . $trimmedSearchTerm . '%');
-        } elseif ($langOption === 'en-rif') {
-            $qb->where('TRIM(t.wordEN) = :exactTerm OR TRIM(t.wordEN) LIKE :termStarts OR TRIM(t.wordEN) LIKE :termContains')
-                ->setParameter('exactTerm', $trimmedSearchTerm)
-                ->setParameter('termStarts', $trimmedSearchTerm . '%')
-                ->setParameter('termContains', '%' . $trimmedSearchTerm . '%');
+    // Supprimer les espaces au début et à la fin du terme de recherche
+    $trimmedSearchTerm = trim($searchTerm);
+    
+    // Convertir le terme de recherche en minuscules
+    $loweredSearchTerm = mb_strtolower($trimmedSearchTerm, 'UTF-8');
+    
+    // Utilisation de LOWER() pour ignorer la casse dans la requête
+    $qb->where("LOWER(TRIM(t.$word)) = :exactTerm OR 
+                LOWER(TRIM(t.$word)) LIKE :termStarts OR 
+                LOWER(TRIM(t.$word)) LIKE :termEnd OR 
+                LOWER(TRIM(t.$word)) LIKE :termContains OR 
+                LOWER(TRIM(t.$word)) LIKE :termContainsSpace")
+        ->setParameter('exactTerm', $loweredSearchTerm)
+        ->setParameter('termStarts', $loweredSearchTerm . '%')
+        ->setParameter('termContainsSpace', '% ' . $loweredSearchTerm . ' %')
+        ->setParameter('termEnd', '%' . $loweredSearchTerm)
+        ->setParameter('termContains', '%' . $loweredSearchTerm . '%');
+    
+    // Ajouter la condition pour exclure les traductions avec status_id = 1 ou 2
+    $qb->andWhere('(s.id NOT IN (:excludedStatuses) OR s.id IS NULL)')
+        ->setParameter('excludedStatuses', [1, 2]);
+    
+    // Trier les résultats pour donner la priorité aux termes qui correspondent exactement
+    $qb->orderBy("CASE 
+                    WHEN LOWER(TRIM(t.$word)) = :exactTerm THEN 0
+                    WHEN LOWER(TRIM(t.$word)) LIKE :termStarts THEN 1
+                    WHEN LOWER(TRIM(t.$word)) LIKE :termContainsSpace THEN 2
+                    WHEN LOWER(TRIM(t.$word)) LIKE :termEnd THEN 3
+                    WHEN LOWER(TRIM(t.$word)) LIKE :termContains THEN 4
+                    ELSE 5
+                END", "ASC")
+        ->addOrderBy("LENGTH(t.$word)", 'ASC');
+
+$results = $qb->getQuery()->getResult();
+
+
+
+        usort($results, function($a, $b) use ($loweredSearchTerm, $word,$langOption) {
+            $function = "get".$this->mapping[$langOption];
+            $wordA = trim($a->$function());
+            $wordB = trim($b->$function());
+
+            $exactMatchA = ($wordA === $loweredSearchTerm || strpos($wordA, ', '.$loweredSearchTerm) !== false || strpos($wordA, $loweredSearchTerm.',') !== false);
+            $exactMatchB = ($wordB === $loweredSearchTerm || strpos($wordB, ', '.$loweredSearchTerm) !== false || strpos($wordB, $loweredSearchTerm.',') !== false);
+
+
+            if ($exactMatchA && !$exactMatchB) {
+                return -1;
+            } elseif (!$exactMatchA && $exactMatchB) {
+                return 1;
+            }
+
+            $posA = strpos($wordA, $loweredSearchTerm);
+            $posB = strpos($wordB, $loweredSearchTerm);
+
+            if ($posA !== $posB) {
+                return $posA - $posB;
+            }
+
+            return strlen($wordA) - strlen($wordB);
+        });
+
+             foreach ($results as $key => $result) {
+            $rifainSingularRecord = $result->getRifainSingularRecord();
+            $rifainPluralRecord = $result->getRifainPluralRecord();
+            
+            // Vérifier si les flux ne sont pas nuls avant de les lire
+            $results[$key]->hasRifainSingularRecord = $rifainSingularRecord && is_resource($rifainSingularRecord) && !empty(stream_get_contents($rifainSingularRecord));
+            $results[$key]->hasRifainPluralRecord = $rifainPluralRecord && is_resource($rifainPluralRecord) && !empty(stream_get_contents($rifainPluralRecord));
         }
-    
-        // Ajouter la condition pour exclure les traductions avec status_id = 1 ou 2
-        // tout en permettant les status_id NULL
-        $qb->andWhere('(s.id NOT IN (:excludedStatuses) OR s.id IS NULL)')
-            ->setParameter('excludedStatuses', [1, 2]);  // Liste des statuts à exclure
-    
-        // Trier les résultats pour donner la priorité aux termes qui correspondent exactement, puis commencent par le terme recherché
-        $qb->orderBy('CASE 
-                        WHEN TRIM(t.wordFR) = :exactTerm THEN 0
-                        WHEN TRIM(t.singular) = :exactTerm THEN 0
-                        WHEN TRIM(t.plural) = :exactTerm THEN 0
-                        WHEN TRIM(t.wordEN) = :exactTerm THEN 0
-                        WHEN TRIM(t.wordFR) LIKE :termStarts THEN 1
-                        WHEN TRIM(t.singular) LIKE :termStarts THEN 1
-                        WHEN TRIM(t.plural) LIKE :termStarts THEN 1
-                        WHEN TRIM(t.wordEN) LIKE :termStarts THEN 1
-                        ELSE 2 
-                        END', 'ASC')
-            ->addOrderBy('LENGTH(t.wordFR)', 'ASC')
-            ->addOrderBy('LENGTH(t.singular)', 'ASC')
-            ->addOrderBy('LENGTH(t.wordEN)', 'ASC');
-    
-        return $qb->getQuery()
-            ->getResult();
+
+        return $results;
     }
-    
 
 
-    public function findRecentWords($limit = 10)
+    public function findRecentWords($limit = 10, $excludeIds = [])
     {
-        return $this->createQueryBuilder('t')
-            ->select('t.wordFR', 't.wordEN', 't.singular', 't.plural', 't.phonetic_singular', 't.phonetic_plural')
-            ->where('t.status = 3 OR t.status = 4 OR t.status IS NULL') // Condition sur le status_id
-            ->orderBy('t.createdAt', 'DESC') // Trier par date de création décroissante
-            ->setMaxResults($limit) // Limiter à 10 résultats
-            ->getQuery()
-            ->getArrayResult();
+        $qb = $this->createQueryBuilder('t')
+            ->select('t.id', 't.wordFR', 't.wordEN', 't.singular', 't.plural', 't.phonetic_singular', 't.phonetic_plural')
+            ->where('t.status = 3 OR t.status = 4 OR t.status IS NULL')
+            ->orderBy('t.createdAt', 'DESC')
+            ->setMaxResults($limit);
+
+        if (!empty($excludeIds)) {
+            $qb->andWhere('t.id NOT IN (:excludeIds)')
+                ->setParameter('excludeIds', $excludeIds);
+        }
+
+        return $qb->getQuery()->getArrayResult();
     }
 
     public function findWordOfTheDay(int $offset)
@@ -104,6 +155,60 @@ class TraductionRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
+    public function findAllSortedByUpdatedAt(): array
+    {
+        return $this->createQueryBuilder('t')
+            ->orderBy('t.updatedAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }    
+    
+    public function findAllAlphabetically(): array
+    {
+        return $this->createQueryBuilder('t')
+            ->orderBy('t.wordFR', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }        
+
+    public function findAllWithRifainSingularRecord(): array
+    {
+        return $this->createQueryBuilder('t')
+            ->where('t.rifainSingularRecord IS NOT NULL')
+            ->andWhere('t.rifainSingularRecord != :empty')
+            ->setParameter('empty', '')
+            ->getQuery()
+            ->getResult();
+    } 
+
+ public function findByFirstLetter(string $letter, string $locale): array
+{
+    $field = $locale === 'en' ? 'wordEN' : 'wordFR';
+    
+    $results = $this->createQueryBuilder('t')
+        ->leftJoin('t.status', 's')
+        ->addSelect('s')
+        ->where('LOWER(SUBSTRING(t.' . $field . ', 1, 1)) = :letter')
+        ->setParameter('letter', strtolower($letter))
+        // Exclure les traductions avec status_id = 1 ou 2
+        ->andWhere('(s.id NOT IN (:excludedStatuses) OR s.id IS NULL)')
+        ->setParameter('excludedStatuses', [1, 2])
+        ->orderBy('t.' . $field, 'ASC')
+        ->getQuery()
+        ->getResult();
+    
+    // Ajouter les propriétés hasRifainSingularRecord et hasRifainPluralRecord
+    foreach ($results as $key => $result) {
+        $rifainSingularRecord = $result->getRifainSingularRecord();
+        $rifainPluralRecord = $result->getRifainPluralRecord();
+        
+        // Vérifier si les flux ne sont pas nuls avant de les lire
+        $results[$key]->hasRifainSingularRecord = $rifainSingularRecord && is_resource($rifainSingularRecord) && !empty(stream_get_contents($rifainSingularRecord));
+        $results[$key]->hasRifainPluralRecord = $rifainPluralRecord && is_resource($rifainPluralRecord) && !empty(stream_get_contents($rifainPluralRecord));
+    }
+    
+    return $results;
+}
 
     //    /**
     //     * @return Traduction[] Returns an array of Traduction objects

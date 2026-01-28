@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Traduction;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
@@ -13,6 +14,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Karser\Recaptcha3Bundle\Validator\Constraints\Recaptcha3;
 
@@ -104,7 +107,45 @@ class AddWordType extends AbstractType
                         ]),
                     ],
                 ]);
+
+                $form->add('rifainSingularRecord', FileType::class, [
+                    'label' => '',
+                    'mapped' => false, // So Symfony doesn’t automatically set it in the entity
+                    'required' => false,
+                    'attr' => [
+                        'class' => 'recorder d-none', // Add the 'recorder' class and hide it
+                    ]
+                ]);
+
+                $form->add('rifainPluralRecord', FileType::class, [
+                    'label' => '',
+                    'mapped' => false, // So Symfony doesn’t automatically set it in the entity
+                    'required' => false,
+                    'attr' => [
+                        'class' => 'recorder d-none', // Add the 'recorder' class and hide it
+                    ]
+                ]);
     
+                 $form->add('origin', TextType::class, [
+                            'label' => 'Origine',
+                            'required' => false,
+                        ]);
+                        
+                  $form->add('racine', TextType::class, [
+                    'label' => 'Racine',
+                    'required' => false,
+                ]);
+                
+                $form->add('example', TextType::class, [
+                    'label' => 'Exemple',
+                    'required' => false,
+                ]);
+                
+                  $form->add('source', TextType::class, [
+                    'label' => 'Source',
+                    'required' => false,
+                ]);
+                
             } else {
                 // Regular users see fields based on locale
                 if ($locale === 'fr') {
@@ -148,6 +189,24 @@ class AddWordType extends AbstractType
                     $form->remove('wordFR');
                     $form->remove('grammarFR');
                 }
+
+                $form->add('rifainSingularRecord', FileType::class, [
+                    'label' => '',
+                    'mapped' => false, // So Symfony doesn’t automatically set it in the entity
+                    'required' => false,
+                    'attr' => [
+                        'class' => 'recorder d-none', // Add the 'recorder' class and hide it
+                    ]
+                ]);
+
+                $form->add('rifainPluralRecord', FileType::class, [
+                    'label' => '',
+                    'mapped' => false, // So Symfony doesn’t automatically set it in the entity
+                    'required' => false,
+                    'attr' => [
+                        'class' => 'recorder d-none', // Add the 'recorder' class and hide it
+                    ]
+                ]);
     
                 // 'singular' field remains not required for regular users
             }

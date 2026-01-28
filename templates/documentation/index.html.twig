@@ -6,11 +6,29 @@
 
 {% block body %}
 	<style>
-		.search-form {
+		.favorite-icon {
+			position: absolute;
+			cursor: pointer;
+		}
+
+		.favorite-icon i {
+			font-size: 24px;
+			color: rgba(0, 0, 0, 0.3);
+		}
+
+		.favorite-icon i:hover {
+			color: #ffc107;
+		}
+
+	.search-form {
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			margin: 0 5px;
+		}
+		
+			.search-form > *:not(#autocomplete-input) {
+			box-shadow: -3px 8px 5px -6px rgba(0, 0, 0, 0.5);
+			justify-content: center;
 		}
 
 		.search-form input:focus {
@@ -21,29 +39,24 @@
 		.search-form > div {
 			position: relative;
 			display: flex;
-			box-shadow: 5px 5px 5px 2px rgba(0, 0, 0, 0.5);
 			border-radius: 20px;
 			width: 100%;
-			max-width: 600px;
-			overflow: hidden;
+			max-width: 700px;
 		}
 
-		.search-form select {
-			padding: 12.5px 30px 12.5px 12.5px;
+	.search-form select {
+			padding: 12.5px 28px 12.5px 12.5px;
 			font-size: 16px;
 			border: none;
 			background-color: rgba(255, 255, 255, 0.8);
 			border-radius: 20px 0 0 20px;
-			flex-grow: 0;
-			min-width: 80px; /* Réduction de la largeur minimale */
-			max-width: 120px; /* Définir une largeur maximale */
-			appearance: none; /* Masquer l'apparence native */
-			-webkit-appearance: none; /* Masquer l'apparence native dans WebKit */
-			-moz-appearance: none; /* Masquer l'apparence native dans Firefox */
-			cursor: pointer;
+			flex: 1;
+			max-width: 100px;
+			appearance: none; /* Supprime l'apparence par défaut du select */
 			background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAiIGhlaWdodD0iNiIgdmlld0JveD0iMCAwIDEwIDYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTSAwLjQ1NzAzOTM5LDEuMzk2MDMgTCAxLjI5MzY4MywwLjU1MDI4NTcgTCA1LDAuNTUwMjg1NyBMIDguNzA2MzIsMC41NTAyODU3IEwgOS41NDI5NiwwLjU1MDI4NTcgTCA1LDQuNTc4OTcgWiIgZmlsbD0iIzAwMCIvPjwvc3ZnPg==');
 			background-repeat: no-repeat;
-			background-position: right 10px center; /* Positionnement de la flèche */ /* Espace pour la flèche */
+			background-position: right 10px center;
+			color: #000; /* Couleur du texte noir */
 		}
 
 		.search-form select::-ms-expand {
@@ -53,8 +66,10 @@
 		.search-form input[type="text"] {
 			padding: 10px;
 			font-size: 16px;
-			border: none;
-			background-color: rgba(255, 255, 255, 0.8);
+			border-radius: 0;
+			border: 2px rgba(255, 255, 255, 0.8) !important;
+			background-color: rgba(255, 255, 255, 0.8) !important;
+			background-color: rgba(255, 255, 255, 0.8) ;
 			flex: 2;
 			min-width: 0;
 		}
@@ -160,19 +175,19 @@
 		</div>
 
 		<form id="searchForm" method="GET" action="{{ path('documentation_index') }}" class="search-form">
-			<div>
-				<select name="category">
-					<option value="" {% if selectedCategory is empty %} selected {% endif %}>{{ 'form.choisir_categorie'|trans }}</option>
-					{% for category in categories %}
-						<option value="{{ category.id }}" {% if category.id == selectedCategory %} selected {% endif %}>{{ category.name }}</option>
-					{% endfor %}
-				</select>
-				<input type="text" name="q" id="search-input" placeholder="{{ 'form.rechercher'|trans }}" value="{{ searchTerm }}" aria-label="Search">
-				<button type="submit" class="search-button">
-					<i class="bi bi-search"></i>
-				</button>
-			</div>
-		</form>
+    <div>
+        <select name="category" onchange="this.form.submit()">
+            <option value="" {% if selectedCategory is empty %} selected {% endif %}>{{ 'form.choisir_categorie'|trans }}</option>
+            {% for category in categories %}
+                <option value="{{ category.id }}" {% if category.id == selectedCategory %} selected {% endif %}>{{ category.name }}</option>
+            {% endfor %}
+        </select>
+        <input type="text" name="q" id="search-input" placeholder="{{ 'form.rechercher'|trans }}" value="{{ searchTerm }}" aria-label="Search">
+        <button type="submit" class="search-button">
+            <i class="bi bi-search"></i>
+        </button>
+    </div>
+</form>
 
 	</div>
 
@@ -181,6 +196,15 @@
 			{% for documentation in pagination %}
 				<div class="col-md-6 mb-4 mt-4">
 					<div class="card h-100 p-5 text-dark">
+						{% set isFavorite = false %}
+						{% for favorite in favorites %}
+							{% if favorite.getDocumentation() is not null and favorite.getDocumentation().id == documentation.id %}
+								{% set isFavorite = true %}
+							{% endif %}
+						{% endfor %}
+						<span class="favorite-icon" data-id="{{ documentation.id }}" style="{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MODERATOR') %}top: 2.5rem;{% else %}top: 0.5rem;{% endif %} right: 1rem;">
+							<i class="bi bi-star-fill {% if isFavorite %}text-warning{% endif %}"></i>
+						</span>
 						{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MODERATOR') %}
 							<a href="{{ path('documentation_edit', {'id': documentation.id}) }}" class="edit-icon">
 								<i class="bi bi-pencil"></i>
@@ -211,6 +235,7 @@
 					<p class="mt-3">{{ 'p.no_result'|trans }}</p>
 				</div>
 			{% endfor %}
+
 		</div>
 	</div>
 
@@ -218,4 +243,38 @@
 		{{ knp_pagination_render(pagination) }}
 	</div>
 
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+document.querySelectorAll('.favorite-icon').forEach(function (star) {
+star.addEventListener('click', function () {
+const documentationId = this.getAttribute('data-id');
+const isFavorite = this.querySelector('i').classList.contains('text-warning');
+const url = isFavorite ? '{{ path('favorite_remove_doc') }}' : '{{ path('favorite_add_doc') }}';
+
+fetch(url, {
+method: 'POST',
+headers: {
+'Content-Type': 'application/json',
+'X-Requested-With': 'XMLHttpRequest',
+'X-CSRF-TOKEN': '{{ csrf_token('favorite_toggle') }}'
+},
+body: JSON.stringify(
+{documentation_id: documentationId}
+)
+}).then(response => response.json()).then(data => {
+if (data.status === 'success') {
+if (isFavorite) {
+this.querySelector('i').classList.remove('text-warning'); // Remove yellow color
+} else {
+this.querySelector('i').classList.add('text-warning'); // Add yellow color
+}
+location.reload(); // Reload the page to show flash messages
+} else {
+alert('Erreur: ' + data.message);
+}
+});
+});
+});
+});
+	</script>
 {% endblock %}

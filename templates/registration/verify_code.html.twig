@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ 'title.verifier_code'|trans }}
+{% endblock %}
+
+{% block body %}
+    <style>
+        .verification-box {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.5);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+            padding: 40px;
+            border-radius: 10px;
+        }
+
+        .verification-box h1 {
+            margin: 0 0 30px;
+            color: #fff;
+            text-align: center;
+        }
+
+        .user-box {
+            margin-bottom: 20px;
+        }
+
+        .user-box label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 16px;
+            color: #fff;
+        }
+
+        .user-box input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            color: #fff;
+            border: none;
+            border-bottom: 1px solid #fff;
+            background: transparent;
+            outline: none;
+        }
+
+        .btn-outline-light {
+            width: 100%;
+            border: 1px solid #fff;
+            transition: 0.3s;
+            background-color: #3498db;
+            color: #fff;
+        }
+
+        .btn-outline-light:hover {
+            background-color: #2980b9;
+        }
+
+        .message {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #999999;
+        }
+
+        .message a {
+            color: #03e9f4;
+            text-decoration: none;
+        }
+    </style>
+
+    <div class="col-11 mx-auto">
+        {% include 'include/flashes.html.twig' %}
+    </div>
+
+    <form method="post" action="{{ path('app_verify_code') }}">
+        <div class="verification-box">
+            <h1>{{ 'title.verifier_code'|trans }}</h1>
+
+            <div class="user-box">
+                <label for="verification_code">{{ 'title.verification_code'|trans }}</label>
+                <input type="text" id="verification_code" name="verification_code" required maxlength="6">
+            </div>
+
+            <button class="btn btn-outline-light" type="submit">{{ 'button.verify_code'|trans }}</button>
+
+            <div class="message">
+                <p>{{ 'p.did_not_receive_code'|trans }}</p>
+                <a href="{{ path('app_resend_verification_code') }}">{{ 'p.resend_code'|trans }}</a>
+            </div>
+        </div>
+    </form>
+{% endblock %}

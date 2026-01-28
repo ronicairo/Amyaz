@@ -6,6 +6,9 @@ use DateTime;
 use App\Form\StatusType;
 use App\Form\AddWordType;
 use App\Entity\Traduction;
+use App\Service\VerbeService;
+use App\Service\SendMailService;
+use App\Repository\UserRepository;
 use App\Repository\StatusRepository;
 use App\Repository\TraductionRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,17 +20,24 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
+
 
 #[Route('/traduction')]
 class TraductionController extends AbstractController
 {
     private TranslatorInterface $translator;
 
-    public function __construct(TranslatorInterface $translator)
+    private $verbeService;
+
+    public function __construct(TranslatorInterface $translator, VerbeService $verbeService)
     {
         $this->translator = $translator;
+        $this->verbeService = $verbeService;
     }
 
     #[Route('/', name: 'app_traduction_index', methods: ['GET'])]
@@ -39,31 +49,86 @@ class TraductionController extends AbstractController
      * @param  mixed $paginator
      * @return Response
      */
-    public function index(TraductionRepository $traductionRepository, Request $request, PaginatorInterface $paginator): Response
+ public function index(TraductionRepository $traductionRepository, Request $request, PaginatorInterface $paginator): Response
+{
+    if (!$this->isGranted('ROLE_ADMIN') && !$this->isGranted('ROLE_MODERATOR')) {
+        $this->addFlash('error', $this->translator->trans('addflash.restreindre_acces'));
+        return $this->redirectToRoute('show_home');
+    }
+
+    // Récupérer le critère de tri depuis la requête, 'alphabetical' par défaut
+    $sort = $request->query->get('sort', 'alphabetical');
+
+    // Récupérer les traductions en fonction du tri
+    if ($sort === 'alphabetical') {
+        $traductions = $traductionRepository->findAllAlphabetically();
+    } elseif ($sort === 'rifainSingularRecord') {
+        $traductions = $traductionRepository->findAllWithRifainSingularRecord();
+    } else {
+        $traductions = $traductionRepository->findAllSortedByUpdatedAt();
+    }
+
+    // Pagination
+    $pagination = $paginator->paginate(
+        $traductions,
+        $request->query->getInt('page', 1),
+        20
+    );
+
+    // Rendu du template
+    return $this->render('traduction/index.html.twig', [
+        'traductions' => $traductions,
+        'pagination' => $pagination,
+        'sort' => $sort, // Pour garder le choix actif dans le template
+    ]);
+}
+
+    #[Route('/autocomplete')]
+    public function autocomplete(TraductionRepository $traductionRepository, Request $request)
     {
-        // Fetch translations
-        $traductions = $traductionRepository->findAll();
-
-        // Sort translations by wordFR
-        usort($traductions, function (Traduction $a, Traduction $b) {
-            return strcmp($a->getWordFR(), $b->getWordFR());
-        });
 
 
-        $pagination = $paginator->paginate(
-            $traductions,
-            $request->query->getInt('page', 1),
-            20
+        $searchType = $request->query->get('searchType');
+        $lang = $request->query->get('lang');
+        $searchTerm = $request->query->get('q');
+
+        $mapping = array(
+            'fr-rif'  => 'wordFR',
+            'rif-fr' => 'singular',
+            'en-rif' => 'wordEN',
+            'rif-en' => 'singular'
+
         );
-        // Render the template with sorted translations
-        return $this->render('traduction/index.html.twig', [
-            'traductions' => $traductions,
-            'pagination' => $pagination
-        ]);
+
+        if ($searchType === "dictionary") {
+            $traductions = $searchTerm
+                ? $traductionRepository->findBySearchTerm($searchTerm, $lang)
+                : [];
+
+            $response = array();
+            $function = "get" . $mapping[$lang];
+            foreach ($traductions as $traduction) {
+                $response[] = $traduction->$function();
+            }
+
+            $response = new Response(json_encode($response));
+        } elseif ($searchType === "verb") {
+            $traductions = $searchTerm
+                ? $this->verbeService->findBySearchTerm($searchTerm, $lang)
+                : [];
+
+
+            $response = new Response(json_encode($traductions));
+        }
+
+
+        $response->headers->set('Content-Type', 'application/json');
+
+        return $response;
     }
 
     #[Route('/new', name: 'app_traduction_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, Security $security, StatusRepository $statusRepository, TraductionRepository $traductionRepository): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, Security $security, UserRepository $userRepository, StatusRepository $statusRepository, TraductionRepository $traductionRepository, SendMailService $mail): Response
     {
         if (!$security->isGranted('ROLE_USER')) {
             $this->addFlash('error', $this->translator->trans('addflash.obligation_connexion'));
@@ -73,7 +138,7 @@ class TraductionController extends AbstractController
         $user = $this->getUser();
 
         if (!$user->isVerified()) {
-            $resendVerificationUrl = $this->generateUrl('app_resend_verification_email');
+            $resendVerificationUrl = $this->generateUrl('app_resend_verification_code');
 
             $verificationMessage = $this->translator->trans('addflash.verification_compte', [
                 '%resend_verification_url%' => $resendVerificationUrl
@@ -94,6 +159,19 @@ class TraductionController extends AbstractController
             $singular = ($traduction->getSingular());
             $wordEN = ($traduction->getWordEN());
 
+            // Normaliser les apostrophes dans les champs
+            if ($wordFR !== null) {
+                $wordFR = str_replace('’', "'", $wordFR);
+                $traduction->setWordFR($wordFR);  // Appliquer la valeur normalisée
+            }
+            if ($singular !== null) {
+                $singular = str_replace('’', "'", $singular);
+                $traduction->setSingular($singular);  // Appliquer la valeur normalisée
+            }
+            if ($wordEN !== null) {
+                $wordEN = str_replace('’', "'", $wordEN);
+                $traduction->setWordEN($wordEN);  // Appliquer la valeur normalisée
+            }
             // Vérification de l'existence des mots dans la base de données
             $existingTraductionFR = $traductionRepository->findOneBy(['wordFR' => $wordFR]);
             $existingTraductionSingular = $traductionRepository->findOneBy(['singular' => $singular]);
@@ -124,6 +202,30 @@ class TraductionController extends AbstractController
 
                 $entityManager->persist($traduction);
                 $entityManager->flush();
+                
+                if (in_array('ROLE_USER', $roles) && !in_array('ROLE_ADMIN', $roles) && !in_array('ROLE_MODERATOR', $roles)) {
+                    $adminsAndMods = $userRepository->findByRoles(['ROLE_ADMIN', 'ROLE_MODERATOR']);
+                    $context = [
+                        'user' => $user,
+                        'traduction' => $traduction,
+                    ];
+                
+                    foreach ($adminsAndMods as $adminOrMod) {
+                        try {
+                            $mail->send(
+                                'contact@amyaz.fr',
+                                $adminOrMod->getEmail(),
+                                'Nouvelle demande de traduction en attente',
+                                'traduction/email_demande_traduction.html.twig',
+                                $context
+                            );
+                        } catch (\Exception $e) {
+                            $this->addFlash('error', 'Erreur lors de l\'envoi de l\'email : ' . $e->getMessage());
+                        }
+                    }
+                }
+
+
 
                 if (!in_array('ROLE_MODERATOR', $roles) && !in_array('ROLE_ADMIN', $roles)) {
                     $statutLink = $this->generateUrl('account_translations');
@@ -156,7 +258,7 @@ class TraductionController extends AbstractController
      * @param  mixed $entityManager
      * @return Response
      */
-    public function editStatus(Request $request, Traduction $traduction, EntityManagerInterface $entityManager): Response
+    public function editStatus(Request $request, Traduction $traduction, EntityManagerInterface $entityManager, SendMailService $mail): Response
     {
         if (!$this->isGranted('ROLE_ADMIN') && !$this->isGranted('ROLE_MODERATOR')) {
             $this->addFlash('error', $this->translator->trans('addflash.restreindre_acces'));
@@ -172,6 +274,27 @@ class TraductionController extends AbstractController
 
             $traduction->setUpdatedAt(new DateTime());
             $entityManager->flush();
+
+            // Envoi du mail si l'utilisateur existe et que le statut est modifié
+            $user = $traduction->getRequestedBy(); // Utilisateur à l'origine de la demande
+
+            if ($user) {
+                // Préparer l'e-mail à envoyer
+                $context = [
+                    'user' => $user,
+                    'traduction' => $traduction,
+                    'newStatus' => $traduction->getStatus()->getLibelle(), // Le libellé du nouveau statut
+                ];
+
+                // Envoi de l'e-mail à l'utilisateur qui a créé la traduction
+                $mail->send(
+                    'contact@amyaz.fr',
+                    $user->getEmail(),
+                    'Changement de statut pour votre demande de traduction',
+                    'traduction/email_statut_change.html.twig', // Template HTML
+                    $context
+                );
+            }
 
             $this->addFlash('success', "Le statut a bien été modifié.");
             return $this->redirectToRoute('account_pending_translations');
@@ -208,17 +331,50 @@ class TraductionController extends AbstractController
      */
     public function edit(Request $request, Traduction $traduction, EntityManagerInterface $entityManager): Response
     {
+        
+              if (!$this->isGranted('ROLE_ADMIN') && !$this->isGranted('ROLE_MODERATOR')) {
+            $this->addFlash('error', $this->translator->trans('addflash.restreindre_acces'));
+            return $this->redirectToRoute('show_home');
+        }
+        
         $form = $this->createForm(AddWordType::class, $traduction);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+
+            $rifainSingularFile = $form['rifainSingularRecord']->getData();
+            $rifainPluralFile = $form['rifainPluralRecord']->getData();
+            $rifainSingularRecordDeleted = $request->request->get('rifainSingularRecordDeleted');
+            $rifainPluralRecordDeleted = $request->request->get('rifainPluralRecordDeleted');
+
+            // Set blob data only if the file is uploaded
+            if ($rifainSingularFile) {
+                $traduction->setRifainSingularRecord(file_get_contents($rifainSingularFile->getPathname()));
+            } else if ($rifainSingularRecordDeleted == 'true') {
+                $traduction->setRifainSingularRecord(null);
+            }
+            if ($rifainPluralFile) {
+                $traduction->setRifainPluralRecord(file_get_contents($rifainPluralFile->getPathname()));
+            } else if ($rifainPluralRecordDeleted == 'true') {
+                $traduction->setRifainPluralRecord(null);
+            }
+            
+            $traduction->setUpdatedAt(new \DateTime());
+            $entityManager->persist($traduction);
             $entityManager->flush();
 
             $this->addFlash('success', "Votre traduction a bien été modifiée.");
             return $this->redirectToRoute('app_traduction_index', [], Response::HTTP_SEE_OTHER);
         }
 
+
+        $hasRifainSingularRecord = $traduction->getRifainSingularRecord() ? !empty(stream_get_contents($traduction->getRifainSingularRecord())) : false;
+        $hasRifainPluralRecord = $traduction->getRifainPluralRecord() ? !empty(stream_get_contents($traduction->getRifainPluralRecord())) : false;
+
         return $this->render('traduction/edit.html.twig', [
+            'hasRifainSingularRecord' => $hasRifainSingularRecord,
+            'hasRifainPluralRecord' => $hasRifainPluralRecord,
             'traduction' => $traduction,
             'form' => $form,
         ]);
@@ -271,5 +427,63 @@ class TraductionController extends AbstractController
 
         // Si aucun terme de recherche n'est fourni, retourner une réponse vide
         return new JsonResponse([]);
+    }
+
+    /**
+     * @Route("/upload-audio", name="upload_audio", methods={"POST"})
+     */
+    public function uploadAudio(Request $request, SluggerInterface $slugger, Traduction $traduction, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $audioDirectory = $this->getParameter('audio_directory');
+        $response = [];
+
+        foreach (['riffianSingularRecord', 'riffianPluralRecord'] as $recordType) {
+            if ($audioFile = $request->files->get($recordType)) {
+                $filename = $slugger->slug($recordType) . '-' . uniqid() . '.' . $audioFile->guessExtension();
+                $audioFile->move($audioDirectory, $filename);
+
+                // Store the filename in the database (assuming the translation entity is available)
+                $setter = 'set' . ucfirst($recordType);
+                $traduction->$setter($filename);
+                $entityManager->flush();
+
+                $response[$recordType] = $filename;
+            }
+        }
+
+        return new JsonResponse($response, Response::HTTP_OK);
+    }
+
+    #[Route('/audio/{id}/{field}', name: 'audio_serve')]
+    public function serveAudio(int $id, string $field, EntityManagerInterface $entityManager): Response
+    {
+        
+        $traduction = $entityManager->getRepository(Traduction::class)->find($id);
+
+        if (!$traduction) {
+            throw $this->createNotFoundException('Audio not found');
+        }
+
+        // Dynamically access the requested field
+        $audioData = null;
+        switch ($field) {
+            case 'rifainSingularRecord':
+                $audioData = $traduction->getRifainSingularRecord();
+                break;
+            case 'rifainPluralRecord':
+                $audioData = $traduction->getRifainPluralRecord();
+                break;
+            default:
+                throw $this->createNotFoundException('Invalid audio field');
+        }
+
+        if (!$audioData) {
+            throw $this->createNotFoundException('Audio data not found');
+        }
+
+        return new Response(stream_get_contents($audioData), 200, [
+            'Content-Type' => 'audio/mpeg',  // Adjust based on the actual file type
+            'Content-Disposition' => 'inline; filename="audio.mp3"',
+        ]);
     }
 }

@@ -112,11 +112,6 @@ class RegistrationFormType extends AbstractType
                 'attr' => [
                     'class' => "d-block mt-4 mx-auto btn btn-outline-light col-"
                 ]
-            ])
-            ->add('captcha', Recaptcha3Type::class, [
-                'constraints' => new Recaptcha3(),
-                'action_name' => 'register',
-
             ]);
     }
 

@@ -1,0 +1,657 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{ 'navigation.conjugation'|trans }}
+{% endblock %}
+
+{% block body %}
+	<style>
+
+		a {
+			color: black;
+		}
+	</style>
+
+
+	<style>
+
+		.search-form {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.search-form input:focus {
+			outline: none;
+			box-shadow: none;
+		}
+
+		.search-form > *:not(#autocomplete-input) {
+			box-shadow: -3px 8px 5px -6px rgba(0, 0, 0, 0.5);
+			justify-content: center;
+		}
+
+		.search-form > div {
+			position: relative;
+			display: flex;
+			border-radius: 20px;
+			width: 100%;
+			max-width: 700px;
+		}
+
+		.search-form select {
+			padding: 12.5px 28px 12.5px 12.5px;
+			font-size: 16px;
+			border: none;
+			background-color: rgba(255, 255, 255, 0.8);
+			border-radius: 20px 0 0 20px;
+			flex: 1;
+			max-width: 100px;
+			appearance: none; /* Supprime l'apparence par défaut du select */
+			background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAiIGhlaWdodD0iNiIgdmlld0JveD0iMCAwIDEwIDYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTSAwLjQ1NzAzOTM5LDEuMzk2MDMgTCAxLjI5MzY4MywwLjU1MDI4NTcgTCA1LDAuNTUwMjg1NyBMIDguNzA2MzIsMC41NTAyODU3IEwgOS41NDI5NiwwLjU1MDI4NTcgTCA1LDQuNTc4OTcgWiIgZmlsbD0iIzAwMCIvPjwvc3ZnPg==');
+			background-repeat: no-repeat;
+			background-position: right 10px center;
+			color: #000; /* Couleur du texte noir */
+		}
+
+		.search-form select::-ms-expand {
+			display: none; /* Masquer la flèche native dans IE */
+		}
+
+		.search-form input[type="text"] {
+			padding: 10px;
+			font-size: 16px;
+			border-radius: 0;
+			border: 2px solid rgba(255, 255, 255, 0.8) !important;
+			background-color: rgba(255, 255, 255, 0.8) !important;
+			flex: 2;
+			min-width: 0;
+		}
+
+		.autocomplete-input {
+			border-color: #EFF6FC !important;
+		}
+
+		.search-button {
+			padding: 10px 20px;
+			font-size: 16px;
+			background-color: rgba(0, 0, 0, 0.7);
+			color: white;
+			border: none;
+			cursor: pointer;
+			transition: background-color 0.3s ease;
+			border-radius: 0 20px 20px 0;
+		}
+
+		.search-form button:hover {
+			background-color: #A0BBD4;
+		}
+
+		.autoComplete_wrapper {
+			display: flex !important;
+			flex-grow: 1 !important;
+		}
+
+		.autoComplete_wrapper > ul {
+			top: 40px;
+		}
+		.autoComplete_wrapper > input {
+			background: rgba(255, 255, 255, 0.8) !important;
+			color: black !important;
+		}
+
+		@media(max-width: 400px) {
+			.search-form select,
+			.search-form input[type="text"],
+			.search-form button {
+				font-size: 12px;
+			}
+
+			.search-form select {
+				min-width: 80px;
+				color: black !important;
+				background-color: rgba(255, 255, 255, 0.8) !important;
+			}
+
+			.autoComplete_wrapper > ul {
+				left: -80px !important;
+				right: -34px !important;
+			}
+
+			.search-form input[type="text"] {
+				padding: 6px;
+			}
+
+			.search-form .search-button {
+				padding: 6px 12px;
+			}
+
+		}
+
+		h2 {
+			font-family: 'DM Serif Display', serif;
+		}
+
+		.row.justify-content-center {
+			justify-content: center;
+		}
+
+		.col-12.col-md-6 {
+			max-width: 500px; /* Ensure columns don’t get too wide */
+			padding-left: 15px;
+			padding-right: 15px;
+		}
+
+		.pagination-container {
+			text-align: center;
+		}
+
+		.row.justify-content-center.align-items-center {
+			display: flex;
+			align-items: center; /* Align the comment form with the middle of the comments section */
+		}
+
+		.col-12.col-md-6 {
+			max-width: 500px; /* Keep the columns the same width */
+		}
+
+		.underline-title,
+		.underline-title > p {
+			text-decoration: underline;
+			margin: 0;
+		}
+
+		.no-border {
+			border: none;
+			background: transparent;
+		}
+
+		#searchForm input[type="text"] {
+			font-family: 'Noto Sans', sans-serif;
+			width: auto;
+		}
+
+
+		.btn-custom-size {
+			font-size: 1.25rem;
+		}
+
+		.search-form .keyboard-icon {
+			background-color: rgba(255, 255, 255, 0.8);
+			cursor: pointer;
+			font-size: 20px;
+			padding: 8px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			z-index: 1001;
+		}
+
+		.keyboard-icon {
+			cursor: pointer;
+			color: black !important;
+			background-color: #A0BBD4;
+			border: none;
+			font-size: 20px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.rifain-characters {
+			display: none;
+			position: absolute;
+			background-color: rgba(0, 0, 0, 0.7);
+			border: none;
+			z-index: 1000;
+			height: 100%;
+			bottom: 100%;
+		}
+
+		.rifain-characters span {
+			cursor: pointer;
+			padding: 5px;
+			color: white;
+			font-size: 20px;
+			display: inline-block;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.rifain-characters span:hover {
+			color: #A0BBD4;
+		}
+
+		main {
+			flex: 1;
+			margin-bottom: 0;
+		}
+
+		span {
+			font-family: 'Arial', sans-serif;
+		}
+
+		h1.dynamic-font-size {
+			font-family: 'DM Serif Display', serif;
+			text-align: center;
+			max-width: 650px;
+			margin: 0 auto;
+			font-size: 5.5vw; /* Taille de police proportionnelle à la largeur de l'écran */
+		}
+
+		.autoComplete_wrapper > input::placeholder {
+			color: black !important;
+		}
+
+		.autoComplete_wrapper > input {
+			height: 100% !important;
+		}
+		/* Limite maximale de la taille de la police */
+		@media(min-width: 700px) {
+			h1.dynamic-font-size {
+				font-size: 2.3rem; /* Taille maximale définie pour les grands écrans */
+			}
+		}
+
+		.ui-widget-content {
+			text-align: left;
+		}
+
+		.autoComplete_results_list {
+			background-color: #f0f0f0; /* Light grey background */
+			border: 1px solid #d4d4d4;
+			max-height: 150px;
+			overflow-y: auto;
+		}
+
+		/* Change the text color and background color of each suggestion item */
+		.autoComplete_result {
+			color: #333; /* Dark text */
+			background-color: white; /* White background */
+			padding: 10px;
+			cursor: pointer;
+		}
+
+		::-webkit-input-placeholder {
+			/* WebKit, Blink, Edge */
+			color: black !important;
+		}
+
+		.autoComplete_wrapper mark {
+			padding: 0 !important;
+		}
+
+		@media(min-width: 400px) {
+			.autoComplete_wrapper > ul {
+				left: -96px !important;
+				right: -54px !important;
+			}
+		}
+
+		#lang {
+			outline: none;
+		}
+
+		.conjugation-instructions {
+			font-family: 'Roboto', sans-serif;
+			line-height: 1.7;
+			color: #333;
+			margin: 50px auto;
+			padding: 30px; /* Ajustement du padding */
+			background-color: transparent;
+			border-radius: 15px;
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+			max-width: 1200px;
+			width: 100%;
+			box-sizing: border-box;
+		}
+
+		.conjugation-instructions h3 {
+			font-family: 'Roboto', sans-serif;
+			font-weight: bold;
+			color: #F26766;
+			margin-top: 30px;
+		}
+		.conjugation-instructions h4, .conjugation-instruction h5 {
+			color:#F26760;
+		}
+
+		.conjugation-instructions p {
+			margin-bottom: 15px;
+			font-size: 16px;
+		}
+
+		.conjugation-instructions h3 {
+			font-size: 22px;
+			margin-bottom: 20px;
+		}
+
+		.conjugation-instructions h4 {
+			font-size: 20px;
+		}
+
+		/* Adaptation pour les petits écrans */
+		@media(max-width: 800px) {
+			.conjugation-instructions {
+				padding: 20px; /* Réduction du padding pour mobile */
+				margin: 10px 0; /* Ajustement des marges pour utiliser toute la largeur de l'écran */
+				max-width: 100%; /* Utilise toute la largeur disponible sur mobile */
+				width: 100%; /* Assure que le bloc utilise toute la largeur de l'écran */
+			}
+
+			.conjugation-instructions h3,
+			.conjugation-instructions h4 {
+				font-size: 18px;
+			}
+
+			.conjugation-instructions p {
+				font-size: 14px;
+			}
+		}
+	</style>
+
+	<main>
+		<div class="col-11 mx-auto">
+			{% include 'include/flashes.html.twig' %}
+		</div>
+
+		{# MESSAGE ACCUEIL #}
+		<h1 class="dynamic-font-size" style="font-family: 'DM Serif Display' , serif;text-align: center; max-width: 650px; margin: 0 auto;">
+			{{ 'home.welcome_message_conjugaison'|trans|raw }}
+		</h1>
+
+		<h3 style="text-align: center; margin-top: 50px; margin-bottom: 50px; font-size: 3rem;font-family: 'MaPolice', sans-serif;">ⴰⵙⴼⵜⵉ ⵙ ⵜⵎⴰⵣⵉⵖⵜ</h3>
+
+		<section class="wow fadeIn animated" style="visibility: visible; animation-name: fadeIn;">
+			<div class="container">
+				<div
+					class="row compteur">
+					<!-- counter -->
+					<div class="col"></div>
+					<div class="col bottom-margin text-center counter-section wow fadeInUp sm-margin-bottom-ten animated" data-wow-duration="300ms" style="visibility: visible; animation-duration: 300ms; animation-name: fadeInUp;">
+						<i class="bi bi-journal-text medium-icon"></i>
+						<span class="timer counter alt-font appear" data-to="980" data-speed="7000">{{ totalItems }}</span>
+						<p class="counter-title">{{ 'navigation.verbe_conjugue'|trans }}</p>
+					</div>
+					<div class="col"></div>
+					<!-- end counter -->
+				</div>
+			</div>
+		</section>
+
+		<div
+			class="container">
+			{# SEARCH BAR #}
+			<div class="barrederecherche">
+				<form id="searchForm" method="GET" action="{{ path('app_verbe') }}" class="search-form">
+					<div style="position: relative;">
+						<select name="lang" id="lang">
+							{% if app.request.locale == 'en' %}
+								<option value="rif-en" {% if app.request.query.get('lang') == 'rif-en' %} selected {% endif %}>Riffian</option>
+								<option value="en-rif" {% if app.request.query.get('lang') == 'en-rif' %} selected {% endif %}>English</option>
+							{% else %}
+								<option value="rif-fr" {% if app.request.query.get('lang') == 'rif-fr' %} selected {% endif %}>Rifain</option>
+								<option value="fr-rif" {% if app.request.query.get('lang') == 'fr-rif' %} selected {% endif %}>Français</option>
+							{% endif %}
+						</select>
+
+						<input type="hidden" id="searchType" value="verb">
+						<input type="text" name="terme" id="search-input" class="autocomplete-input" autocomplete="off" placeholder="{{ 'home.search_bar'|trans }}..." maxlength="60" value="" required>
+						<button type="button" class="keyboard-icon" id="toggle-keyboard">
+							<i class="bi bi-keyboard"></i>
+						</button>
+						<div class="rifain-characters" id="rifain-characters">
+							<span>ɛ</span>
+							<span>ḍ</span>
+							<span>ṣ</span>
+							<span>ḥ</span>
+							<span>ɣ</span>
+							<span>ǧ</span>
+							<span>ẓ</span>
+							<span>ṭ</span>
+							<span>ř</span>
+							<span>č</span>
+						</div>
+						<button type="submit" class="search-button">
+							<i class="bi bi-search"></i>
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<div class="container mt-5">
+			<div class="conjugation-instructions">
+				<p style="font-weight: bold;">
+					It is recommended to search for verbs in Riffian. To do so, use the imperative form of the verbs, for example: ecc for "to eat". 
+					            If you don't know the verb in Riffian, you can also start with the French form by searching for the infinitive form. For example, 
+					            searching "manger" will give you the Riffian conjugation of ecc.
+				</p>
+				<p>
+					The conjugation tables are based on the
+					<strong>
+						<em>Dictionnaire tarifit-français by Mohamed Serhoual (2002)</em>
+					</strong>. In this dictionary, 
+					            each verb entry presents the different verb forms in the third person singular masculine, covering the main aspects of Riffian conjugation: 
+					            preterite, negative preterite, intensive aorist, and simple aorist.
+				</p>
+
+				<h3>Some elements about Riffian verbs.
+				</h3>
+				<p>
+					Riffian conjugation primarily relies on the aspect of the action, i.e., how the action is perceived (completed, ongoing, repeated), rather than just indicating the tense (past, present, future). Verbs are formed from consonantal roots, and the use of vowel patterns and particles expresses different aspects and modes of action. Three main aspects dominate Riffian conjugation: preterite, intensive aorist, and simple aorist. Negation in Riffian sometimes has specific forms for the past, future, as well as for intensive forms.
+				</p>
+
+				<h3>I. The neutral vowel 'e' (schwa).</h3>
+				<p>
+					The neutral vowel 'e' (schwa) is frequently used in Riffian for phonetic reasons. Even though it has no phonological status of its own, it is inserted into verb constructions to ease pronunciation, especially to avoid difficult consonant clusters. This vowel can be flexible and disappear depending on the phonetic context.
+				</p>
+
+				<h3>II. The different aspects in Riffian.</h3>
+
+				<h4>1. Preterite</h4>
+				<p>1.1. The preterite is used to indicate actions completed in the past. This aspect is simple and direct, meaning that the action is finished.</p>
+				<p>
+					<em>Example:</em>
+				</p>
+				<p>
+					ufiɣ: means "I found" or "I found (past tense)", indicating a completed action in the past.<br/>
+					rajiɣ: means "I waited", expressing an accomplished action.
+				</p>
+				<p>The preterite is used to describe actions definitively completed.</p>
+
+				<p>2.2. When the preterite is preceded by the particle ttuɣa, it is used to express an action that occurred before another action in the past.</p>
+				<p>
+					<em>Example:</em>
+				</p>
+				<p>ttuɣa yecca uca yeffeɣ: means "he had eaten and then went out."</p>
+
+				<p>These two actions are completed in time, but one action (eating) precedes the other (going out).</p>
+
+				<h4>2. Negative preterite</h4>
+				<p>The negative preterite is formed with a negative particle. Different particles are used to express negation in Riffian, such as "wer", "war", "wa", and "ur". In the following examples, "wer" is used to express negation.</p>
+				<p>
+					<em>Example:</em>
+				</p>
+				<p>
+					wer ufiɣ: means "I didn’t find".<br/>
+					wer ggiɣ: means "I didn’t do".
+				</p>
+				<p>Additionally, for some types of verbs, a vowel "i" is added in the last syllable of the verb when negated.</p>
+				<p>
+					<em>Example:</em>
+				</p>
+				<p>
+					icɣel: "he is busy"<br/>
+					wer icɣil: "he is not busy".
+				</p>
+
+				<h4>3. Aorist</h4>
+				<p>The aorist expresses unfinished actions, either ongoing or happening in the future. It is also used to give commands through the imperative.</p>
+				<p>3.1. When associated with the preverbal
+					<strong>
+						<em>ad</em>
+					</strong>, the aorist expresses actions that will occur in the future. It is equivalent to the future tense in French.</p>
+				<p>
+					<em>Example:</em>
+				</p>
+				<p>
+					ad afeɣ: "I will find", where
+					<strong>
+						<em>ad</em>
+					</strong>
+					precedes the verb to indicate that the action will take place in the future.
+				</p>
+				<p>3.2. To express negation in the future, Riffian uses the negative intensive aorist. This allows for the negation of an action that will occur in the future.</p>
+				<p>
+					<em>Example:</em>
+				</p>
+				<p>
+					ad ibuẓẓel: "he will lie down"<br/>
+					wer ittbuẓẓul: "he will not lie down".
+				</p>
+
+				<p>3.1. When associated with
+					<strong>
+						<em>ad yiři</em>
+					</strong>, the aorist expresses an action that will be completed at a specific point in the future.</p>
+				<p>
+					<em>Example:</em>
+				</p>
+				<p>Badis ad yiři yaweḍ ɣar Meknas zzat ass n řheḍ: means "Badis will have arrived in Meknes before Monday".</p>
+
+				<p>This action is situated in the future. Badis will arrive in Meknes, something that has not yet happened because he is still not in Meknes. It is known that he will arrive before Monday, a specific point in the future that has yet to occur.</p>
+
+				<h4>4. Intensive aorist</h4>
+
+				<p>The intensive aorist is a specific form of the aorist that emphasizes the repetition or duration of an action. This aspect is used to describe actions that are repeated frequently or are habitual.</p>
+				<p>4.1. It can express habitual present actions. The intensive aorist often functions as an intensive present, expressing an action that happens regularly or is part of a routine.</p>
+				<p>
+					<em>Example:</em>
+				</p>
+				<p>ittraja: means "to wait regularly or repeatedly", indicating an action that occurs regularly in the present.</p>
+
+				<p>4.2. It can express an immediate present (ongoing action). To express an action happening at the very moment, Riffian uses the intensive aorist, often accompanied by the indicator aqqa. This indicator can be translated as "in the process of" and is used to mark that the action is occurring at the time of speaking, when the action is being performed.</p>
+				<p>
+					<em>Example:</em>
+				</p>
+				<p>aqqa tteteɣ: means "I am eating", where aqqa indicates that the action is happening at the moment.</p>
+
+				<p>4.3. It can express habitual past actions. With temporal indicators like ttuɣa, the intensive aorist can also express repeated actions in the past.</p>
+				<p>
+					<em>Example:</em>
+				</p>
+				<p>ttuɣa ttazzleɣ: means "I used to run regularly". Here, the repeated action in the past is indicated by the adverb ttuɣa.</p>
+
+				<h3 class="reveal">III. The participle</h3>
+				<p>The participle in Riffian is an invariable verb form in gender and number, used mainly in relative clauses where the subject of the verb matches an antecedent. It is used to describe actions performed by the subject.</p>
+				<p>
+					<em>Example:</em>
+				</p>
+				<p>
+					D ajeǧid ig issawařen: "He is the king who speaks".<br/>
+					Timɣarin ig ifetřen seysu: "The women who rolled the couscous".<br/>
+					Iryazen ig icarrzen cal: "The men who plow the land".
+				</p>
+
+				<h3>IV. Derived verb forms.</h3>
+
+				<p>Riffian has several derived verb forms that can be combined to express additional nuances.</p>
+
+				<h4>1. Causative</h4>
+				<p>This form expresses the idea of making someone or something do something. It is characterized by the prefix
+					<strong>ss</strong>
+					on the verb.</p>
+				<p>
+					<em>Example:</em>
+				</p>
+				<p>
+					cmeḍ: to burn<br/>
+					ssecmeḍ: to make burn.
+				</p>
+
+				<h4>2. Reciprocal</h4>
+				<p>This form expresses reciprocal action, an exchange between multiple parties. It is characterized by the prefix
+					<strong>m</strong>
+					on the verb.</p>
+				<p>
+					<em>Example:</em>
+				</p>
+				<p>
+					jjaǧ: to swear<br/>
+					mjjaǧ: to swear to each other.
+				</p>
+
+				<h4>3. Passive</h4>
+				<p>This form expresses that an action is experienced by the subject. It is characterized by the prefix
+					<strong>ttw</strong>
+					or
+					<strong>nn</strong>
+					on the verb.</p>
+				<p>
+					<em>Example:</em>
+				</p>
+				<p>
+					nḍeř: to bury<br/>
+					ttwanḍeř: to be buried.
+				</p>
+				<p>ḍřem: to commit injustice<br/>
+					nnḍřem: to be a victim of injustice.
+				</p>
+				<p>
+					fḍeḥ: to denounce<br/>
+					nnfḍeḥ: to be denounced.
+				</p>
+
+				<h4>4. Combination of derived forms</h5>
+				<p>
+					<em>Example:</em>
+				</p>
+				<p>
+					eqqeř: to examine, to look<br/>
+					muqqeř: to look, to see, to search<br/>
+					smuqqeř: to look, to see, to search, to exorcise a demon-possessed person, to examine a pregnant woman.
+				</p>
+
+				<h3>V. Indirect transitive verbs.</h3>
+				<p>In the Amyaz online dictionary, and that of Mohamed Serhoual, you will often find verbs accompanied by prepositions such as
+					<strong>di</strong>,
+					<strong>ɣar</strong>,
+					<strong>adu</strong>,
+					<strong>zi</strong>,
+					<strong>ar</strong>,
+					<strong>ak</strong>,
+					<strong>jar</strong>,
+					<strong>s</strong>,
+					<strong>x</strong>, etc.</p>
+				<p>These prepositions slightly modify the meaning of the verb.</p>
+				<p>Let's take the example of the verb "cař".</p>
+				<p>"ceř" alone means "to spend the siesta" or "to spend the day".</p>
+				<p>
+					<em>Example:</em>
+				</p>
+				<p>cřiɣ ad qeccareɣ ibawen -> I spent the day peeling beans</p>
+				<p>When accompanied by the preposition "di", it takes the meaning of "to stay" or "to remain". In the dictionary, the verb is noted as: "cař -di-". Only cař is conjugated, di is just a preposition accompanying the verb.</p>
+				<p>
+					<em>Example:</em>
+				</p>
+				<p>cřiɣ
+					<strong>di</strong>
+					taddart ass ikmeř -> I stayed at home all day.</p>
+			</div>
+		</div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+const searchInput = document.getElementById('search-input');
+
+searchInput.addEventListener('input', function () {
+let inputValue = searchInput.value;
+// Remplacer toutes les variantes d'apostrophes par des apostrophes simples
+inputValue = inputValue.replace(/‘|’|ʼ|`|´|′|ʾ|ʿ|ˈ|‛|❛|❜|ʹ/g, "'");
+searchInput.value = inputValue;
+});
+});
+</script>
+	{% endblock %}

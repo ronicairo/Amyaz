@@ -1,9 +1,12 @@
 meta:
     description: "Discover our online French-Riffian dictionary, a comprehensive tool for learning and mastering the Riffian language. Access detailed grammar sheets, methods for learning the Riffian alphabet and a wealth of documentation on Riffian culture. Improve your knowledge of Rifa with reliable, educational resources."
-    title: "Amyaz - Riffian dictionnary"
+    title: "Amyaz - Learn the riffian"
 
 home:
+    back_to_home': "Back to home"
+    browse_dictionary: "Browse the dictionary alphabetically"
     welcome_message: 'Welcome to  <span style="color: #F26766;">Amyaz</span> !<br>Your English-Riffian dictionary.'
+    welcome_message_conjugaison: 'Welcome to <span style="color: #F26766;">Amyaz</span> !<br> Your Riffian conjugator.'
     search_results: "Search Results:"
     search_bar: "Search"
     no_results_logged_in: "No results found.<br><a style=\"text-decoration:none; color: #F26766\" href=\"%path_traduction_new%\">Request a word.</a>"
@@ -12,9 +15,9 @@ home:
     alphabet_description: "The Riffian language can be written with the Latin Berber alphabet but also in Tifinagh which is the traditional Berber alphabet."
     latin_berber: "Latin Berber"
     tifinagh: "Tifinagh"
-    tifinagh_singular: "ⴰⵎⵢⵉⵡⵏ"
-    tifinagh_plural: "ⴰⵎⴰⴳⵓⵜ"
-    tifinagh_verb: "ⵙ ⵜⴼⵉⵏⴰⴳ"
+    tifinagh_singular: "ⴰⵎⵉⵊⵊⵏⵏ"
+    tifinagh_plural: "ⴰⵎⴰⵡⴰⵟⵟⴰⵙ"
+    tifinagh_verb: "ⵙ ⵜⴼⵉⵏⴰⵖ"
     singular: "singular"
     plural: "plural"
     comment: "Publish"
@@ -22,6 +25,13 @@ home:
     grammaire_guide: "Grammar guide"
     grammaire_guide_sous_titre: "Practice Riffian Berber grammar with a few simple modules."
     post: "Posted by"
+    fav_login: "You must be logged in to bookmark content."
+    no_fav: "Translation not found."
+    no_fav_doc: "Documentation not found."
+    favorite_added: 'This item has been added to your favorites. <a href="{{ url }}">See my favorites</a>'
+    favorite_remove_ogin_required: "You must be logged in to delete favourites."
+    favorite_remove_not_found: "Favorite not found."
+    noverbfound: "No results found."
 
 navigation:
     home: 'Dictionary'
@@ -35,6 +45,10 @@ navigation:
     profile: 'My profile'
     logout: 'Logout'
     dashboard: 'Dashboard'
+    conjugation: 'Conjugation'
+    game: 'Crossword'
+    du_verbe: 'of verb'
+    verbe_conjugue: "conjugated verbs"
 
 post:
     rifain_word: "Riffian word"
@@ -65,6 +79,14 @@ post:
     no_user: "User deleted"
     worday: "Word of the Day"
     no_worday: "No word of the day for today"
+    countword: "There are"
+    countword2: "words in the dictionary"
+    added_by: "Added by"
+    verified: "and verified"
+    sort_by: "Sort by"
+    sort_recent: "Most Recent"
+    sort_alphabetical: "Alphabetical Order"
+    sort_rifain_singular: "Translations with Singular Record"
     
 category:
     title: "Document category"
@@ -76,8 +98,8 @@ pending_request:
 
 documentation:
     add: "Add document"
-    title: "Riffian language documentation"
-    resume: "Amyaz makes available all publications relating to the Rifa language.<br> These publications are mainly Rifa dictionaries, conjugation and learning manuals, and Rifa novels, newspapers and magazines.<br>The aim is to collect these publications in one place."
+    title: "Linguistic and Cultural Resource Center."
+    resume: "Discover a rich and diverse collection of documents and works, including dictionaries, literary texts, linguistic and historical resources, and much more. This resource center is dedicated to exploring Amazigh culture from the Rif, with a special emphasis on the language. Dive into in-depth studies, academic articles, traditional narratives, and modern research on the Rif to expand your knowledge and celebrate the richness of Rifian heritage."
 
 button:
     back_list: "Back to list"
@@ -96,6 +118,14 @@ button:
     password_forgot: "Password forgotten"
     log_as: "You are logged in as"
     activate_account: "Activate my account"
+    triesleft: "You have"
+    3triesleft: "You have 3 attempts left."
+    tries: "attempts."
+    trie: "attempt."
+    checkanswer: "Check my answers"
+    showanswer: "Show the answers"
+    reset: "Reset"
+    verify_code: "Verify code"
 
 account-user:
     title: "User details"
@@ -173,6 +203,10 @@ title:
     create_doc: "Create new documentation"
     create_category: "Create new category"
     create_documentation: "Create new documentation"
+    crosswordsearch: "Find the Rifian translation of the words below:"
+    verifier_code: "Verify your account"
+    verification_code: "Verification code received by email"
+    rappel_verification: "Activate your Amyaz account"
 
 addflash:
     obligation_connexion: "You must be logged in to access this feature."
@@ -227,6 +261,14 @@ p:
     title_mail_newsletter: "Here are 10 words for today"
     current_email: "Current email"
     no_result: "No results found"
+    update_role: "You now have the role"
+    did_not_receive_code: "If you did not receive the code, click on the following link:"
+    resend_code: "Resend the code"
+    enter_verification_code: "Enter the verification code below to validate your account."
+    reminder_verification_intro: "We noticed that your Amyaz account has not yet been activated."
+    reminder_verification_warning: "Please activate your account within 7 days to avoid automatic deactivation."
+    verify_now: "Activate my account now"
+    reminder_verification_instructions: "To verify your account: log in to your account, access your profile and click on the 'Verify my account' button."
 
 account:
     add: "Add a Translation"
@@ -237,6 +279,10 @@ account:
     pending_request: "Pending Request"
     list_word: "Word List"
     category_doc: "Documentation Categories"
+    favorite: "My favourites"
+    no_fav: "You don't have any favourites yet."
+    show_form_verb: "Add a Verb"
+    verify_account: "Verify my account"
 
 grammar:
     title: "Grammar in Riffian"
@@ -250,3 +296,16 @@ td:
     name: "Name"
     update: "Updated at"
 
+table_headers:
+    pronoun: 'Pronoun'
+    preterit: 'Preterite'
+    preterit_negatif: 'Preterite negative'
+    aoriste_intensif: 'Intensive aorist'
+    aoriste_intensif_negatif: 'Intensive aorist negative'
+    aoriste_futur: 'Future aorist'
+    participe_preterit: 'Preterite participle'
+    participe_preterit_negatif: 'Negative preterite participle'
+    participe_aoriste_intensif: 'Intensive aorist participle'
+    participe_aoriste_intensif_negatif: 'Negative intensive aorist'
+    participes: 'Participles'
+    conjug: 'conjugation'

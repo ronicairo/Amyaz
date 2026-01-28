@@ -144,11 +144,19 @@
 									<a href="{{ path('app_traduction_new') }}" class="btn btn-light btn-rounded btn-block btn-lg">
 										{{ 'account.add'|trans }}
 									</a>
+									<a href="{{ path('show_form_verb') }}" class="btn btn-light btn-rounded btn-block btn-lg">
+										{{ 'account.show_form_verb'|trans }}
+									</a>
 									<a href="{{ path('dashboard') }}" class="btn btn-light btn-rounded btn-block btn-lg">
 										{{ 'navigation.dashboard'|trans }}
 									</a>
 								{% else %}
 									<!-- Sinon, affichez le bouton avec "account.ask" -->
+									{% if not app.user.isVerified %}
+										<a href="{{ path('app_verify_email') }}" class="btn btn-light btn-rounded btn-block btn-lg">
+											{{ 'account.verify_account'|trans }}
+										</a>
+									{% endif %}
 									<a href="{{ path('app_traduction_new') }}" class="btn btn-light btn-rounded btn-block btn-lg">
 										{{ 'account.ask'|trans }}
 									</a>
@@ -160,6 +168,9 @@
 										{{ 'account.my_request_translation'|trans }}
 									</a>
 								{% endif %}
+								<a href="{{ path('show_favorites') }}" class="btn btn-light btn-rounded btn-block btn-lg">
+									{{ 'account.favorite'|trans }}
+								</a>
 							</div>
 						</div>
 					</div>

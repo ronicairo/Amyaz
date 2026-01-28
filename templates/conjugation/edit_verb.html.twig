@@ -1,0 +1,162 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Modification d'un verbe
+{% endblock %}
+
+{% block body %}
+	<style>
+		.form-box {
+			width: 100%;
+			max-width: 500px;
+			margin: 0 auto;
+			padding: 40px;
+			background: rgba(0, 0, 0, 0.5);
+			box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+			border-radius: 10px;
+		}
+
+		@media(min-width: 768px) {
+			.form-box {
+				max-width: 40%;
+			}
+		}
+
+		.form-box h1 {
+			margin: 0 0 30px;
+			padding: 0;
+			color: #fff;
+			text-align: center;
+		}
+
+		.form-box .user-box {
+			position: relative;
+			margin-bottom: 30px;
+		}
+
+		.form-box .user-box input {
+			width: 100%;
+			padding: 10px 0;
+			font-size: 16px;
+			color: #fff;
+			margin-bottom: 30px;
+			border: none;
+			border-bottom: 1px solid #fff;
+			outline: none;
+			background: transparent;
+			transition: border-color 0.3s, background-color 0.3s;
+		}
+
+		.form-box .user-box input:hover {
+			border-bottom: 1px solid #03e9f4;
+		}
+
+		.form-box .user-box label {
+			position: absolute;
+			top: 0;
+			left: 0;
+			padding: 10px 0;
+			font-size: 16px;
+			color: #fff;
+			pointer-events: none;
+			transition: 0.5s;
+		}
+
+		.form-box .user-box input:focus ~ label,
+		.form-box .user-box input:valid ~ label {
+			top: -20px;
+			left: 0;
+			color: #03e9f4;
+			font-size: 12px;
+		}
+
+		.form-box button {
+			background: none;
+			border: none;
+			color: #fff;
+			padding: 10px 20px;
+			font-size: 16px;
+			cursor: pointer;
+			transition: background-color 0.3s;
+		}
+
+		.form-box button:hover {
+			color: black;
+		}
+	</style>
+
+	<div class="form-box">
+		<h1 class="h3 mb-5 font-weight-normal">Modifier le Verbe Rifain</h1>
+
+		<form action="{{ path('edit_verb', { id: verbe.id }) }}" method="POST">
+			<div class="user-box">
+				<input type="text" id="verbe_rifain" name="verbe_rifain" value="{{ verbe.verbeRifain }}" required>
+				<label for="verbe_rifain">Verbe Rifain :</label>
+			</div>
+
+			<div class="user-box">
+				<input type="text" id="verbe_francais" name="verbe_francais" value="{{ verbe.verbeFrancais }}" required>
+				<label for="verbe_francais">Verbe Français :</label>
+			</div>
+
+			<div class="user-box">
+				<input type="text" id="verbe_tifinagh" name="verbe_tifinagh" value="{{ verbe.verbeTifinagh }}" required>
+				<label for="verbe_tifinagh">Verbe en Tifinagh :</label>
+			</div>
+
+			<div class="user-box">
+				<input type="text" id="forme" name="forme" value="{{ verbe.forme }}" required>
+				<label for="forme">Forme :</label>
+			</div>
+
+			<div class="user-box">
+				<input type="text" id="R1" name="R1" value="{{ verbe.R1 }}" required>
+				<label for="R1">R1 :</label>
+			</div>
+
+			<div class="user-box">
+				<input type="text" id="R2" name="R2" value="{{ verbe.R2 }}">
+				<label for="R2">R2 (optionnel) :</label>
+			</div>
+
+			<div class="user-box">
+				<input type="text" id="R3" name="R3" value="{{ verbe.R3 }}">
+				<label for="R3">R3 (optionnel) :</label>
+			</div>
+
+			<div class="user-box">
+				<input type="text" id="R4" name="R4" value="{{ verbe.R4 }}">
+				<label for="R4">R4 (optionnel) :</label>
+			</div>
+
+			<div class="user-box">
+				<input type="text" id="R5" name="R5" value="{{ verbe.R5 }}">
+				<label for="R5">R5 (optionnel) :</label>
+			</div>
+
+			<div class="user-box">
+				<input type="text" id="R6" name="R6" value="{{ verbe.R6 }}">
+				<label for="R6">R6 (optionnel) :</label>
+			</div>
+
+		<div class="user-box">
+				<input type="text" id="R7" name="R7" value="{{ verbe.R7 }}">
+				<label for="R7">R7 (optionnel) :</label>
+			</div>
+
+			<div class="d-block mt-4 mx-auto btn btn-outline-light col-5">
+				<button type="submit">Modifier</button>
+			</div>
+
+			<input type="hidden" name="_token" value="{{ csrf_token('edit_verb') }}">
+		</form>
+
+		<div style="text-align: center; margin-top: 20px;">
+			<form action="{{ path('delete_verb', { id: verbe.id }) }}" method="POST">
+				<button style="color: #F26766;" type="submit" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce verbe ?');">Supprimer</button>
+			</form>
+			<a style="color:white;" href="{{ path('account') }}">Retourner à mon compte</a>
+		</div>
+
+	</div>
+{% endblock %}

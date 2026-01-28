@@ -9,6 +9,35 @@
 
 {% block body %}
 	<style>
+	h1 {
+        animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+		.favorite-icon {
+			position: absolute;
+			cursor: pointer;
+		}
+
+		.favorite-icon i {
+			font-size: 24px;
+			color: white;
+		}
+
+		.favorite-icon i:hover {
+			color: #ffc107;
+		}
+		
 		.search-form {
 			display: flex;
 			align-items: center;
@@ -20,43 +49,51 @@
 			box-shadow: none;
 		}
 
+		.search-form > *:not(#autocomplete-input) {
+			box-shadow: -3px 8px 5px -6px rgba(0, 0, 0, 0.5);
+			justify-content: center;
+		}
+
 		.search-form > div {
 			position: relative;
 			display: flex;
-			box-shadow: 5px 5px 5px 2px rgba(0, 0, 0, 0.5);
 			border-radius: 20px;
 			width: 100%;
 			max-width: 700px;
-			overflow: hidden;
 		}
 
 		.search-form select {
-			padding: 12.5px;
+			padding: 12.5px 28px 12.5px 12.5px;
 			font-size: 16px;
 			border: none;
 			background-color: rgba(255, 255, 255, 0.8);
 			border-radius: 20px 0 0 20px;
 			flex: 1;
 			max-width: 100px;
-			appearance: none;
+			appearance: none; /* Supprime l'apparence par défaut du select */
 			background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAiIGhlaWdodD0iNiIgdmlld0JveD0iMCAwIDEwIDYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTSAwLjQ1NzAzOTM5LDEuMzk2MDMgTCAxLjI5MzY4MywwLjU1MDI4NTcgTCA1LDAuNTUwMjg1NyBMIDguNzA2MzIsMC41NTAyODU3IEwgOS41NDI5NiwwLjU1MDI4NTcgTCA1LDQuNTc4OTcgWiIgZmlsbD0iIzAwMCIvPjwvc3ZnPg==');
 			background-repeat: no-repeat;
 			background-position: right 10px center;
-			color: #000;
+			color: #000; /* Couleur du texte noir */
 		}
 
 		.search-form select::-ms-expand {
-			display: none;
+			display: none; /* Masquer la flèche native dans IE */
 		}
 
 		.search-form input[type="text"] {
 			padding: 10px;
 			font-size: 16px;
 			border-radius: 0;
-			border: 1px solid rgba(255, 255, 255, 0.8);
-			background-color: rgba(255, 255, 255, 0.8);
+			border: 2px rgba(255, 255, 255, 0.8) !important;
+			background-color: rgba(255, 255, 255, 0.8) !important;
+			background-color: rgba(255, 255, 255, 0.8) ;
 			flex: 2;
 			min-width: 0;
+		}
+
+		.autocomplete-input {
+			border-color: #EFF6FC !important;
 		}
 
 		.search-button {
@@ -74,6 +111,19 @@
 			background-color: #A0BBD4;
 		}
 
+		.autoComplete_wrapper {
+			display: flex !important;
+			flex-grow: 1 !important;
+		}
+
+		.autoComplete_wrapper > ul {
+			top: 40px;
+		}
+		.autoComplete_wrapper > input {
+			background: rgba(255, 255, 255, 0.8) !important;
+			color: black !important;
+		}
+
 		@media(max-width: 400px) {
 			.search-form select,
 			.search-form input[type="text"],
@@ -82,9 +132,14 @@
 			}
 
 			.search-form select {
-				min-width: 50px;
+				min-width: 80px;
 				color: black !important;
 				background-color: rgba(255, 255, 255, 0.8) !important;
+			}
+
+			.autoComplete_wrapper > ul {
+				left: -80px !important;
+				right: -34px !important;
 			}
 
 			.search-form input[type="text"] {
@@ -208,7 +263,7 @@
 			width: 100%;
 			font-size: 16px;
 			text-align: center;
-			color: white;
+			color: white !important;
 			border: none;
 			border-bottom: 1px solid white;
 			background: transparent;
@@ -269,7 +324,6 @@
 			}
 		}
 
-
 		.no-border {
 			border: none;
 			background: transparent;
@@ -283,10 +337,14 @@
 			box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
 		}
 
+		#searchForm input[type="text"] {
+			font-family: 'Noto Sans', sans-serif;
+			width: auto;
+		}
+
 		.card {
-			background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5));
-			box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
-			border: 1px solid #333;
+    		background: linear-gradient(180deg, rgba(0, 0, 0, 0.918), rgba(0, 0, 0, 0.493));
+			box-shadow: 0 10px 10px rgba(0, 0, 0, 0.6);
 			border-radius: 20px;
 			width: 100%;
 			color: #ffffff;
@@ -314,7 +372,7 @@
 		.keyboard-icon {
 			cursor: pointer;
 			color: black !important;
-			background-color: rgba(255, 255, 255, 0.8);
+			background-color: #A0BBD4;
 			border: none;
 			font-size: 20px;
 			display: flex;
@@ -325,22 +383,26 @@
 		.rifain-characters {
 			display: none;
 			position: absolute;
-			background-color: #A0BBD4;
-			border-radius: 0;
-			padding: 8px;
+			background-color: rgba(0, 0, 0, 0.7);
+			border: none;
 			z-index: 1000;
-			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+			height: 100%;
+			bottom: 100%;
 		}
 
 		.rifain-characters span {
 			cursor: pointer;
-			margin: 3px;
-			padding-left: 4px;
-			padding-bottom: 4px;
-			font-size: 16px;
+			padding: 5px;
+			color: white;
+			font-size: 20px;
 			display: inline-block;
+			align-items: center;
+			justify-content: center;
 		}
 
+		.rifain-characters span:hover {
+			color: #A0BBD4;
+		}
 		.alert-custom {
 			background: rgba(0, 0, 0, 0.5);
 			box-sizing: border-box;
@@ -401,12 +463,139 @@
 			font-size: 5.5vw; /* Taille de police proportionnelle à la largeur de l'écran */
 		}
 
+		.autoComplete_wrapper > input::placeholder {
+			color: black !important;
+		}
+
+		.autoComplete_wrapper > input {
+			height: 100% !important;
+		}
 		/* Limite maximale de la taille de la police */
 		@media(min-width: 700px) {
 			h1.dynamic-font-size {
 				font-size: 2.3rem; /* Taille maximale définie pour les grands écrans */
 			}
 		}
+
+		.ui-widget-content {
+			text-align: left;
+		}
+
+		.autoComplete_results_list {
+			background-color: #f0f0f0; /* Light grey background */
+			border: 1px solid #d4d4d4;
+			max-height: 150px;
+			overflow-y: auto;
+		}
+
+		/* Change the text color and background color of each suggestion item */
+		.autoComplete_result {
+			color: #333; /* Dark text */
+			background-color: white; /* White background */
+			padding: 10px;
+			cursor: pointer;
+		}
+
+		::-webkit-input-placeholder {
+			/* WebKit, Blink, Edge */
+			color: black !important;
+		}
+
+		.autoComplete_wrapper mark {
+			padding: 0 !important;
+		}
+
+		@media(min-width: 400px) {
+			.autoComplete_wrapper > ul {
+				left: -96px !important;
+				right: -54px !important;
+			}
+		}
+		#lang {
+			outline: none;
+		}
+
+        .recorder-player{
+
+			color: white;
+			margin-left:5px;
+			font-size: 15px;
+			padding: 7px;
+
+		}
+		.recorder-player:hover{
+		color: #0db6ff;
+		}
+		
+		.modal-content.modal-information {
+        background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.75));
+        	box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+        	border: 1px solid #333;
+        	border-radius: 20px;
+        	color: white;
+        }
+        
+        .modal-content.modal-information .modal-header,
+        .modal-content.modal-information .modal-footer {
+        	border: none;
+        }
+        
+        .modal-content.modal-information .list-group-item {
+        	background-color: transparent;
+        	border: none;
+        	color: #ddd;
+        	padding-left: 0;
+        }
+        
+        .modal-content.modal-information .modal-title i {
+        	color: #fff;
+        }
+        
+        .modal-content.modal-information .btn-close {
+        	filter: invert(1); /* pour une croix blanche */
+        }
+
+/* Navigation alphabétique page d'accueil */
+.alphabet-nav-home {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px auto;
+    max-width: 800px;
+}
+
+.alphabet-nav-home .alphabet-letter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5));
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    border: 1px solid #333;
+}
+
+.alphabet-nav-home .alphabet-letter:hover {
+    background: linear-gradient(135deg, #A0BBD4, #7A9AB8);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    color: white;
+}
+
+@media(max-width: 768px) {
+    .alphabet-nav-home .alphabet-letter {
+        width: 38px;
+        height: 38px;
+        font-size: 1rem;
+    }
+}
 	</style>
 
 	<main>
@@ -422,6 +611,7 @@
 		<h3 style="text-align: center; margin-top: 50px; margin-bottom: 50px; font-size: 3rem;font-family: 'MaPolice', sans-serif;">ⴰⵎⴰⵡⴰⵍ ⵙ ⵜⵎⴰⵣⵉⵖⵜ</h3>
 
 		{# BARRE DE RECHERCHE #}
+		<div class="barrederecherche">
 		<form id="searchForm" method="GET" action="{{ path('show_home') }}" class="search-form">
 			<div style="position: relative;">
 				<select name="lang" id="lang">
@@ -433,7 +623,11 @@
 						<option value="rif-fr" {% if app.request.query.get('lang') == 'rif-fr' %} selected {% endif %}>RIF - FR</option>
 					{% endif %}
 				</select>
-				<input type="text" name="q" id="search-input" placeholder="{{ 'home.search_bar'|trans }}..." maxlength="30" value="{{ sanitizedSearchTerm|raw }}" required>
+
+
+
+					<input type="hidden" id="searchType" value="dictionary">
+					<input type="text" name="q" id="search-input" class="autocomplete-input" autocomplete="off" placeholder="{{ 'home.search_bar'|trans }}..." maxlength="60" value="{{ sanitizedSearchTerm|raw }}" required>
 				<button type="button" class="keyboard-icon" id="toggle-keyboard">
 					<i class="bi bi-keyboard"></i>
 				</button>
@@ -455,163 +649,319 @@
 				</button>
 			</div>
 		</form>
-
+</div>
 		{% if error %}
-			<div style="color:#890000;" class="mt-2 error-message text-center">{{ error }}</div>
+			<div style="color:#F26766;" class="mt-2 error-message text-center">{{ error }}</div>
 		{% endif %}
 
-
-		{# CARD #}
-		{% if traductions is not empty %}
-			<h4 style="text-align: center; margin-top: 30px">{{ 'home.search_results'|trans }}</h4>
-			<div class="card-container row mt-0">
-				{% for traduction in pagination %}
-					<div class="card col-11 col-md-9 col-lg-6 custom-card" style="background: rgba(0, 0, 0, 0.624); border: 1px solid black;">
-						{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MODERATOR') %}
-							<button style="color: #fff" type="button" class="btn btn-sm position-absolute top-0 mt-2 me-2" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal{{ traduction.id }}">
-								&times;
-							</button>
-							<button style="color: #fff; right: 0; margin-right: 1rem;" type="button" class="btn btn-sm position-absolute top-0 mt-2 me-2">
-								<a href="{{ path('app_traduction_edit', {'id': traduction.id}) }}">
-									<i class="bi bi-pencil" style="color: white;"></i>
-								</a>
-							</button>
+{# CARD #}
+{% if traductions is not empty %}
+	<h4 style="text-align: center; margin-top: 30px">{{ 'home.search_results'|trans }}</h4>
+	<div class="card-container row mt-0">
+		{% for traduction in pagination %}
+			<div class="card col-11 col-md-9 col-lg-6 custom-card" style="background: rgba(0, 0, 0, 0.624); border: 1px solid black;">
+				{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MODERATOR') %}
+					<button style="color: #fff" type="button" class="btn btn-sm position-absolute top-0 mt-2 me-2" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal{{ traduction.id }}">
+						&times;
+					</button>
+					<button style="color: #fff; right: 0; margin-right: 1rem;" type="button" class="btn btn-sm position-absolute top-0 mt-2 me-2">
+						<a href="{{ path('app_traduction_edit', {'id': traduction.id}) }}">
+							<i class="bi bi-pencil" style="color: white;"></i>
+						</a>
+					</button>
+				{% endif %}
+				{% set isFavorite = false %}
+				{% for favorite in favorites %}
+					{% if favorite.getTraduction() is not null %}
+						{% if favorite.getTraduction().id == traduction.id %}
+							{% set isFavorite = true %}
 						{% endif %}
-						<div class="card-body">
-							{% set grammar = app.request.query.get('lang') in ['fr-rif', 'rif-fr'] ? traduction.grammarFR : traduction.grammarEN %}
-							<p class="card-text">{{ grammar }}</p>
-							<h5 class="card-title">
-								{% if app.request.query.get('lang') == 'fr-rif' %}
-									{{ traduction.wordFR }}
-								{% elseif app.request.query.get('lang') in ['rif-fr', 'rif-en'] %}
-									{% if traduction.plural %}
-										<span>
-											{{ 'home.singular'|trans }}:
-											{{ traduction.singular }}
-										</span>
-										<br>
-										<span style="margin-top: 10px; display: block;">
-											{{ 'home.plural'|trans }}:
-											{{ traduction.plural }}
-										</span>
-									{% else %}
-										<span>{{ traduction.singular }}</span>
+					{% endif %}
+				{% endfor %}
+				<span class="favorite-icon" data-id="{{ traduction.id }}" style="{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MODERATOR') %}top: 2.5rem;{% else %}top: 0.5rem;{% endif %} right: 1rem;">
+					<i class="bi bi-star-fill {% if isFavorite %}text-warning{% endif %}"></i>
+				</span>
+				{# Vérifier si la traduction appartient à un utilisateur qui n'est pas admin ou modérateur #}
+				{% if traduction.requestedBy is not null and not (traduction.requestedBy.roles is same as([]) or 'ROLE_ADMIN' in traduction.requestedBy.roles or 'ROLE_MODERATOR' in traduction.requestedBy.roles) %}
+					<div class="added-by-info mt-3">
+						<p>{{ 'post.added_by'|trans }}
+							<strong style="color:#F26766;">{{ traduction.requestedBy.username }}</strong>
+							{{ 'post.verified'|trans }}
+						</p>
+						{# Image de profil sous l'icône favori #}
+						<div class="profile-picture mt-2" style="position: absolute;
+																			{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MODERATOR') %}top: 4.5rem;{% else %}top: 2.5rem;{% endif %} right: 1rem;">
+							{% if traduction.requestedBy.picture %}
+								<img src="{{ asset('uploads/profile/' ~ traduction.requestedBy.picture) }}" alt="Photo de profil" style="width: 30px; height: 30px; border-radius: 50%;">
+							{% else %}
+								<img src="{{ asset('uploads/profile/default_profile_picture.jpg') }}" alt="Photo de profil" style="width: 30px; height: 30px; border-radius: 50%;">
+							{% endif %}
+						</div>
+					</div>
+				{% endif %}
+				<div class="card-body">
+					{% set grammar = app.request.query.get('lang') in ['fr-rif', 'rif-fr'] ? traduction.grammarFR : traduction.grammarEN %}
+					<p class="card-text">{{ grammar }}</p>
+					<h5 class="card-title">
+						{% if app.request.query.get('lang') == 'fr-rif' %}
+							{{ traduction.wordFR }}
+						{% elseif app.request.query.get('lang') in ['rif-fr', 'rif-en'] %}
+							{% if traduction.plural %}
+								<span>
+									{{ 'home.singular'|trans }}:
+									{{ traduction.singular }}
+									{% if traduction.hasRifainSingularRecord %}
+										{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+											<a href="{{ path('audio_serve', { id: traduction.id, field: 'rifainSingularRecord' }) }}" class="audio-trigger" data-audio-url="{{ path('audio_serve', { id: traduction.id, field: 'rifainSingularRecord' }) }}">
+												<i class="fa-solid fa-volume-high recorder-player"></i>
+											</a>
+										{% else %}
+											<a href="#" class="audio-trigger" onclick="alert('Veuillez vous connecter pour accéder à cette fonctionnalité.'); return false;">
+												<i class="fa-solid fa-volume-high recorder-player"></i>
+											</a>
+										{% endif %}
 									{% endif %}
-								{% elseif app.request.query.get('lang') in ['en-rif', 'rif-en'] %}
-									{{ traduction.wordEN }}
-								{% endif %}
-							</h5>
-							<h6 class="card-subtitle mb-2" style="color: #dec5a5;">
-								<span style="margin-top: 10px; display: block; text-transform: lowercase; font-size: 20px;">
-									{% if app.request.query.get('lang') == 'fr-rif' %}
 
-										{% if traduction.plural %}
-											<span>
-												{{ 'home.singular'|trans }}:
-												{{ traduction.singular }}
-											</span>
-											<br>
-											<span style="margin-top: 10px; display: block;">
-												{{ 'home.plural'|trans }}:
-												{{ traduction.plural }}
-											</span>
-										{% endif %}
-										{% if traduction.singular and not traduction.plural %}
-											<span style="margin-top: 20px; display: block;">
-												{{ traduction.singular }}
-											</span>
-										{% endif %}
-
-									{% elseif app.request.query.get('lang') == 'rif-fr' %}
-										{{ traduction.wordFR }}
-									{% elseif app.request.query.get('lang') == 'en-rif' %}
-										{% if traduction.plural %}
-											<span>
-												{{ 'home.singular'|trans }}:
-												{{ traduction.singular }}
-											</span>
-											<br>
-											<span style="margin-top: 10px; display: block;">
-												{{ 'home.plural'|trans }}:
-												{{ traduction.plural }}
-											</span>
-										{% endif %}
-										{% if traduction.singular and not traduction.plural %}
-											<span style="margin-top: 20px; display: block;">
-												{{ traduction.singular }}
-											</span>
-										{% endif %}
-									{% elseif app.request.query.get('lang') == 'rif-en' %}
-										{{ traduction.wordEN }}
-									{% endif %}
-									<hr class="mb-0">
 								</span>
 								<br>
-								{% if traduction.phoneticPlural %}
+								<span style="margin-top: 10px; display: block;">
+									{{ 'home.plural'|trans }}:
+									{{ traduction.plural }}
+									{% if traduction.hasRifainPluralRecord %}
+										{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+											<a href="{{ path('audio_serve', { id: traduction.id, field: 'rifainPluralRecord' }) }}" class="audio-trigger" data-audio-url="{{ path('audio_serve', { id: traduction.id, field: 'rifainPluralRecord' }) }}">
+												<i class="fa-solid fa-volume-high recorder-player"></i>
+											</a>
+										{% else %}
+											<a href="#" class="audio-trigger" onclick="alert('Veuillez vous connecter pour accéder à cette fonctionnalité.'); return false;">
+												<i class="fa-solid fa-volume-high recorder-player"></i>
+											</a>
+										{% endif %}
+									{% endif %}
+
+								</span>
+							{% else %}
+								<span>{{ traduction.singular }}
+									{% if traduction.hasRifainSingularRecord %}
+										{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+											<a href="{{ path('audio_serve', { id: traduction.id, field: 'rifainPluralRecord' }) }}" class="audio-trigger" data-audio-url="{{ path('audio_serve', { id: traduction.id, field: 'rifainPluralRecord' }) }}">
+												<i class="fa-solid fa-volume-high recorder-player"></i>
+											</a>
+										{% else %}
+											<a href="#" class="audio-trigger" onclick="alert('Veuillez vous connecter pour accéder à cette fonctionnalité.'); return false;">
+												<i class="fa-solid fa-volume-high recorder-player"></i>
+											</a>
+										{% endif %}
+									{% endif %}</span>
+							{% endif %}
+						{% elseif app.request.query.get('lang') in ['en-rif', 'rif-en'] %}
+							{{ traduction.wordEN }}
+						{% endif %}
+					</h5>
+					<h6 class="card-subtitle mb-2" style="color: #dec5a5;">
+						<span style="margin-top: 10px; display: block; text-transform: lowercase; font-size: 20px;">
+							{% if app.request.query.get('lang') == 'fr-rif' %}
+
+								{% if traduction.plural %}
 									<span>
-										{{ 'home.tifinagh_singular'|trans }}:
-										{{ traduction.phoneticSingular }}
+										{{ 'home.singular'|trans }}:
+										{{ traduction.singular }}
+										{% if traduction.hasRifainSingularRecord %}
+											{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+												<a href="{{ path('audio_serve', { id: traduction.id, field: 'rifainSingularRecord' }) }}" class="audio-trigger" data-audio-url="{{ path('audio_serve', { id: traduction.id, field: 'rifainSingularRecord' }) }}">
+													<i class="fa-solid fa-volume-high recorder-player"></i>
+												</a>
+											{% else %}
+												<a href="#" class="audio-trigger" onclick="alert('Veuillez vous connecter pour accéder à cette fonctionnalité.'); return false;">
+													<i class="fa-solid fa-volume-high recorder-player"></i>
+												</a>
+											{% endif %}
+										{% endif %}
 									</span>
 									<br>
 									<span style="margin-top: 10px; display: block;">
-										{{ 'home.tifinagh_plural'|trans }}:
-										{{ traduction.phoneticPlural }}
+										{{ 'home.plural'|trans }}:
+										{{ traduction.plural }}
+										{% if traduction.hasRifainPluralRecord %}
+											{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+												<a href="{{ path('audio_serve', { id: traduction.id, field: 'rifainPluralRecord' }) }}" class="audio-trigger" data-audio-url="{{ path('audio_serve', { id: traduction.id, field: 'rifainPluralRecord' }) }}">
+													<i class="fa-solid fa-volume-high recorder-player"></i>
+												</a>
+											{% else %}
+												<a href="#" class="audio-trigger" onclick="alert('Veuillez vous connecter pour accéder à cette fonctionnalité.'); return false;">
+													<i class="fa-solid fa-volume-high recorder-player"></i>
+												</a>
+											{% endif %}
+										{% endif %}
 									</span>
 								{% endif %}
-								{% if traduction.phoneticSingular and not traduction.phoneticPlural %}
+								{% if traduction.singular and not traduction.plural %}
 									<span style="margin-top: 20px; display: block;">
-										{{ 'home.tifinagh_verb'|trans }}
-										:
-										{{ traduction.phoneticSingular }}
+										{{ traduction.singular }}
+										{% if traduction.hasRifainSingularRecord %}
+										{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+											<a href="{{ path('audio_serve', { id: traduction.id, field: 'rifainSingularRecord' }) }}" class="audio-trigger" data-audio-url="{{ path('audio_serve', { id: traduction.id, field: 'rifainSingularRecord' }) }}">
+												<i class="fa-solid fa-volume-high recorder-player"></i>
+											</a>
+										{% else %}
+											<a href="#" class="audio-trigger" onclick="alert('Veuillez vous connecter pour accéder à cette fonctionnalité.'); return false;">
+												<i class="fa-solid fa-volume-high recorder-player"></i>
+											</a>
+										{% endif %}
+									{% endif %}
 									</span>
 								{% endif %}
 
-							</h6>
+							{% elseif app.request.query.get('lang') == 'rif-fr' %}
+								{{ traduction.wordFR }}
+							{% elseif app.request.query.get('lang') == 'en-rif' %}
+								{% if traduction.plural %}
+									<span>
+										{{ 'home.singular'|trans }}:
+										{{ traduction.singular }}
+									</span>
+									<br>
+									<span style="margin-top: 10px; display: block;">
+										{{ 'home.plural'|trans }}:
+										{{ traduction.plural }}
+									</span>
+								{% endif %}
+								{% if traduction.singular and not traduction.plural %}
+									<span style="margin-top: 20px; display: block;">
+										{{ traduction.singular }}
+									</span>
+								{% endif %}
+							{% elseif app.request.query.get('lang') == 'rif-en' %}
+								{{ traduction.wordEN }}
+							{% endif %}
+							<hr class="mb-0">
+						</span>
+						<br>
+						{% if traduction.phoneticPlural %}
+							<span>
+								{{ 'home.tifinagh_singular'|trans }}:
+								{{ traduction.phoneticSingular }}
+							</span>
+							<br>
+							<span style="margin-top: 10px; display: block;">
+								{{ 'home.tifinagh_plural'|trans }}:
+								{{ traduction.phoneticPlural }}
+							</span>
+						{% endif %}
+						{% if traduction.phoneticSingular and not traduction.phoneticPlural %}
+							<span style="margin-top: 20px; display: block;">
+								{{ 'home.tifinagh_verb'|trans }}
+								:
+								{{ traduction.phoneticSingular }}
+							</span>
+						{% endif %}
+
+					</h6>
+					
+										{# MODAL INFO #}
+				{% if traduction.source is not empty or traduction.origin is not empty or traduction.example is not empty or traduction.racine is not empty %}
+    <button type="button" class="btn btn-outline-info btn-sm mt-2" data-bs-toggle="modal" data-bs-target="#infoModal{{ traduction.id }}">
+        <i class="bi bi-info-circle"></i>
+    </button>
+
+    <div class="modal fade" id="infoModal{{ traduction.id }}" tabindex="-1" aria-labelledby="infoModalLabel{{ traduction.id }}" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-sm modal-dialog-centered">
+            <div class="modal-content modal-information">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="infoModalLabel{{ traduction.id }}">
+                        <i class="bi bi-info-circle-fill me-2"></i>
+                        {{ 'Informations sur la traduction'|trans }}
+                    </h5>
+                    <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-label="{{ 'Fermer'|trans }}"></button>
+                </div>
+
+                <div class="modal-body">
+                    <ul class="list-group list-group-flush small">
+                        {% if traduction.origin %}
+                            <li class="list-group-item">
+                                <i class="bi bi-geo-alt-fill me-2"></i>
+                                <strong>{{ 'Origine'|trans }}:</strong> {{ traduction.origin|e }}
+                            </li>
+                        {% endif %}
+                        {% if traduction.racine %}
+                            <li class="list-group-item">
+                                <i class="bi bi-diagram-3-fill me-2"></i>
+                                <strong>{{ 'Racine'|trans }}:</strong> {{ traduction.racine|e }}
+                            </li>
+                        {% endif %}
+                        {% if traduction.example %}
+                            <li class="list-group-item">
+                                <i class="bi bi-chat-left-text-fill me-2"></i>
+                                <strong>{{ 'Exemple'|trans }}:</strong> {{ traduction.example|e }}
+                            </li>
+                        {% endif %}
+                        {% if traduction.source %}
+                            <li class="list-group-item">
+                                <i class="bi bi-globe-americas me-2"></i>
+                                <strong>{{ 'Source'|trans }}:</strong> {{ traduction.source|e }}
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+
+                <div class="modal-footer pt-0">
+                    <button type="button" class="btn btn-outline-light btn-sm" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> {{ 'Fermer'|trans }}
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+				</div>
+			</div>
+			
+			<!-- Confirmation suppression traduction -->
+			<div class="modal fade" id="confirmDeleteModal{{ traduction.id }}" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="confirmDeleteModalLabel">Confirmation de suppression</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>
+						<div class="modal-body">
+							Êtes-vous sûr de vouloir supprimer cette traduction ?
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+							<form action="{{ path('app_traduction_delete', {'id': traduction.id}) }}" method="post">
+								<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ traduction.id) }}">
+								<button type="submit" class="btn btn-danger">Supprimer</button>
+							</form>
 						</div>
 					</div>
-					<!-- Confirmation suppression traduction -->
-					<div class="modal fade" id="confirmDeleteModal{{ traduction.id }}" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-						<div class="modal-dialog">
-							<div class="modal-content">
-								<div class="modal-header">
-									<h5 class="modal-title" id="confirmDeleteModalLabel">Confirmation de suppression</h5>
-									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-								</div>
-								<div class="modal-body">
-									Êtes-vous sûr de vouloir supprimer cette traduction ?
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-									<form action="{{ path('app_traduction_delete', {'id': traduction.id}) }}" method="post">
-										<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ traduction.id) }}">
-										<button type="submit" class="btn btn-danger">Supprimer</button>
-									</form>
-								</div>
-							</div>
-						</div>
-					</div>
-				{% endfor %}
-
-				{% if app.session.flashBag.has('success') %}
-					<div class="alert alert-success" role="alert">
-						{{ app.session.flashBag.get('success')[0] }}
-					</div>
-				{% endif %}
-
+				</div>
 			</div>
-			<div id="pagination-container" class="pagination justify-content-center mt-4">
-				{{ knp_pagination_render(pagination) }}
+		{% endfor %}
+
+		{% if app.session.flashBag.has('success') %}
+			<div class="alert alert-success" role="alert">
+				{{ app.session.flashBag.get('success')[0] }}
 			</div>
-		{% elseif traductions is empty and app.request.query.get('q') is not null %}
-			{% if is_granted('ROLE_USER') %}
-				<p class="mt-2" style="text-align: center;">{{ 'home.no_results_logged_in'|trans({'%path_traduction_new%': path('app_traduction_new')})|raw }}</p>
-			{% else %}
-				<p class="mt-2" style="text-align: center;">{{ 'home.no_results_guest'|trans({'%path_app_login%': path('app_login')})|raw }}</p>
-			{% endif %}
 		{% endif %}
 
+	</div>
+	<div id="pagination-container" class="pagination justify-content-center mt-4">
+		{{ knp_pagination_render(pagination) }}
+	</div>
+{% elseif traductions is empty and app.request.query.get('q') is not null %}
+	{% if is_granted('ROLE_USER') %}
+		<p class="mt-2" style="text-align: center;">{{ 'home.no_results_logged_in'|trans({'%path_traduction_new%': path('app_traduction_new')})|raw }}</p>
+	{% else %}
+		<p class="mt-2" style="text-align: center;">{{ 'home.no_results_guest'|trans({'%path_app_login%': path('app_login')})|raw }}</p>
+	{% endif %}
+{% endif %}
+
 		{# ALPHABET #}
-		<div class="container reveal" style="margin-top: 75px;">
+		<div class="container" style="margin-top: 75px;">
 			<img src="/img/abc.png" class="img-rounded mx-auto d-block" style="width: 80px;" alt="alphabet rif">
 			<div class="p-3 text-center bg-body-tertiary rounded-3">
 				<h2 class="text-body-emphasis">{{ 'home.learn_alphabet'|trans }}</h2>
@@ -629,26 +979,47 @@
 			</div>
 		</div>
 
+{# NAVIGATION ALPHABÉTIQUE #}
+<div class="container reveal" style="margin-top: 30px;">
+    <div class="p-3 text-center bg-body-tertiary rounded-3">
+        <h2 class="text-body-emphasis">{{ 'home.browse_dictionary'|trans }}</h2>
+    
+        <div class="alphabet-nav-home">
+            {% set alphabet = 'abcdefghijklmnopqrstuvwxyz'|split('') %}
+            {% for char in alphabet %}
+                <a href="{{ path('browse_by_letter', {'letter': char}) }}" class="alphabet-letter">
+                    {{ char|upper }}
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
 		{# MOT DU JOUR SECTION #}
-		<div class="worday mx-auto reveal">
-			<div class="p-4 text-center bg-body-tertiary rounded-3">
-				<h2 class="text-body-emphasis text-white mb-4">{{ 'post.worday'|trans }}</h2>
-				<div class="mt-3 text-white">
-					{% if wordOfTheDay %}
-						{% if app.request.locale == 'fr' %}
-							<p class="lead mb-2" style="font-style: italic;">{{ wordOfTheDay.grammarFR }}</p>
-							<h3 class="mb-3" style="font-size: 2rem; font-weight: bold;">{{ wordOfTheDay.wordFR }}</h3>
-						{% else %}
-							<p class="lead mb-2" style="font-style: italic;">{{ wordOfTheDay.grammarEN }}</p>
-							<h3 class="mb-3" style="font-size: 2rem; font-weight: bold;">{{ wordOfTheDay.wordEN }}</h3>
-						{% endif %}
-						<p class="mb-3" style="font-size: 1.5rem; font-weight: bold; font-family: 'Arial', sans-serif;">{{ wordOfTheDay.singular }}</p>
-					{% else %}
-						<p class="lead">{{ 'post.no_worday'|trans }}</p>
-					{% endif %}
-				</div>
-			</div>
-		</div>
+<div class="worday mx-auto reveal">
+    <div class="p-4 text-center bg-body-tertiary rounded-3">
+        <h4 class="text-body-emphasis text-white mb-5">
+					{{ 'post.countword'|trans }}
+					<span style="color:#dec5a5" id="wordCount">{{ translatedMessage }}</span>
+					{{ 'post.countword2'|trans }}
+        </h4>
+        <h3 class="text-body-emphasis text-white mb-4">{{ 'post.worday'|trans }}</h3>
+        <div class="mt-3 text-white">
+            {% if wordOfTheDay %}
+                {% if app.request.locale == 'fr' %}
+                    <p class="lead mb-2" style="font-style: italic;">{{ wordOfTheDay.grammarFR }}</p>
+                    <h5 class="mb-3" style="font-weight: bold;">{{ wordOfTheDay.wordFR }}</h5>
+                {% else %}
+                    <p class="lead mb-2" style="font-style: italic;">{{ wordOfTheDay.grammarEN }}</p>
+                    <h5 class="mb-3" style="font-weight: bold;">{{ wordOfTheDay.wordEN }}</h5>
+                {% endif %}
+                <h3 class="mb-3" style="font-size: 2rem; font-weight: bold;">{{ wordOfTheDay.singular }}</h3>
+            {% else %}
+                <p class="lead">{{ 'post.no_worday'|trans }}</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
 
 		{# GRAMMAIRE #}
 		<div class="text-center mt-3 reveal">
@@ -665,7 +1036,7 @@
 						{% for sheet in grammarSheets %}
 							<div class="carousel-item {% if loop.first %}active{% endif %}">
 								<div class="d-flex justify-content-center">
-									<button onclick="window.location.href='{{ path('grammarsheet_show', {'id': sheet.id}) }}'" class="btn btn-outline-dark btn-md px-4 mx-2" type="button">
+									<button onclick="window.location.href='{{ path('grammarsheet_show', {'id': sheet.id}) }}'" class="btn btn-dark btn-md px-4 mx-2" type="button">
 										{% if app.request.locale == 'en' %}
 											{{ sheet.titleEn|striptags }}
 										{% else %}
@@ -688,10 +1059,10 @@
 
 		{# COMMENTAIRE #}
 		<div
-			class="container reveal" style="margin-top: 100px;">
+				class="container reveal" style="margin-top: 100px;">
 			<!-- Form and Comments Section -->
 			<div
-				class="row justify-content-center align-items-center">
+					class="row justify-content-center align-items-center">
 				<!-- Comment Form -->
 				<div class="col-12 col-md-6 d-flex justify-content-center">
 					<div class="comment-box align-self-center">
@@ -740,7 +1111,7 @@
 				</div>
 			</div>
 		</div>
-		<hr>
+
 		{# NEWSLETTER #}
 		<div class="reveal" style="margin-top: 10vh;">
 			<div class="newsletter-box">
@@ -755,5 +1126,106 @@
 			</div>
 		</div>
 	</main>
+	
+	<script>
+    // Attacher l'événement keydown à chaque élément avec la classe "autocomplete-input"
+    document.querySelectorAll(".autocomplete-input").forEach(function(inputElement) {
+        inputElement.addEventListener("keydown", function(event) {
+            // Vérifier si la touche "Enter" est pressée
+            if (event.key === "Enter") {
+                event.preventDefault(); // Empêcher l'action par défaut
 
+                const lang = document.getElementById("lang").value; // Utiliser document.getElementById pour le select
+                const q = inputElement.value; // Récupérer la valeur de l'input correspondant
+
+                // Redirection vers la nouvelle URL avec les paramètres
+                window.location.replace("https://amyaz.fr/?lang=" + lang + "&q=" + q);
+            }
+        });
+    });
+    
+    document.addEventListener('DOMContentLoaded', function () {
+const searchInput = document.getElementById('search-input');
+
+searchInput.addEventListener('input', function () {
+let inputValue = searchInput.value;
+// Remplacer toutes les variantes d'apostrophes par des apostrophes simples
+inputValue = inputValue.replace(/‘|’|ʼ|`|´|′|ʾ|ʿ|ˈ|‛|❛|❜|ʹ/g, "'");
+searchInput.value = inputValue;
+});
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+document.querySelectorAll('.favorite-icon').forEach(function (star) {
+star.addEventListener('click', function () {
+const traductionId = this.getAttribute('data-id');
+const isFavorite = this.querySelector('i').classList.contains('text-warning');
+const url = isFavorite ? '{{ path('favorite_remove_word') }}' : '{{ path('favorite_add_word') }}';
+
+fetch(url, {
+method: 'POST',
+headers: {
+'Content-Type': 'application/json',
+'X-Requested-With': 'XMLHttpRequest',
+'X-CSRF-TOKEN': '{{ csrf_token('favorite_toggle') }}'
+},
+body: JSON.stringify(
+{traduction_id: traductionId}
+)
+}).then(response => response.json()).then(data => {
+if (data.status === 'success') {
+if (isFavorite) {
+this.querySelector('i').classList.remove('text-warning'); // Remove yellow color
+} else {
+this.querySelector('i').classList.add('text-warning'); // Add yellow color
+}
+location.reload(); // Reload the page to show flash messages
+} else {
+alert('Erreur: ' + data.message);
+}
+});
+});
+});
+});
+</script>
+
+
+<!-- Charger la bibliothèque CountUp.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/countup.js/2.0.8/countUp.min.js"></script>
+<script type="module">
+    import { CountUp } from 'https://cdnjs.cloudflare.com/ajax/libs/countup.js/2.0.8/countUp.min.js';
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Sélectionner l'élément à observer
+        var target = document.getElementById('wordCount');
+        
+        // Options pour l'Intersection Observer
+        var options = {
+            root: null, // Utiliser le viewport comme référence
+            rootMargin: '0px',
+            threshold: 0.5 // 50% visible pour déclencher
+        };
+
+        // Créer un nouvel observateur
+        var observer = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    // Lorsque l'élément est visible à 50%, démarrer le compteur
+                    var countUp = new CountUp('wordCount', {{ wordCount }});
+                    if (!countUp.error) {
+                        countUp.start();
+                    } else {
+                        console.error(countUp.error);
+                    }
+                    // Une fois déclenché, on peut arrêter d'observer
+                    observer.unobserve(target);
+                }
+            });
+        }, options);
+
+        // Commencer à observer l'élément
+        observer.observe(target);
+    });
+
+</script>
 {% endblock %}

@@ -21,14 +21,18 @@ rifainCharacters.style.display = rifainCharacters.style.display === 'none' || ri
 
 // Insérer un caractère dans le clavier
 function insertCharacter(character) {
-const startPos = searchInput.selectionStart;
-const endPos = searchInput.selectionEnd;
-searchInput.value = searchInput.value.substring(0, startPos) + character + searchInput.value.substring(endPos);
-searchInput.setSelectionRange(startPos + 1, startPos + 1);
-searchInput.focus();
+  const startPos = searchInput.selectionStart;
+  const endPos = searchInput.selectionEnd;
+  searchInput.value = searchInput.value.substring(0, startPos) + character + searchInput.value.substring(endPos);
+  searchInput.setSelectionRange(startPos + 1, startPos + 1);
+  searchInput.focus();
 
-// Masquer la boîte des caractères après l'insertion
-rifainCharacters.style.display = 'none';
+  // Déclencher l'événement input pour l'autocomplétion
+  const event = new Event('input', { bubbles: true });
+  searchInput.dispatchEvent(event);
+
+  // Masquer la boîte des caractères après l'insertion
+  rifainCharacters.style.display = 'none';
 }
 
 // Ecouteur d'évenements clavier

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Service\SendMailService;
 use App\Repository\UserRepository;
 use App\Repository\CommentRepository;
 use App\Form\PasswordConfirmationType;
@@ -38,17 +39,33 @@ class AdminController extends AbstractController
      * @param  mixed $request
      * @return Response
      */
-    public function index(UserRepository $userRepository, PaginatorInterface $paginator, Request $request): Response
+     
+   public function index(UserRepository $userRepository, PaginatorInterface $paginator, Request $request): Response
     {
-        $queryBuilder = $userRepository->createQueryBuilder('u');
+        $queryBuilder = $userRepository->createQueryBuilder('u')
+            ->orderBy('u.createdAt', 'DESC'); // Sort by createdAt DESC
+
+        // Pagination des utilisateurs
         $pagination = $paginator->paginate(
             $queryBuilder,
             $request->query->getInt('page', 1),
             10
         );
 
+        // Nombre total d'utilisateurs
+        $totalUsers = $userRepository->count([]);
+
+        // Nombre d'utilisateurs vérifiés
+        $verifiedUsersCount = $userRepository->count(['isVerified' => true]);
+
+        // Nombre d'utilisateurs non vérifiés
+        $unverifiedUsersCount = $userRepository->count(['isVerified' => false]);
+
         return $this->render('account/user/index.html.twig', [
             'pagination' => $pagination,
+            'totalUsers' => $totalUsers,
+            'verifiedUsersCount' => $verifiedUsersCount,
+            'unverifiedUsersCount' => $unverifiedUsersCount,
         ]);
     }
 
@@ -78,38 +95,52 @@ class AdminController extends AbstractController
         ]);
     }
 
-    #[Route('/user/{id}/change-role', name: 'app_user_change_role', methods: ['POST'])]
-    public function changeRole(Request $request, User $user, EntityManagerInterface $em): Response
-    {
-
-        if (!$this->isGranted('ROLE_ADMIN')) {
-            $this->addFlash('error', $this->translator->trans('addflash.restreindre_acces'));
-            return $this->redirectToRoute('account');
-        }
-
-        // Empêcher un administrateur de changer son propre rôle
-        $currentUser = $this->getUser();
-        if ($user === $currentUser) {
-            $this->addFlash('error', 'Vous ne pouvez pas changer votre propre rôle.');
+      #[Route('/user/{id}/change-role', name: 'app_user_change_role', methods: ['POST'])]
+        public function changeRole(Request $request, User $user, EntityManagerInterface $em, SendMailService $mail): Response
+        {
+    
+            if (!$this->isGranted('ROLE_ADMIN')) {
+                $this->addFlash('error', $this->translator->trans('addflash.restreindre_acces'));
+                return $this->redirectToRoute('account');
+            }
+    
+            // Empêcher un administrateur de changer son propre rôle
+            $currentUser = $this->getUser();
+            if ($user === $currentUser) {
+                $this->addFlash('error', 'Vous ne pouvez pas changer votre propre rôle.');
+                return $this->redirectToRoute('app_user_index');
+            }
+    
+            $newRole = $request->request->get('role');
+    
+            if ($newRole && in_array($newRole, ['ROLE_USER', 'ROLE_MODERATOR', 'ROLE_ADMIN'])) {
+                $user->setRoles([]);
+                $user->setRoles([$newRole]);
+    
+                $em->persist($user);
+                $em->flush();
+    
+                $context = [
+                    'user' => $user,
+                    'newRole' => $newRole
+                ];
+        
+                $mail->send(
+                    'contact@amyaz.fr',
+                    $user->getEmail(),
+                    'Changement de rôle',
+                    'security/email_update_role.html.twig',
+                    $context
+                );
+    
+                $this->addFlash('success', 'Rôle mis à jour avec succès.');
+            } else {
+                $this->addFlash('error', 'Rôle invalide.');
+            }
+    
             return $this->redirectToRoute('app_user_index');
         }
 
-        $newRole = $request->request->get('role');
-
-        if ($newRole && in_array($newRole, ['ROLE_USER', 'ROLE_MODERATOR', 'ROLE_ADMIN'])) {
-            $user->setRoles([]);
-            $user->setRoles([$newRole]);
-
-            $em->persist($user);
-            $em->flush();
-
-            $this->addFlash('success', 'Rôle mis à jour avec succès.');
-        } else {
-            $this->addFlash('error', 'Rôle invalide.');
-        }
-
-        return $this->redirectToRoute('app_user_index');
-    }
 
     #[Route('/user/{id}/delete', name: 'admin_user_delete', methods: ['GET', 'POST'])]
     public function deleteUser(

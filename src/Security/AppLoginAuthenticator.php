@@ -36,8 +36,10 @@ class AppLoginAuthenticator extends AbstractLoginFormAuthenticator
 
         $recaptchaResponse = $request->request->get('recaptcha_response');
 
+        // Création de la contrainte de validation
         $recaptchaConstraint = new Recaptcha3();
 
+        // Exécution de la validation
         $violations = $this->validator->validate($recaptchaResponse, $recaptchaConstraint);
 
         // Vérification des violations

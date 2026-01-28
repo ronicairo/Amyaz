@@ -4,17 +4,23 @@ namespace App\Controller;
 
 use DateTime;
 use App\Entity\User;
+use App\Entity\Favorite;
 use App\Form\ChangeEmailFormType;
 use App\Repository\UserRepository;
 use App\Form\ChangePasswordFormType;
+use App\Repository\FavoriteRepository;
 use App\Repository\TraductionRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -25,12 +31,14 @@ class AccountController extends AbstractController
 {
 
     private TranslatorInterface $translator;
-    public function __construct(TranslatorInterface $translator)
+    private Security $security;
+    public function __construct(TranslatorInterface $translator, Security $security)
     {
         $this->translator = $translator;
+        $this->security = $security;
     }
 
-    #[Route('/account', name: 'account')]    
+    #[Route('/account', name: 'account')]
     /**
      * Page profil
      *
@@ -45,7 +53,7 @@ class AccountController extends AbstractController
         ]);
     }
 
-    #[Route('/dashboard', name: 'dashboard')]    
+    #[Route('/dashboard', name: 'dashboard')]
     /**
      * Tableau de bord
      *
@@ -60,7 +68,7 @@ class AccountController extends AbstractController
         ]);
     }
 
-    #[Route('/account/edit_username{id}', name: 'update_username', methods: ['GET', 'POST'])]    
+    #[Route('/account/edit_username{id}', name: 'update_username', methods: ['GET', 'POST'])]
     /**
      * Modifier son nom
      *
@@ -98,7 +106,7 @@ class AccountController extends AbstractController
             'form' => $form->createView()
         ]);
     }
-    #[Route('/account/edit_password{id}', name: 'update_password', methods: ['GET', 'POST'])]    
+    #[Route('/account/edit_password{id}', name: 'update_password', methods: ['GET', 'POST'])]
     /**
      * Modifier son mot de passe
      *
@@ -148,7 +156,7 @@ class AccountController extends AbstractController
         ]);
     } // end updatePassword()
 
-    #[Route('/account/edit_email{id}', name: 'update_email', methods: ['GET', 'POST'])]    
+    #[Route('/account/edit_email{id}', name: 'update_email', methods: ['GET', 'POST'])]
     /**
      * Modifier son email
      *
@@ -166,42 +174,42 @@ class AccountController extends AbstractController
             $this->addFlash('danger', $this->translator->trans('addflash.connexion_acces'));
             return $this->redirectToRoute('app_login');
         }
-    
+
         $form = $this->createForm(ChangeEmailFormType::class)
             ->handleRequest($request);
-    
+
         if ($form->isSubmitted() && $form->isValid()) {
             $plainEmail = $form->get('plainEmail')->getData();
             $repeatEmail = $form->get('repeatEmail')->getData();
-    
+
             if ($plainEmail !== $repeatEmail) {
                 $this->addFlash('danger', $this->translator->trans('addflash.email_not_same'));
                 return $this->redirectToRoute('update_email', ['id' => $user->getId()]);
             }
-    
+
             // Check if the email is already used by another user
             $existingUser = $repository->findOneBy(['email' => $plainEmail]);
             if ($existingUser && $existingUser->getId() !== $user->getId()) {
                 $this->addFlash('danger', $this->translator->trans('addflash.email_already_use'));
                 return $this->redirectToRoute('update_email', ['id' => $user->getId()]);
             }
-    
+
             $user->setEmail($plainEmail);
-    
+
             $repository->save($user);
             $entityManager->flush();
-    
+
             $this->addFlash('success', $this->translator->trans('addflash.email_update_success'));
             return $this->redirectToRoute('account');
         }
-    
+
         return $this->render('account/update/update_email_form.html.twig', [
             'form' => $form->createView()
         ]);
     }
-    
 
-    #[Route('/account/edit_picture{id}', name: 'update_picture', methods: ['GET', 'POST'])]    
+
+    #[Route('/account/edit_picture{id}', name: 'update_picture', methods: ['GET', 'POST'])]
     /**
      * Modifier sa photo de profil
      *
@@ -289,7 +297,7 @@ class AccountController extends AbstractController
         return $result;
     }
 
-    #[Route('/account/translations', name: 'account_translations')]    
+    #[Route('/account/translations', name: 'account_translations')]
     /**
      * Voir les traductions des utilisateurs
      *
@@ -309,7 +317,7 @@ class AccountController extends AbstractController
         ]);
     }
 
-    #[Route('/account/pending-translations', name: 'account_pending_translations')]    
+    #[Route('/account/pending-translations', name: 'account_pending_translations')]
     /**
      * Traduction en attente
      *
@@ -331,5 +339,62 @@ class AccountController extends AbstractController
         return $this->render('account/pending_translations.html.twig', [
             'pendingTranslations' => $pendingTranslations,
         ]);
+    }
+
+    #[Route('/favorites', name: 'show_favorites')]
+    public function showFavorites(Request $request, FavoriteRepository $favoriteRepository, PaginatorInterface $paginator): Response
+    {
+        $user = $this->security->getUser();
+        if (!$user) {
+            throw $this->createAccessDeniedException($this->translator->trans('home.fav_login'));
+        }
+
+        $queryBuilder = $favoriteRepository->createQueryBuilder('f')
+            ->where('f.user = :user')
+            ->setParameter('user', $user);
+
+        $pagination = $paginator->paginate(
+            $queryBuilder,
+            $request->query->getInt('page', 1), // Numéro de la page
+            10 // Limite par page
+        );
+
+
+        return $this->render('account/favorites.html.twig', [
+            'pagination' => $pagination,
+        ]);
+    }
+
+    #[Route('/favorite/remove', name: 'fav_remove', methods: ['POST'])]
+    public function removeFav(Request $request, EntityManagerInterface $em): JsonResponse
+    {
+        $user = $this->security->getUser();
+        if (!$user) {
+            return new JsonResponse([
+                'status' => 'error',
+                'message' => $this->translator->trans('favorite_remove_login_required')
+            ], 401);
+        }
+
+        $data = json_decode($request->getContent(), true);
+        $favoriteId = $data['id'];
+        $type = $data['type']; // Expecting 'word' or 'doc'
+
+        $favorite = $em->getRepository(Favorite::class)->findOneBy([
+            'user' => $user,
+            $type === 'word' ? 'traduction' : 'documentation' => $favoriteId
+        ]);
+
+        if (!$favorite) {
+            return new JsonResponse([
+                'status' => 'error',
+                'message' => $this->translator->trans('favorite_remove_not_found')
+            ], 404);
+        }
+
+        $em->remove($favorite);
+        $em->flush();
+
+        return new JsonResponse(['status' => 'success']);
     }
 }

@@ -16,6 +16,7 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -31,119 +32,170 @@ class RegistrationController extends AbstractController
         $this->translator = $translator;
     }
 
-    #[Route('/register', name: 'app_register')]    
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $entityManager, TokenGeneratorInterface $tokenGenerator, SendMailService $mail): Response
+  #[Route('/register', name: 'app_register')]    
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, Security $security, TokenGeneratorInterface $tokenGenerator, SendMailService $mail, SessionInterface $session): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
-
+    
         if ($security->isGranted('ROLE_USER')) {
-            $this->addFlash('warning', $this->translator->trans('addflash.already_connected'));
             return $this->redirectToRoute('account');
         }
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
-
+            // Générer un code de vérification à 6 chiffres
+            $verificationCode = random_int(100000, 999999);
+            $user->setVerificationCode($verificationCode);
+    
+            // Hasher le mot de passe mais ne pas sauvegarder encore
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,
                     $form->get('password')->getData()
                 )
             );
-
+    
             $user->setCreatedAt(new DateTime());
             $user->setUpdatedAt(new DateTime());
-
-            $token = $tokenGenerator->generateToken();
-            $user->setResetToken($token);
-
-            $entityManager->persist($user);
-            $entityManager->flush();
-
-            $url = $this->generateUrl('app_verify_email', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
-
-            $context = compact('url', 'user');
-
+    
+            // Sauvegarder temporairement dans la session
+            $session->set('registration_user', $user);
+    
+            // Envoyer le code par email
+            $context = ['code' => $verificationCode, 'user' => $user];
             $mail->send(
                 'contact@amyaz.fr',
                 $user->getEmail(),
-                'Activation de votre compte Amyaz',
-                'registration/email_activation_compte.html.twig',
+                'Code de vérification pour votre inscription',
+                'registration/email_verification_code.html.twig',
                 $context
             );
-
-            $this->addFlash('success', $this->translator->trans('addflash.activation_email_sent'));
-
-            return $this->redirectToRoute('app_login');
+    
+            return $this->redirectToRoute('app_verify_code');
         }
-
+    
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
     }
+    
 
-    #[Route('/verify/email', name: 'app_verify_email')]    
-    public function verifyUserEmail(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/verify/code', name: 'app_verify_code')]
+    public function verifyCode(Request $request, EntityManagerInterface $entityManager, SessionInterface $session): Response
     {
-        $token = $request->get('token');
-
-        if (!$token) {
-            throw $this->createNotFoundException('No token found in URL.');
+        if ($request->isMethod('POST')) {
+            $code = $request->request->get('verification_code');
+    
+            // Récupérer l'utilisateur de la session
+            $user = $session->get('registration_user');
+    
+            if ($user && $user->getVerificationCode() === $code) {
+                $user->setIsVerified(true);
+                $user->setVerificationCode(null); // Supprime le code après vérification
+    
+                // Sauvegarder l'utilisateur dans la base de données
+                $entityManager->persist($user);
+                $entityManager->flush();
+    
+                // Supprimer les données de la session
+                $session->remove('registration_user');
+    
+                $this->addFlash('success', 'Votre compte a été vérifié avec succès !');
+                return $this->redirectToRoute('account');
+            } else {
+                $this->addFlash('error', 'Code de vérification incorrect.');
+            }
         }
-
-        $user = $entityManager->getRepository(User::class)->findOneBy(['resetToken' => $token]);
-
-        if (!$user) {
-            throw $this->createNotFoundException('No user found for this token.');
-        }
-
-        if ($user->isVerified()) {
-            $this->addFlash('info', $this->translator->trans('addflash.account_already_verified'));
-            return $this->redirectToRoute('account');
-        }
-
-        $user->setIsVerified(true);
-        $user->setResetToken(null);
-        $entityManager->flush();
-
-
-        $this->addFlash('success', $this->translator->trans('addflash.email_verified_success'));
-
-        return $this->redirectToRoute('show_home');
+    
+        return $this->render('registration/verify_code.html.twig');
     }
 
-    #[Route('/resend/verification-email', name: 'app_resend_verification_email', methods: ['GET'])]    
-    public function resendVerificationEmail(EntityManagerInterface $entityManager, MailerInterface $mailer, UrlGeneratorInterface $urlGenerator, SendMailService $mail): Response
-    {
-        $user = $this->getUser();
+#[Route('/verify/email', name: 'app_verify_email')]
+public function verifyUserEmail(Request $request, EntityManagerInterface $entityManager, SendMailService $mail): Response
+{
+    $user = $this->getUser();
 
-        if (!$user || !$user instanceof User || $user->isVerified()) {
-            $this->addFlash('error', $this->translator->trans('addflash.no_verification_needed_or_not_logged_in'));
-            return $this->redirectToRoute('app_login');
-        }
-
-        // Génère un token et l'enregistre
-        $token = bin2hex(random_bytes(32));
-        $user->setResetToken($token);
-        $entityManager->flush();
-
-        // Generate le lien de vérification
-        $url = $this->generateUrl('app_verify_email', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
-
-        $context = compact('url', 'user');
-
-        $mail->send(
-            'contact@amyaz.fr',
-            $user->getEmail(),
-            'Activation de votre compte Amyaz',
-            'registration/email_activation_compte.html.twig',
-            $context
-        );
-
-
-        $this->addFlash('success', $this->translator->trans('addflash.verification_email_sent'));
-
-        return $this->redirectToRoute('show_home');
+    if (!$user || !$user instanceof User || $user->isVerified()) {
+        // Si l'utilisateur est déjà vérifié, rediriger
+        $this->addFlash('info', 'Votre compte a déjà été vérifié.');
+        return $this->redirectToRoute('account');
     }
+
+    // Générer un code de vérification
+    $verificationCode = random_int(100000, 999999);
+    $user->setVerificationCode($verificationCode);
+    $entityManager->flush();
+
+    // Générer l'URL de vérification
+    $verificationUrl = $this->generateUrl(
+        'app_verify_code', 
+        ['code' => $verificationCode], 
+        UrlGeneratorInterface::ABSOLUTE_URL
+    );
+
+    // Préparer l'email
+    $context = [
+        'user' => $user,
+        'verificationUrl' => $verificationUrl,
+        'code' => $verificationCode,
+    ];
+
+    // Envoyer l'email
+    $mail->send(
+        'contact@amyaz.fr',
+        $user->getEmail(),
+        'Code de vérification pour votre inscription',
+        'registration/email_verification_code.html.twig', // Le template
+        $context // Le contexte avec 'code' et 'user'
+    );
+
+    $this->addFlash('success', 'Un email avec un code de vérification a été envoyé.');
+
+    return $this->redirectToRoute('app_verify_code');
+}
+
+
+#[Route('/resend-verification-code', name: 'app_resend_verification_code')]
+public function resendVerificationCode(EntityManagerInterface $entityManager, SendMailService $mail): Response
+{
+    $user = $this->getUser();
+
+    if (!$user || !$user instanceof User || $user->isVerified()) {
+        $this->addFlash('error', 'Vous êtes déjà vérifié ou non connecté.');
+        return $this->redirectToRoute('app_login');
+    }
+
+    // Générer un nouveau code de vérification
+    $verificationCode = random_int(100000, 999999); // Code à 6 chiffres
+    $user->setVerificationCode($verificationCode);
+    $entityManager->flush();
+
+     // Générer l'URL de vérification de manière absolue
+     $verificationUrl = $this->generateUrl(
+        'app_verify_code', // Le nom de la route de vérification
+        ['code' => $verificationCode], // Paramètres
+        UrlGeneratorInterface::ABSOLUTE_URL // Générer l'URL absolue
+    );
+
+    // Préparer le contexte pour l'email
+    $context = [
+        'user' => $user,
+        'code' => $verificationCode,
+        'verificationUrl' => $verificationUrl, // Utiliser l'URL absolue ici
+    ];
+
+    // Envoyer l'email
+    $mail->send(
+        'contact@amyaz.fr',                  // Adresse de l'expéditeur
+        $user->getEmail(),                   // Adresse de l'utilisateur
+        'Nouveau code de vérification',      // Sujet
+        'registration/email_verification_code.html.twig', // Template d'email
+        $context                             // Contexte pour le template
+    );
+
+    $this->addFlash('success', 'Un nouveau code de vérification a été envoyé à votre adresse email.');
+    return $this->redirectToRoute('app_verify_code');
+}
+
 }

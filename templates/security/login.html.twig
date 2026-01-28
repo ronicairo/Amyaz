@@ -111,7 +111,7 @@
 				<input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
 			</div>
 			<div class="user-box">
-				<label for="inputPassword">Mot de passe</label>
+				<label for="inputPassword">	{{ 'form.password'|trans }}</label>
 				<input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
 				<i class="bi bi-eye show-password" id="togglePassword" onclick="togglePasswordVisibility()"></i>
 			</div>

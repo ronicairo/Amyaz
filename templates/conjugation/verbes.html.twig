@@ -1,0 +1,562 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{ 'Conjugation'|trans }}
+	{{ 'navigation.du_verbe'|trans }}
+	{% if verbe is not null %}
+		{{ verbe.verbeRifain }}
+	{% endif %}
+
+{% endblock %}
+
+{% block body %}
+
+	<style>
+		/* Style pour le hover des th */
+		tr:hover {
+			background-color: #F26766; /* Couleur de fond gris lors du survol */
+			color: white; /* Couleur du texte en blanc lors du survol */
+		}
+
+		.search-form {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.search-form input:focus {
+			outline: none;
+			box-shadow: none;
+		}
+
+		.search-form > *:not(#autocomplete-input) {
+			box-shadow: -3px 8px 5px -6px rgba(0, 0, 0, 0.5);
+			justify-content: center;
+		}
+
+		.search-form > div {
+			position: relative;
+			display: flex;
+			border-radius: 20px;
+			width: 100%;
+			max-width: 700px;
+		}
+
+		.search-form select {
+			padding: 12.5px 28px 12.5px 12.5px;
+			font-size: 16px;
+			border: none;
+			background-color: rgba(255, 255, 255, 0.8);
+			border-radius: 20px 0 0 20px;
+			flex: 1;
+			max-width: 100px;
+			appearance: none; /* Supprime l'apparence par défaut du select */
+			background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAiIGhlaWdodD0iNiIgdmlld0JveD0iMCAwIDEwIDYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTSAwLjQ1NzAzOTM5LDEuMzk2MDMgTCAxLjI5MzY4MywwLjU1MDI4NTcgTCA1LDAuNTUwMjg1NyBMIDguNzA2MzIsMC41NTAyODU3IEwgOS41NDI5NiwwLjU1MDI4NTcgTCA1LDQuNTc4OTcgWiIgZmlsbD0iIzAwMCIvPjwvc3ZnPg==');
+			background-repeat: no-repeat;
+			background-position: right 10px center;
+			color: #000; /* Couleur du texte noir */
+		}
+
+		.search-form select::-ms-expand {
+			display: none; /* Masquer la flèche native dans IE */
+		}
+
+		.search-form input[type="text"] {
+			padding: 10px;
+			font-size: 16px;
+			border-radius: 0;
+			border: 2px solid rgba(255, 255, 255, 0.8) !important;
+			background-color: rgba(255, 255, 255, 0.8) !important;
+			flex: 2;
+			min-width: 0;
+		}
+
+		.autocomplete-input {
+			border-color: #EFF6FC !important;
+		}
+
+		.search-button {
+			padding: 10px 20px;
+			font-size: 16px;
+			background-color: rgba(0, 0, 0, 0.7);
+			color: white;
+			border: none;
+			cursor: pointer;
+			transition: background-color 0.3s ease;
+			border-radius: 0 20px 20px 0;
+		}
+
+		.search-form button:hover {
+			background-color: #A0BBD4;
+		}
+
+		.autoComplete_wrapper {
+			display: flex !important;
+			flex-grow: 1 !important;
+		}
+
+		.autoComplete_wrapper > ul {
+			top: 40px;
+		}
+		.autoComplete_wrapper > input {
+			background: rgba(255, 255, 255, 0.8) !important;
+			color: black !important;
+		}
+
+		@media(max-width: 400px) {
+			.search-form select,
+			.search-form input[type="text"],
+			.search-form button {
+				font-size: 12px;
+			}
+
+			.search-form select {
+				min-width: 80px;
+				color: black !important;
+				background-color: rgba(255, 255, 255, 0.8) !important;
+			}
+
+			.autoComplete_wrapper > ul {
+				left: -80px !important;
+				right: -34px !important;
+			}
+
+			.search-form input[type="text"] {
+				padding: 6px;
+			}
+
+			.search-form .search-button {
+				padding: 6px 12px;
+			}
+
+		}
+
+		h2 {
+			font-family: 'DM Serif Display', serif;
+		}
+
+		.row.justify-content-center {
+			justify-content: center;
+		}
+
+		.col-12.col-md-6 {
+			max-width: 500px; /* Ensure columns don’t get too wide */
+			padding-left: 15px;
+			padding-right: 15px;
+		}
+
+		.pagination-container {
+			text-align: center;
+		}
+
+		.row.justify-content-center.align-items-center {
+			display: flex;
+			align-items: center; /* Align the comment form with the middle of the comments section */
+		}
+
+		.col-12.col-md-6 {
+			max-width: 500px; /* Keep the columns the same width */
+		}
+
+		.underline-title,
+		.underline-title > p {
+			text-decoration: underline;
+			margin: 0;
+		}
+
+		#searchForm input[type="text"] {
+			font-family: 'Noto Sans', sans-serif;
+			width: auto;
+		}
+
+		.btn-custom-size {
+			font-size: 1.25rem;
+		}
+
+		.search-form .keyboard-icon {
+			background-color: rgba(255, 255, 255, 0.8);
+			cursor: pointer;
+			font-size: 20px;
+			padding: 8px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			z-index: 1001;
+		}
+
+		.keyboard-icon {
+			cursor: pointer;
+			color: black !important;
+			background-color: #A0BBD4;
+			border: none;
+			font-size: 20px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.rifain-characters {
+			display: none;
+			position: absolute;
+			background-color: rgba(0, 0, 0, 0.7);
+			border: none;
+			z-index: 1000;
+			height: 100%;
+			bottom: 100%;
+		}
+
+		.rifain-characters span {
+			cursor: pointer;
+			padding: 5px;
+			color: white;
+			font-size: 20px;
+			display: inline-block;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.rifain-characters span:hover {
+			color: #A0BBD4;
+		}
+		.alert-custom {
+			background: rgba(0, 0, 0, 0.5);
+			box-sizing: border-box;
+			box-shadow: 0 15px 20px rgba(0, 0, 0, 0.6);
+			border: 1px solid black;
+			border-radius: 15px;
+		}
+
+		main {
+			flex: 1;
+			margin-bottom: 0;
+		}
+
+		span {
+			font-family: 'Arial', sans-serif;
+		}
+
+		h1.dynamic-font-size {
+			font-family: 'DM Serif Display', serif;
+			text-align: center;
+			max-width: 650px;
+			margin: 0 auto;
+			font-size: 5.5vw; /* Taille de police proportionnelle à la largeur de l'écran */
+		}
+
+		.autoComplete_wrapper > input::placeholder {
+			color: black !important;
+		}
+
+		.autoComplete_wrapper > input {
+			height: 100% !important;
+		}
+		/* Limite maximale de la taille de la police */
+		@media(min-width: 700px) {
+			h1.dynamic-font-size {
+				font-size: 2.3rem; /* Taille maximale définie pour les grands écrans */
+			}
+		}
+
+		.ui-widget-content {
+			text-align: left;
+		}
+
+		.autoComplete_results_list {
+			background-color: #f0f0f0; /* Light grey background */
+			border: 1px solid #d4d4d4;
+			max-height: 150px;
+			overflow-y: auto;
+		}
+
+		/* Change the text color and background color of each suggestion item */
+		.autoComplete_result {
+			color: #333; /* Dark text */
+			background-color: white; /* White background */
+			padding: 10px;
+			cursor: pointer;
+		}
+
+		::-webkit-input-placeholder {
+			/* WebKit, Blink, Edge */
+			color: black !important;
+		}
+
+		.autoComplete_wrapper mark {
+			padding: 0 !important;
+		}
+
+		@media(min-width: 400px) {
+			.autoComplete_wrapper > ul {
+				left: -96px !important;
+				right: -54px !important;
+			}
+		}
+		#lang {
+			outline: none;
+		}
+	</style>
+
+	<main>
+		<div class="col-11 mx-auto">
+			{% include 'include/flashes.html.twig' %}
+		</div>
+
+
+		{# MESSAGE ACCUEIL #}
+		<h1 class="dynamic-font-size" style="font-family: 'DM Serif Display' , serif;text-align: center; max-width: 650px; margin: 0 auto;">
+			{{ 'home.welcome_message_conjugaison'|trans|raw }}
+		</h1>
+
+		<h3 style="text-align: center; margin-top: 50px; margin-bottom: 50px; font-size: 3rem;font-family: 'MaPolice', sans-serif;">ⴰⵙⴼⵜⵉ ⵙ ⵜⵎⴰⵣⵉⵖⵜ</h3>
+
+
+		<div class="barrederecherche mb-3">
+			<form id="searchForm" method="GET" action="{{ path('app_verbe') }}" class="search-form">
+				<div style="position: relative;">
+					<select name="lang" id="lang">
+						{% if app.request.locale == 'en' %}
+							<option value="rif-en" {% if app.request.query.get('lang') == 'rif-en' %} selected {% endif %}>Riffian</option>
+							<option value="en-rif" {% if app.request.query.get('lang') == 'en-rif' %} selected {% endif %}>English</option>
+						{% else %}
+							<option value="rif-fr" {% if app.request.query.get('lang') == 'rif-fr' %} selected {% endif %}>Rifain</option>
+							<option value="fr-rif" {% if app.request.query.get('lang') == 'fr-rif' %} selected {% endif %}>Français</option>
+						{% endif %}
+					</select>
+
+					<input type="hidden" id="searchType" value="verb">
+					<input type="text" name="terme" id="search-input" class="autocomplete-input" autocomplete="off" placeholder="{{ 'home.search_bar'|trans }}..." maxlength="60" value="" required>
+					<button type="button" class="keyboard-icon" id="toggle-keyboard">
+						<i class="bi bi-keyboard"></i>
+					</button>
+					<div class="rifain-characters" id="rifain-characters">
+						<span>ɛ</span>
+						<span>ḍ</span>
+						<span>ṣ</span>
+						<span>ḥ</span>
+						<span>ɣ</span>
+						<span>ǧ</span>
+						<span>ẓ</span>
+						<span>ṭ</span>
+						<span>ř</span>
+						<span>č</span>
+					</div>
+					<button type="submit" class="search-button">
+						<i class="bi bi-search"></i>
+					</button>
+				</div>
+			</form>
+		</div>
+
+		{% if verbExists == false %}
+			<h4 class="text-center" style="color:#F26766;">{{ 'home.noverbfound'|trans|raw }}</h4>
+		{% else %}
+			<h1 style="font-family: 'Arial', sans-serif;" class="text-center mt-5">{{ 'table_headers.conjug'|trans }}
+				{{ 'navigation.du_verbe'|trans }}
+				{{ verbe.verbeRifain }}</h1>
+			<h4 class="text-center">{{ verbe.verbeTifinagh }}</h4>
+			<h4 class="text-center">{{ verbe.verbeFrancais }}</h4>
+
+
+			{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MODERATOR') %}
+				<div class="text-center mb-3">
+					<a href="{{ path('edit_verb', { id: verbe.id }) }}" class="d-block mt-4 mx-auto btn btn-outline-dark col-7">{{ 'button.edit'|trans }}</a>
+				</div>
+			{% endif %}
+
+			<div class="d-none d-md-block col-10 mx-auto">
+				<table class="table">
+					<thead class="thead-dark">
+						<tr>
+							<th>{{ 'table_headers.pronoun'|trans }}</th>
+							<th>{{ 'table_headers.preterit'|trans }}</th>
+							<th>{{ 'table_headers.preterit_negatif'|trans }}</th>
+							<th>{{ 'table_headers.aoriste_intensif'|trans }}</th>
+							<th>{{ 'table_headers.aoriste_intensif_negatif'|trans }}</th>
+							<th>{{ 'table_headers.aoriste_futur'|trans }}</th>
+						</tr>
+					</thead>
+					<tbody>
+					{% if conjugations['preterit'] is defined and conjugations['preterit'] is not empty %}
+    {% for pronoun in conjugations['preterit']|keys %}
+        <tr>
+            <td>{{ pronoun }}</td>
+            <td>{{ conjugations['preterit'][pronoun]|raw }}</td>
+            <td>{{ conjugations['preterit_negatif'][pronoun]|raw }}</td>
+            <td>{{ conjugations['aoriste_intensif'][pronoun]|raw }}</td>
+            <td>{{ conjugations['aoriste_intensif_negatif'][pronoun]|raw }}</td>
+            <td>{{ conjugations['aoriste_futur'][pronoun]|raw }}</td>
+        </tr>
+    {% endfor %}
+{% endif %}
+
+					</tbody>
+				</table>
+
+			</div>
+
+			<div class="d-md-none">
+				<table class="table col-11 mx-auto">
+					<thead class="thead-dark">
+						<tr>
+							<th>{{ 'table_headers.pronoun'|trans }}</th>
+							<th>{{ 'table_headers.preterit'|trans }}</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% if conjugations['preterit'] is defined and conjugations['preterit'] is not empty %}
+    {% for pronoun in conjugations['preterit']|keys %}
+        <tr>
+            <td>{{ pronoun }}</td>
+            <td>{{ conjugations['preterit'][pronoun]|raw }}</td>
+        </tr>
+    {% endfor %}
+{% endif %}
+
+					</tbody>
+				</table>
+
+
+				<table class="table col-11 mx-auto">
+					<thead class="thead-dark">
+						<tr>
+							<th>{{ 'table_headers.pronoun'|trans }}</th>
+							<th>{{ 'table_headers.preterit_negatif'|trans }}</th>
+						</tr>
+					</thead>
+					<tbody>
+					{% if conjugations['preterit_negatif'] is defined and conjugations['preterit_negatif'] is not empty %}
+    {% for pronoun in conjugations['preterit_negatif']|keys %}
+        <tr>
+            <td>{{ pronoun }}</td>
+            <td>{{ conjugations['preterit_negatif'][pronoun]|raw }}</td>
+        </tr>
+    {% endfor %}
+{% endif %}
+
+					</tbody>
+				</table>
+
+
+				<table class="table col-11 mx-auto">
+					<thead class="thead-dark">
+						<tr>
+							<th>{{ 'table_headers.pronoun'|trans }}</th>
+							<th>{{ 'table_headers.aoriste_intensif'|trans }}</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% if conjugations['aoriste_intensif'] is defined and conjugations['aoriste_intensif'] is not empty %}
+    {% for pronoun in conjugations['aoriste_intensif']|keys %}
+        <tr>
+            <td>{{ pronoun }}</td>
+            <td>{{ conjugations['aoriste_intensif'][pronoun]|raw }}</td>
+        </tr>
+    {% endfor %}
+{% endif %}
+
+					</tbody>
+				</table>
+
+
+				<table class="table col-11 mx-auto">
+					<thead class="thead-dark">
+						<tr>
+							<th>{{ 'table_headers.pronoun'|trans }}</th>
+							<th>{{ 'table_headers.aoriste_intensif_negatif'|trans }}</th>
+						</tr>
+					</thead>
+					<tbody>
+					{% if conjugations['aoriste_intensif_negatif'] is defined and conjugations['aoriste_intensif_negatif'] is not empty %}
+    {% for pronoun in conjugations['aoriste_intensif_negatif']|keys %}
+        <tr>
+            <td>{{ pronoun }}</td>
+            <td>{{ conjugations['aoriste_intensif_negatif'][pronoun]|raw }}</td>
+        </tr>
+    {% endfor %}
+{% endif %}
+
+					</tbody>
+				</table>
+
+
+				<table class="table mx-auto col-11">
+					<thead class="thead-dark">
+						<tr>
+							<th>{{ 'table_headers.pronoun'|trans }}</th>
+							<th>{{ 'table_headers.aoriste_futur'|trans }}</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% if conjugations['aoriste_futur'] is defined and conjugations['aoriste_futur'] is not empty %}
+    {% for pronoun in conjugations['aoriste_futur']|keys %}
+        <tr>
+            <td>{{ pronoun }}</td>
+            <td>{{ conjugations['aoriste_futur'][pronoun]|raw }}</td>
+        </tr>
+    {% endfor %}
+{% endif %}
+					</tbody>
+				</table>
+			</div>
+
+			<h3 class="text-center mb-3 mt-6">{{ 'table_headers.participes'|trans }}</h3>
+			<div class="table-responsive">
+				<table class="table mx-auto col-10">
+					<thead class="thead-dark">
+						<tr>
+							<th style="vertical-align: middle;">{{ 'table_headers.participe_preterit'|trans }}</th>
+							<th>{{ 'table_headers.participe_preterit_negatif'|trans }}</th>
+							<th>{{ 'table_headers.participe_aoriste_intensif'|trans }}</th>
+							<th>{{ 'table_headers.participe_aoriste_intensif_negatif'|trans }}</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								{% if conjugations['participe_preterit'][''] is defined %}
+									{{ conjugations['participe_preterit']['']|raw }}
+									{% else %}
+
+								{% endif %}
+							</td>
+							<td>
+								{% if conjugations['participe_preterit_negatif'][''] is defined %}
+									{{ conjugations['participe_preterit_negatif']['']|raw }}
+									{% else %}
+
+								{% endif %}
+							</td>
+							<td>
+								{% if conjugations['participe_aoriste_intensif'][''] is defined %}
+									{{ conjugations['participe_aoriste_intensif']['']|raw }}
+									{% else %}
+
+								{% endif %}
+							</td>
+							<td>
+								{% if conjugations['participe_aoriste_intensif_negatif'][''] is defined %}
+									{{ conjugations['participe_aoriste_intensif_negatif']['']|raw }}
+									{% else %}
+
+								{% endif %}
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		{% endif %}
+	</main>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+const searchInput = document.getElementById('search-input');
+
+searchInput.addEventListener('input', function () {
+let inputValue = searchInput.value;
+// Remplacer toutes les variantes d'apostrophes par des apostrophes simples
+inputValue = inputValue.replace(/‘|’|ʼ|`|´|′|ʾ|ʿ|ˈ|‛|❛|❜|ʹ/g, "'");
+searchInput.value = inputValue;
+});
+});
+	</script>
+{% endblock %}

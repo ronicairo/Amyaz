@@ -49,7 +49,7 @@ class CommentType extends AbstractType
                     new Length([
                         'min' => 4,
                         'max' => 200,
-                        'minMessage' => $this->translator->trans('form.max_comment'),
+                        'minMessage' => $this->translator->trans('form.min_comment'),
                         'maxMessage' => $this->translator->trans('form.max_comment'),
                     ]),
                 ]
@@ -61,11 +61,7 @@ class CommentType extends AbstractType
                     'class' => 'd-block mt-4 mx-auto btn btn-light col-6'
                 ]
             ])
-            ->add('captcha', Recaptcha3Type::class, [
-                'constraints' => new Recaptcha3(),
-                'action_name' => 'comment',
-                'locale' => $locale
-            ]);
+          ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

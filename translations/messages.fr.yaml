@@ -1,9 +1,12 @@
 meta:
     description: "Découvrez notre dictionnaire en ligne Français-Rifain, un outil complet pour apprendre et maîtriser la langue rifaine. Accédez à des fiches de grammaire détaillées, des méthodes d'apprentissage de l'alphabet rifain et une riche documentation sur la culture rifaine. Améliorez votre connaissance du rifain avec des ressources fiables et éducatives."
-    title: "Amyaz - Dictionnaire Rifain"
+    title: "Amyaz - Apprendre le rifain"
 
 home:
+    back_to_home: "Retour à l'accueil"
+    browse_dictionary: "Parcourir le dictionnaire par ordre alphabétique"
     welcome_message: 'Bienvenue sur <span style="  color: #F26766;">Amyaz</span> !<br> Ton dictionnaire Français-Rifain.'
+    welcome_message_conjugaison: 'Bienvenue sur <span style="  color: #F26766;">Amyaz</span> !<br> Ton conjugueur rifain.'
     search_results: "Résultats de la recherche :"
     search_bar: "Rechercher"
     no_results_logged_in: "Aucun résultat trouvé.<br><a style=\"text-decoration:none; color:#F26766\" href=\"%path_traduction_new%\">Demander une traduction.</a>"
@@ -12,9 +15,9 @@ home:
     alphabet_description: "La langue rifaine peut s'écrire avec l'alphabet latin berbère mais aussi en tifinagh qui est l'alphabet traditionel du berbère."
     latin_berber: "Berbère Latin"
     tifinagh: "Tifinagh"
-    tifinagh_singular: "ⴰⵎⵢⵉⵡⵏ"
-    tifinagh_plural: "ⴰⵎⴰⴳⵓⵜ"
-    tifinagh_verb: "ⵙ ⵜⴼⵉⵏⴰⴳ"
+    tifinagh_singular: "ⴰⵎⵉⵊⵊⵏ"
+    tifinagh_plural: "ⴰⵎⵡⴰⵟⵟⴰⵙ"
+    tifinagh_verb: "ⵙ ⵜⴼⵉⵏⴰⵖ"
     singular: "singulier"
     plural: "pluriel"
     comment: "Publier"
@@ -22,6 +25,13 @@ home:
     grammaire_guide: "Guide de grammaire"
     grammaire_guide_sous_titre: "Exercez-vous à la grammaire berbère rifaine avec quelques modules simples."
     post: "Posté par"
+    fav_login: "Vous devez être connecté pour ajouter du contenu en favori."
+    no_fav: "Traduction non trouvée."
+    no_fav_doc: "Documentation non trouvée."
+    favorite_added: 'Cet élément a été ajouté à vos favoris. <a href="{{ url }}">Voir mes favoris</a>'
+    favorite_remove_login_required: "Vous devez être connecté pour supprimer des favoris."
+    favorite_remove_not_found: "Favori non trouvé."
+    noverbfound: "Aucun résultat trouvé."
 
 navigation:
     home: 'Dictionnaire'
@@ -35,6 +45,10 @@ navigation:
     profile: 'Mon profil'
     logout: 'Déconnexion'
     dashboard: 'Tableau de bord'
+    conjugation: 'Conjugaison'
+    game: 'Mots croisés'
+    du_verbe: 'du verbe'
+    verbe_conjugue: "verbes conjugués"
 
 post:
     rifain_word: "Rifain"
@@ -65,6 +79,14 @@ post:
     no_user: "Utilisateur supprimé"
     worday: "Mot du jour"
     no_worday: "Aucun mot du jour pour aujourd'hui"
+    countword: "Il y a"
+    countword2: "mots dans le dictionnaire"
+    added_by: "Ajouté par"
+    verified: "et vérifié"
+    sort_by: "Trier par"
+    sort_recent: "Plus récent"
+    sort_alphabetical: "Ordre alphabétique"
+    sort_rifain_singular: "Traductions avec enregistrement singulier"
 
 category:
     title: "Catégorie de document"
@@ -76,8 +98,8 @@ pending_request:
 
 documentation:
     add: "Ajouter un document"
-    title: "Centre de documentation de la langue rifaine"
-    resume: "Amyaz met à disposition des internautes l'ensemble des publications relatives à la langue rifaine.<br> Ces publications sont pour l'essentiel des dictionnaires de langue rifaine, des manuels de conjugaison et d'apprentissage, et des romans, journaux et magasines d'expression rifaine.<br>L'objectif est de collecter dans un même endroit ces publications."
+    title: "Centre de ressources linguistiques et culturelle."
+    resume: "Découvrez une collection riche et diversifiée de documents et d'ouvrages, incluant des dictionnaires, des textes littéraires, des ressources linguistiques, historiques, et bien plus encore. Ce centre de ressources est dédié à l'exploration de la culture amazighe du Rif, en mettant un accent particulier sur la langue. Plongez également dans des études approfondies, des articles académiques, des récits traditionnels et des recherches modernes sur le Rif pour enrichir vos connaissances et célébrer la richesse du patrimoine rifain."
 
 button:
     back_list: "Revenir à la liste"
@@ -96,6 +118,14 @@ button:
     password_forgot: "Mot de passe oublié"
     log_as: "Vous êtes connecté en tant que"
     activate_account: "Activer mon compte"
+    triesleft: "Il vous reste"
+    3triesleft: "Il vous reste 3 essais."
+    tries: "essais."
+    trie: "essai."
+    checkanswer: "Vérifier mes réponses"
+    showanswer: "Voir les réponses"
+    reset: "Réinitialiser"
+    verify_code: "Vérifier le code"
 
 account-user:
     title: "Détails de l'utilisateur"
@@ -173,6 +203,10 @@ title:
     create_doc: "Créer une nouvelle documentation"
     create_category: "Créer une nouvelle catégorie"
     create_documentation: "Créer une nouvelle documentation"
+    crosswordsearch: "Trouves la traduction rifaine des mots ci-dessous:"
+    verifier_code: "Vérification de votre compte"
+    verification_code: "Code de vérification reçu par mail"
+    rappel_verification: "Activez votre compte Amyaz"
 
 addflash:
     obligation_connexion: "Vous devez être connecté pour accéder à cette fonctionnalité."
@@ -227,6 +261,14 @@ p:
     title_mail_newsletter: "Voici 10 mots pour aujourd'hui"
     current_email: "Mon email actuel"
     no_result: "Aucun résultat trouvé"
+    update_role: "Vous disposez désormais du rôle"
+    did_not_receive_code: "Si vous n'avez pas reçu le code, veuillez cliquer sur le lien ci-dessous pour en générer un nouveau."
+    resend_code: "Renvoyer le code"
+    enter_verification_code: "Entrez le code de vérification ci-dessous afin de valider votre compte."
+    reminder_verification_intro: "Nous avons remarqué que votre compte Amyaz n'est toujours pas activé."
+    reminder_verification_warning: "Veuillez vérifier votre compte sous 7 jours pour éviter sa désactivation automatique."
+    verify_now: "Activer mon compte maintenant"
+    reminder_verification_instructions: "Pour vérifier votre compte : connecter vous votre compte, accéder à votre profil et cliquer sur le bouton 'Vérifier mon compte'."
     
 account:
     add: "Ajouter une traduction"
@@ -237,6 +279,10 @@ account:
     pending_request: "Demande en attente"
     list_word: "Liste de mots"
     category_doc: "Catégories de documentation"
+    favorite: "Mes favoris"
+    no_fav: "Vous n'avez pas encore de favoris."
+    show_form_verb: "Ajouter un verbe"
+    verify_account: "Vérifier mon compte"
 
 grammar:
     title: "La grammaire en rifain"
@@ -249,3 +295,19 @@ td:
     create: "Crée le"
     name: "Nom"
     update: "Modifié le"
+
+table_headers:
+    pronoun: 'Pronom'
+    preterit: 'Prétérit'
+    preterit_negatif: 'Prétérit négatif'
+    aoriste_intensif: 'Aoriste intensif'
+    aoriste_intensif_negatif: 'Aoriste intensif négatif'
+    aoriste_futur: 'Aoriste (futur)'
+    participe_preterit: "Participe du prétérit"
+    participe_preterit_negatif: "Participe du prétérit négatif"
+    participe_aoriste_intensif: "Participe de l'aoriste intensif"
+    participe_aoriste_intensif_negatif: "Participe de l'aoriste intensif négatif"
+    participes: "Les participes"
+    conjug: "conjugaison"
+
+

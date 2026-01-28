@@ -94,7 +94,7 @@ class SecurityController extends AbstractController
                 return $this->redirectToRoute('app_login');
             }
 
-            $this->addFlash('danger',  $this->translator->trans('addflash.email_not_recognized'));
+          
             return $this->redirectToRoute('forgotten_password');
         }
 

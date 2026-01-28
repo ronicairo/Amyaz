@@ -121,6 +121,19 @@
             <div class="user-box">
                 {{ form_row(form.phoneticPlural) }}
             </div>
+         
+             <div class="user-box">
+                {{ form_row(form.origin) }}
+            </div>
+               <div class="user-box">
+                {{ form_row(form.racine) }}
+            </div>
+              <div class="user-box">
+                {{ form_row(form.example) }}
+            </div>
+             <div class="user-box">
+                {{ form_row(form.source) }}
+            </div>
         {% else %}
             {% if locale == 'fr' %}
                 <div class="user-box">
@@ -143,12 +156,13 @@
             <div class="user-box">
                 {{ form_row(form.plural) }}
             </div>
-            <div class="user-box">
+                       <div class="user-box">
                 {{ form_row(form.phoneticSingular) }}
             </div>
             <div class="user-box">
                 {{ form_row(form.phoneticPlural) }}
             </div>
+         
         {% endif %}
         <div class="text-center mt-3">
             {{ form_row(form.submit) }}

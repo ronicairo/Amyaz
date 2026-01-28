@@ -29,7 +29,7 @@ class SendMailService
             ->context($context);
 
         // Attach inline image
-        $email->embedFromPath('/Users/Roni/Downloads/Amyaz/public/img/logo.png', 'logo_amyaz');
+        $email->embedFromPath('/home/u230803854/domains/amyaz.fr/public_html/public/img/logo.png', 'logo_amyaz');
 
         $this->mailer->send($email);
     }

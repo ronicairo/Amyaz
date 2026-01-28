@@ -91,3 +91,10 @@ yarn-error.log
 
 # Embedded web-server pid file
 /.web-server-pid
+
+# macOS
+.DS_Store
+
+# Local tests sandbox
+/test/
+/test/node_modules/

@@ -22,3 +22,12 @@ traduction_new:
 
 api_login_check:
     path: /api/login_check
+
+ajouter_verbe:
+    path: /show_form_verb
+    controller: App\Controller\VerbeController::showFormVerb
+
+alimenter_verbes:
+    path: /add_verb
+    controller: App\Controller\VerbeController::addVerb
+    methods: [POST]

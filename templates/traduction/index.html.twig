@@ -7,9 +7,27 @@
 {% block body %}
 	<h1 class="text-center">{{ 'post.list_word'|trans }}</h1>
 
-<div class="col-11 mx-auto">
+	<div class="col-11 mx-auto">
 		{% include 'include/flashes.html.twig' %}
 	</div>
+
+    <form method="get" action="{{ path('app_traduction_index') }}" class="text-center">
+        <div class="d-flex flex-column align-items-center">
+            <label for="sort" class="form-label mb-2">{{ 'post.sort_by'|trans }}</label>
+            <select name="sort" id="sort" class="form-select w-auto" onchange="this.form.submit()">
+                <option value="alphabetical" {% if sort == 'alphabetical' %}selected{% endif %}>
+                    {{ 'post.sort_alphabetical'|trans }}
+                </option>
+                <option value="recent" {% if sort == 'recent' %}selected{% endif %}>
+                    {{ 'post.sort_recent'|trans }}
+                </option>
+                <option value="rifainSingularRecord" {% if sort == 'rifainSingularRecord' %}selected{% endif %}>
+                    {{ 'post.sort_rifain_singular'|trans }}
+                </option>
+            </select>
+        </div>
+    </form>
+</div>
 
 	<div class="mt-5 container">
 		<div class="row justify-content-center">
@@ -19,11 +37,12 @@
 						<thead class="thead-dark">
 							<tr>
 								<th class="align-middle">{{ 'post.french_word'|trans }}</th>
-								<th class="align-middle">{{ 'post.english_word'|trans }}</th>
 								<th class="align-middle">{{ 'post.rif_singular'|trans }}</th>
 								<th class="align-middle">{{ 'post.rif_plural'|trans }}</th>
-								<th class="align-middle">{{ 'post.phonetic_singular'|trans }}</th>
-								<th class="align-middle">{{ 'post.phonetic_plural'|trans }}</th>
+									<th class="align-middle">Origine</th>
+								<th class="align-middle">Racine</th>
+								<th class="align-middle">Example</th>
+									<th class="align-middle">Source</th>
 								{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MODERATOR') %}
 									<th class="align-middle">Actions</th>
 								{% endif %}
@@ -33,11 +52,12 @@
 							{% for traduction in pagination %}
 								<tr>
 									<td>{{ traduction.wordFR }}</td>
-									<td>{{ traduction.wordEN }}</td>
 									<td>{{ traduction.singular }}</td>
 									<td>{{ traduction.plural }}</td>
-									<td>{{ traduction.phoneticSingular }}</td>
-									<td>{{ traduction.phoneticPlural }}</td>
+										<td>{{ traduction.origin }}</td>
+										 <td>{{ traduction.racine}}</td>
+								    <td>{{ traduction.example}}</td>
+								   	<td>{{ traduction.source }}</td>
 									{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MODERATOR')%}
 										<td>
 											<a href="{{ path('app_traduction_show', {'id': traduction.id}) }}" class="btn btn-outline-primary btn-sm">
@@ -57,9 +77,9 @@
 						</tbody>
 					</table>
 				</div>
-					<div id="pagination-container" class="pagination justify-content-center mt-4">
-				{{ knp_pagination_render(pagination) }}
-			</div>
+				<div id="pagination-container" class="pagination justify-content-center mt-4">
+					{{ knp_pagination_render(pagination) }}
+				</div>
 			</div>
 		</div>
 	</div>

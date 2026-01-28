@@ -51,7 +51,7 @@ class RemoveDeclineTraductionCommand extends Command
 
         $io->success("$numDeleted translations removed.");
 
-        file_put_contents('/Users/Roni/Downloads/Amyaz/cron.log', "Traductions supprimées à " . (new \DateTime())->format('Y-m-d H:i:s') . "\n", FILE_APPEND);
+        file_put_contents('/home/u230803854/domains/amyaz.fr/public_html/cron.log', "Traductions supprimées à " . (new \DateTime())->format('Y-m-d H:i:s') . "\n", FILE_APPEND);
 
         $output->writeln('Traductions supprimées avec succès.');
 

@@ -3,18 +3,23 @@
 namespace App\Controller;
 
 use DateTime;
+use App\Entity\Favorite;
 use App\Entity\Documentation;
 use App\Form\DocumentationType;
+use App\Repository\FavoriteRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\CategoryDocRepository;
 use App\Repository\DocumentationRepository;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -23,14 +28,16 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 class DocumentationController extends AbstractController
 {
     private TranslatorInterface $translator;
+    private Security $security;
 
-    public function __construct(TranslatorInterface $translator)
+    public function __construct(TranslatorInterface $translator, Security $security)
     {
         $this->translator = $translator;
+        $this->security = $security;
     }
 
     #[Route('/', name: 'documentation_index', methods: ['GET'])]
-    public function index(DocumentationRepository $documentationRepository, CategoryDocRepository $categoryDocRepository, Request $request, PaginatorInterface $paginator): Response
+    public function index(DocumentationRepository $documentationRepository, CategoryDocRepository $categoryDocRepository, Request $request, PaginatorInterface $paginator, FavoriteRepository $favoriteRepository): Response
     {
         $searchTerm = $request->query->get('q');
 
@@ -51,6 +58,12 @@ class DocumentationController extends AbstractController
                 ->andWhere('c.id = :categoryId')
                 ->setParameter('categoryId', $selectedCategory);
         }
+        $user = $this->security->getUser();
+
+        $favorites = [];
+        if ($user) {
+            $favorites = $favoriteRepository->findBy(['user' => $user]);
+        }
 
         $pagination = $paginator->paginate(
             $queryBuilder->getQuery(),
@@ -64,6 +77,7 @@ class DocumentationController extends AbstractController
             'pagination' => $pagination,
             'searchTerm' => $searchTerm,
             'categories' => $categories,
+            'favorites' => $favorites,
             'selectedCategory' => $selectedCategory
         ]);
     }
@@ -192,6 +206,67 @@ class DocumentationController extends AbstractController
         }
     }
 
+    #[Route('/favorite/add', name: 'favorite_add_doc', methods: ['POST'])]
+    public function add(Request $request, EntityManagerInterface $em, UserInterface $user = null): JsonResponse
+    {
+        if (!$user) {
+            return new JsonResponse([
+                'status' => 'error',
+                'message' => $this->translator->trans('home.fav_login')
+            ], 401);
+        }
+
+        $data = json_decode($request->getContent(), true);
+        $documentationId = $data['documentation_id'];
+        $documentation = $em->getRepository(Documentation::class)->find($documentationId);
+
+        if (!$documentation) {
+            return new JsonResponse(['status' => 'error', 'message' => $this->translator->trans('home.no_fav_doc')], 404);
+        }
+
+        $favorite = new Favorite();
+        $favorite->setUser($user);
+        $favorite->setDocumentation($documentation);
+
+        $em->persist($favorite);
+        $em->flush();
+
+        $favoritesUrl = $this->generateUrl('show_favorites');
+        $this->addFlash('success', $this->translator->trans('home.favorite_added', ['{{ url }}' => $favoritesUrl]));
+
+        return new JsonResponse(['status' => 'success']);
+    }
+
+    #[Route('/favorite/remove', name: 'favorite_remove_doc', methods: ['POST'])]
+    public function remove(Request $request, EntityManagerInterface $em): JsonResponse
+    {
+        $user = $this->security->getUser();
+        if (!$user) {
+            return new JsonResponse([
+                'status' => 'error',
+                'message' => $this->translator->trans('favorite_remove_login_required')
+            ], 401);
+        }
+
+        $data = json_decode($request->getContent(), true);
+        $documentationId = $data['documentation_id'];
+        $favorite = $em->getRepository(Favorite::class)->findOneBy([
+            'user' => $user,
+            'documentation' => $documentationId
+        ]);
+
+        if (!$favorite) {
+            return new JsonResponse([
+                'status' => 'error',
+                'message' => $this->translator->trans('favorite_remove_not_found')
+            ], 404);
+        }
+
+        $em->remove($favorite);
+        $em->flush();
+
+        return new JsonResponse(['status' => 'success']);
+    }
     // #[Route('supprimer-tous-document-archive', name: 'delete_all_document_archive', methods: ['GET'])]
     // public function deleteAllDocArchive(EntityManagerInterface $entityManager): Response
     // {

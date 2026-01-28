@@ -16,6 +16,10 @@
 			font-size: 1.2em;
 			transition: background-color 0.3s ease, border-color 0.3s ease;
 		}
+    
+        td{
+            font-family: 'Noto Sans', sans-serif;
+        }
 
 		.parent {
 			display: flex;
@@ -215,11 +219,6 @@
 					<td>r</td>
 				</tr>
 				<tr>
-					<td>ⵕ</td>
-					<td>yarr</td>
-					<td>ṛ</td>
-				</tr>
-				<tr>
 					<td>ⵙ</td>
 					<td>yas</td>
 					<td>s</td>
@@ -283,6 +282,21 @@
 					<td>ⵅ</td>
 					<td>yakh</td>
 					<td>x (prononcé comme le "خ" en arabe)</td>
+				</tr>
+				<tr>
+					<td>ⴵ</td>
+					<td>yadj</td>
+					<td>ǧ (prononcé comme le "dj" de djamila)</td>
+				</tr>
+				<tr>
+					<td>ⵞ</td>
+					<td>yatch</td>
+					<td>č (prononcé comme le "tch" de tchat)</td>
+				</tr>
+								<tr>
+					<td>ⵁ</td>
+					<td></td>
+					<td>ř (mutation rifaine du "l" en "r")</td>
 				</tr>
 			</tbody>
 		</table>
@@ -421,6 +435,15 @@ correct: "ɛ"
 }, {
 letter: "ⵅ",
 correct: "x"
+}, {
+letter: "ⴵ",
+correct: "ǧ"
+}, {
+letter: "ⵞ",
+correct: "č"
+}, {
+letter: "ⵁ",
+correct: "ř"
 }
 ];
 
@@ -458,7 +481,10 @@ const allLetters = [
 "c",
 "ɣ",
 "ɛ",
-"x"
+"x",
+'ǧ',
+'č',
+'ř'
 ];
 
 let recentQuestions = [];

@@ -4,32 +4,39 @@ namespace App\Controller;
 
 use DateTime;
 use App\Entity\Comment;
+use App\Entity\Favorite;
 use App\Form\CommentType;
+use App\Entity\Traduction;
 use App\Entity\GrammarSheet;
 use App\Form\NewsletterType;
 use App\Service\SendMailService;
 use App\Repository\CommentRepository;
 use App\Entity\NewsletterSubscription;
+use App\Repository\FavoriteRepository;
 use App\Repository\TraductionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\GrammarSheetRepository;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Repository\NewsletterSubscriptionRepository;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class DefaultController extends AbstractController
 {
 
     private TranslatorInterface $translator;
-    public function __construct(TranslatorInterface $translator)
+    private Security $security;
+    public function __construct(TranslatorInterface $translator, Security $security)
     {
         $this->translator = $translator;
+        $this->security = $security;
     }
 
     #[Route('/', name: 'show_home')]
@@ -40,6 +47,7 @@ class DefaultController extends AbstractController
      */
     public function showHome(
         TraductionRepository $traductionRepository,
+        FavoriteRepository $favoriteRepository,
         NewsletterSubscriptionRepository $newsletterRepository,
         Request $request,
         EntityManagerInterface $entityManager,
@@ -50,29 +58,40 @@ class DefaultController extends AbstractController
 
         $searchTerm = $request->query->get('q');
         $langOption = $request->query->get('lang', $request->query->get('selected_lang', ''));
-    
+
         // Initialiser les variables error et sanitizedSearchTerm
         $error = '';
         $sanitizedSearchTerm = '';
-    
+
         // Vérifier la présence de balises HTML dans le terme de recherche
         if ($searchTerm && $this->containsHtml($searchTerm)) {
             $error = 'Le terme de recherche ne doit pas contenir de code HTML.';
         } else {
             // Assainir le terme de recherche pour éviter le code HTML ou les balises
-            $sanitizedSearchTerm = htmlspecialchars($searchTerm, ENT_QUOTES, 'UTF-8');
-    
+            $sanitizedSearchTerm = htmlspecialchars($searchTerm, ENT_NOQUOTES, 'UTF-8');
+
             // Validation de la longueur du terme de recherche
-            if (strlen($sanitizedSearchTerm) > 10) {
-                $sanitizedSearchTerm = substr($sanitizedSearchTerm, 0, 30); // Tronquer le terme si nécessaire
+            if (strlen($sanitizedSearchTerm) > 60) {
+                $sanitizedSearchTerm = substr($sanitizedSearchTerm, 0, 60); // Tronquer le terme si nécessaire
             }
         }
-    
+
         // Recherche des traductions
         $traductions = $sanitizedSearchTerm
             ? $traductionRepository->findBySearchTerm($sanitizedSearchTerm, $langOption)
             : [];
-            
+
+            $user = $this->security->getUser();
+
+            $favorites = [];
+            if ($user) {
+                $favorites = $favoriteRepository->findBy(['user' => $user]);
+            }
+
+        // Compteur dictionnaire
+            $wordCount = $traductionRepository->countSingularWords();
+            $translatedMessage = $this->translator->trans('countword', ['{{ count }}' => $wordCount]);
+
         // Récupération des commentaires (non supprimés) pour l'affichage
         $commentaires = $repoComment->createQueryBuilder('c')
             ->where('c.user IS NOT NULL')
@@ -113,7 +132,7 @@ class DefaultController extends AbstractController
             }
 
             if (!$user->isVerified()) {
-                $resendVerificationUrl = $this->generateUrl('app_resend_verification_email');
+                $resendVerificationUrl = $this->generateUrl('app_resend_verification_code');
 
                 $verificationMessage = $this->translator->trans('addflash.verification_compte', [
                     '%resend_verification_url%' => $resendVerificationUrl
@@ -164,18 +183,22 @@ class DefaultController extends AbstractController
         }
         return $this->render('default/show_home.html.twig', [
             'traductions' => $traductions,
+            'favorites' => $favorites,
             'langOption' => $langOption,
             'pagination' => $pagination,
             'commentaires' => $commentaires,
             'paginationComment' => $paginationComment,
             'sanitizedSearchTerm' => $sanitizedSearchTerm,
             'form' => $form->createView(),
+            'wordCount' => $wordCount,
+            'translatedMessage' => $translatedMessage,
             'formNews' => $formNews->createView(),
             'error' => $error,
             'wordOfTheDay' => $wordOfTheDay,
             'grammarSheets' => $grammarSheets
         ]);
     }
+
 
     #[Route('/unsubscribe', name: 'newsletter_unsubscribe', methods: ['GET', 'POST'])]
     /**
@@ -205,7 +228,7 @@ class DefaultController extends AbstractController
             $this->addFlash('error', $this->translator->trans('addflash.email_non_specifie'));
         }
 
-        return $this->redirectToRoute('show_home');
+        return $this->redirectToRoute('show_home'); // Rediriger vers la page d'accueil ou une autre page
     }
 
     #[Route('/supprimer-un-commentaire/{id}', name: 'hard_delete_commentaire', methods: ['GET'])]
@@ -252,4 +275,123 @@ class DefaultController extends AbstractController
     {
         return $this->render('bundles/TwigBundle/Exception/error404.html.twig');
     }
+
+
+    #[Route('/favorite/add', name: 'favorite_add_word', methods: ['POST'])]
+    public function add(Request $request, EntityManagerInterface $em, UserInterface $user = null): JsonResponse
+    {
+        if (!$user) {
+            return new JsonResponse([
+                'status' => 'error',
+                'message' => $this->translator->trans('home.fav_login')
+            ], 401);
+        }
+
+        $data = json_decode($request->getContent(), true);
+        $traductionId = $data['traduction_id'];
+        $traduction = $em->getRepository(Traduction::class)->find($traductionId);
+
+        if (!$traduction) {
+            return new JsonResponse(['status' => 'error', 'message' => $this->translator->trans('home.no_fav')], 404);
+        }
+
+        $favorite = new Favorite();
+        $favorite->setUser($user);
+        $favorite->setTraduction($traduction);
+
+        $em->persist($favorite);
+        $em->flush();
+
+        $favoritesUrl = $this->generateUrl('show_favorites');
+        $this->addFlash('success', $this->translator->trans('home.favorite_added', ['{{ url }}' => $favoritesUrl]));
+
+        return new JsonResponse(['status' => 'success']);
+    }
+
+    #[Route('/favorite/remove', name: 'favorite_remove_word', methods: ['POST'])]
+    public function remove(Request $request, EntityManagerInterface $em): JsonResponse
+    {
+        $user = $this->security->getUser();
+        if (!$user) {
+            return new JsonResponse([
+                'status' => 'error',
+                'message' => $this->translator->trans('favorite_remove_login_required')
+            ], 401);
+        }
+
+        $data = json_decode($request->getContent(), true);
+        $traductionId = $data['traduction_id'];
+        $favorite = $em->getRepository(Favorite::class)->findOneBy([
+            'user' => $user,
+            'traduction' => $traductionId
+        ]);
+
+        if (!$favorite) {
+            return new JsonResponse([
+                'status' => 'error',
+                'message' => $this->translator->trans('favorite_remove_not_found')
+            ], 404);
+        }
+
+        $em->remove($favorite);
+        $em->flush();
+
+        return new JsonResponse(['status' => 'success']);
+    }
+
+    #[Route('/alphabet/{letter}', name: 'browse_by_letter')]
+/**
+ * Parcourir le dictionnaire par lettre alphabétique
+ *
+ * @param string $letter
+ * @param TraductionRepository $traductionRepository
+ * @param FavoriteRepository $favoriteRepository
+ * @param Request $request
+ * @param PaginatorInterface $paginator
+ * @return Response
+ */
+public function browseByLetter(
+    string $letter,
+    TraductionRepository $traductionRepository,
+    FavoriteRepository $favoriteRepository,
+    Request $request,
+    PaginatorInterface $paginator
+): Response {
+    // Valider la lettre (a-z uniquement)
+    $letter = strtolower($letter);
+    if (!preg_match('/^[a-z]$/', $letter)) {
+        throw $this->createNotFoundException($this->translator->trans('error.invalid_letter'));
+    }
+
+    $locale = $request->getLocale();
+    $user = $this->security->getUser();
+    
+    // Récupérer les traductions commençant par la lettre
+    $traductions = $traductionRepository->findByFirstLetter($letter, $locale);
+    
+    // Récupérer les favoris de l'utilisateur
+    $favorites = [];
+    if ($user) {
+        $favorites = $favoriteRepository->findBy(['user' => $user]);
+    }
+    
+    // Pagination
+    $pagination = $paginator->paginate(
+        $traductions,
+        $request->query->getInt('page', 1),
+        20 // 20 résultats par page
+    );
+
+    // Déterminer l'option de langue pour l'affichage
+    $langOption = $locale === 'en' ? 'en-rif' : 'fr-rif';
+
+    return $this->render('default/browse_alphabet.html.twig', [
+    'letter' => strtoupper($letter),
+    'traductions' => $traductions,
+    'favorites' => $favorites,
+    'pagination' => $pagination,
+    'langOption' => $langOption
+]);
+}
+
 }

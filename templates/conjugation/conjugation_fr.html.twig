@@ -1,0 +1,646 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{ 'navigation.conjugation'|trans }}
+{% endblock %}
+
+{% block body %}
+	<style>
+
+		a {
+			color: black;
+		}
+
+		.search-form {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.search-form input:focus {
+			outline: none;
+			box-shadow: none;
+		}
+
+		.search-form > *:not(#autocomplete-input) {
+			box-shadow: -3px 8px 5px -6px rgba(0, 0, 0, 0.5);
+			justify-content: center;
+		}
+
+		.search-form > div {
+			position: relative;
+			display: flex;
+			border-radius: 20px;
+			width: 100%;
+			max-width: 700px;
+		}
+
+		.search-form select {
+			padding: 12.5px 28px 12.5px 12.5px;
+			font-size: 16px;
+			border: none;
+			background-color: rgba(255, 255, 255, 0.8);
+			border-radius: 20px 0 0 20px;
+			flex: 1;
+			max-width: 100px;
+			appearance: none; /* Supprime l'apparence par défaut du select */
+			background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAiIGhlaWdodD0iNiIgdmlld0JveD0iMCAwIDEwIDYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTSAwLjQ1NzAzOTM5LDEuMzk2MDMgTCAxLjI5MzY4MywwLjU1MDI4NTcgTCA1LDAuNTUwMjg1NyBMIDguNzA2MzIsMC41NTAyODU3IEwgOS41NDI5NiwwLjU1MDI4NTcgTCA1LDQuNTc4OTcgWiIgZmlsbD0iIzAwMCIvPjwvc3ZnPg==');
+			background-repeat: no-repeat;
+			background-position: right 10px center;
+			color: #000; /* Couleur du texte noir */
+		}
+
+		.search-form select::-ms-expand {
+			display: none; /* Masquer la flèche native dans IE */
+		}
+
+		.search-form input[type="text"] {
+			padding: 10px;
+			font-size: 16px;
+			border-radius: 0;
+			border: 2px solid rgba(255, 255, 255, 0.8) !important;
+			background-color: rgba(255, 255, 255, 0.8) !important;
+			flex: 2;
+			min-width: 0;
+		}
+
+		.autocomplete-input {
+			border-color: #EFF6FC !important;
+		}
+
+		.search-button {
+			padding: 10px 20px;
+			font-size: 16px;
+			background-color: rgba(0, 0, 0, 0.7);
+			color: white;
+			border: none;
+			cursor: pointer;
+			transition: background-color 0.3s ease;
+			border-radius: 0 20px 20px 0;
+		}
+
+		.search-form button:hover {
+			background-color: #A0BBD4;
+		}
+
+		.autoComplete_wrapper {
+			display: flex !important;
+			flex-grow: 1 !important;
+		}
+
+		.autoComplete_wrapper > ul {
+			top: 40px;
+		}
+		.autoComplete_wrapper > input {
+			background: rgba(255, 255, 255, 0.8) !important;
+			color: black !important;
+		}
+
+		@media(max-width: 400px) {
+			.search-form select,
+			.search-form input[type="text"],
+			.search-form button {
+				font-size: 12px;
+			}
+
+			.search-form select {
+				min-width: 80px;
+				color: black !important;
+				background-color: rgba(255, 255, 255, 0.8) !important;
+			}
+
+			.autoComplete_wrapper > ul {
+				left: -80px !important;
+				right: -34px !important;
+			}
+
+			.search-form input[type="text"] {
+				padding: 6px;
+			}
+
+			.search-form .search-button {
+				padding: 6px 12px;
+			}
+
+		}
+
+		h2 {
+			font-family: 'DM Serif Display', serif;
+		}
+
+		.pagination-container {
+			text-align: center;
+		}
+
+		.row.justify-content-center.align-items-center {
+			display: flex;
+			align-items: center; /* Align the comment form with the middle of the comments section */
+		}
+
+		.col-12.col-md-6 {
+			max-width: 500px; /* Keep the columns the same width */
+		}
+
+		.no-border {
+			border: none;
+			background: transparent;
+		}
+
+
+		#searchForm input[type="text"] {
+			font-family: 'Noto Sans', sans-serif;
+			width: auto;
+		}
+
+		.btn-custom-size {
+			font-size: 1.25rem;
+		}
+
+		.search-form .keyboard-icon {
+			background-color: rgba(255, 255, 255, 0.8);
+			cursor: pointer;
+			font-size: 20px;
+			padding: 8px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			z-index: 1001;
+		}
+
+		.keyboard-icon {
+			cursor: pointer;
+			color: black !important;
+			background-color: #A0BBD4;
+			border: none;
+			font-size: 20px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.rifain-characters {
+			display: none;
+			position: absolute;
+			background-color: rgba(0, 0, 0, 0.7);
+			border: none;
+			z-index: 1000;
+			height: 100%;
+			bottom: 100%;
+		}
+
+		.rifain-characters span {
+			cursor: pointer;
+			padding: 5px;
+			color: white;
+			font-size: 20px;
+			display: inline-block;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.rifain-characters span:hover {
+			color: #A0BBD4;
+		}
+
+		main {
+			flex: 1;
+			margin-bottom: 0;
+		}
+
+		span {
+			font-family: 'Arial', sans-serif;
+		}
+		.profile-img {
+			width: 50px;
+			/* Augmenté pour plus de visibilité */
+			height: 50px;
+			/* Augmenté pour plus de visibilité */
+			border-radius: 50%;
+			object-fit: cover;
+			border: 1px solid #ddd;
+		}
+
+		h1.dynamic-font-size {
+			font-family: 'DM Serif Display', serif;
+			text-align: center;
+			max-width: 650px;
+			margin: 0 auto;
+			font-size: 5.5vw; /* Taille de police proportionnelle à la largeur de l'écran */
+		}
+
+		.autoComplete_wrapper > input::placeholder {
+			color: black !important;
+		}
+
+		.autoComplete_wrapper > input {
+			height: 100% !important;
+		}
+		/* Limite maximale de la taille de la police */
+		@media(min-width: 700px) {
+			h1.dynamic-font-size {
+				font-size: 2.3rem; /* Taille maximale définie pour les grands écrans */
+			}
+		}
+
+		.ui-widget-content {
+			text-align: left;
+		}
+
+		.autoComplete_results_list {
+			background-color: #f0f0f0; /* Light grey background */
+			border: 1px solid #d4d4d4;
+			max-height: 150px;
+			overflow-y: auto;
+		}
+
+		/* Change the text color and background color of each suggestion item */
+		.autoComplete_result {
+			color: #333; /* Dark text */
+			background-color: white; /* White background */
+			padding: 10px;
+			cursor: pointer;
+		}
+
+		::-webkit-input-placeholder {
+			/* WebKit, Blink, Edge */
+			color: black !important;
+		}
+
+		.autoComplete_wrapper mark {
+			padding: 0 !important;
+		}
+
+		@media(min-width: 400px) {
+			.autoComplete_wrapper > ul {
+				left: -96px !important;
+				right: -54px !important;
+			}
+		}
+		#lang {
+			outline: none;
+		}
+
+		.conjugation-instructions {
+			font-family: 'Roboto', sans-serif;
+			line-height: 1.7;
+			color: #333;
+			margin: 50px auto;
+			padding: 30px; /* Ajustement du padding */
+			background-color: transparent;
+			border-radius: 15px;
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+			max-width: 1200px;
+			width: 100%;
+			box-sizing: border-box;
+		}
+
+		.conjugation-instructions h3 {
+			font-family: 'Roboto', sans-serif;
+			font-weight: bold;
+			color: #F26766;
+			margin-top: 30px;
+		}
+		.conjugation-instructions h4, .conjugation-instruction h5 {
+			color:#F26760;
+		}
+
+		.conjugation-instructions p {
+			margin-bottom: 15px;
+			font-size: 16px;
+		}
+
+		.conjugation-instructions h3 {
+			font-size: 22px;
+			margin-bottom: 20px;
+		}
+
+		.conjugation-instructions h4 {
+			font-size: 20px;
+		}
+
+		/* Adaptation pour les petits écrans */
+		@media(max-width: 800px) {
+			.conjugation-instructions {
+				padding: 20px; /* Réduction du padding pour mobile */
+				margin: 0px; /* Ajustement des marges pour utiliser toute la largeur de l'écran */
+				width: 100%; /* Assure que le bloc utilise toute la largeur de l'écran */
+			}
+
+			.conjugation-instructions h3,
+			.conjugation-instructions h4 {
+				font-size: 18px;
+			}
+
+			.conjugation-instructions p {
+				font-size: 14px;
+			}
+		}
+	</style>
+
+	<main>
+		<div class="col-11 mx-auto">
+			{% include 'include/flashes.html.twig' %}
+		</div>
+
+		{# MESSAGE ACCUEIL #}
+		<h1 class="dynamic-font-size" style="font-family: 'DM Serif Display' , serif;text-align: center; max-width: 650px; margin: 0 auto;">
+			{{ 'home.welcome_message_conjugaison'|trans|raw }}
+		</h1>
+
+		<h3 style="text-align: center; margin-top: 50px; margin-bottom: 50px; font-size: 3rem;font-family: 'MaPolice', sans-serif;">ⴰⵙⴼⵜⵉ ⵙ ⵜⵎⴰⵣⵉⵖⵜ</h3>
+
+
+		<section class="wow fadeIn animated" style="visibility: visible; animation-name: fadeIn;">
+			<div class="container">
+				<div
+					class="row compteur">
+					<!-- counter -->
+					<div class="col"></div>
+					<div class="col bottom-margin text-center counter-section wow fadeInUp sm-margin-bottom-ten animated" data-wow-duration="300ms" style="visibility: visible; animation-duration: 300ms; animation-name: fadeInUp;">
+						<i class="bi bi-journal-text medium-icon"></i>
+						<span class="timer counter alt-font appear" data-to="980" data-speed="7000">{{ totalItems }}</span>
+						<p class="counter-title">{{ 'navigation.verbe_conjugue'|trans }}</p>
+					</div>
+					<div class="col"></div>
+					<!-- end counter -->
+				</div>
+			</div>
+		</section>
+
+		<div
+<div class="container">
+		{# BARRE DE RECHERCHE #}
+		<div class="barrederecherche">
+			<form id="searchForm" method="GET" action="{{ path('app_verbe') }}" class="search-form">
+				<div style="position: relative;">
+<select name="lang" id="lang">
+    {% if app.request.locale == 'en' %}
+        <option value="rif-en" {% if app.request.query.get('lang') == 'rif-en' %} selected {% endif %}>Riffian</option>
+        <option value="en-rif" {% if app.request.query.get('lang') == 'en-rif' %} selected {% endif %}>English</option>
+    {% else %}
+        <option value="rif-fr" {% if app.request.query.get('lang') == 'rif-fr' %} selected {% endif %}>Rifain</option>
+        <option value="fr-rif" {% if app.request.query.get('lang') == 'fr-rif'  %} selected {% endif %}>Français</option>
+    {% endif %}
+</select>
+
+
+
+					<input type="hidden" id="searchType" value="verb">
+					<input type="text" name="terme" id="search-input" class="autocomplete-input" autocomplete="off" placeholder="{{ 'home.search_bar'|trans }}..." maxlength="60" value="" required>
+					<button type="button" class="keyboard-icon" id="toggle-keyboard">
+						<i class="bi bi-keyboard"></i>
+					</button>
+					<div class="rifain-characters" id="rifain-characters">
+						<span>ɛ</span>
+						<span>ḍ</span>
+						<span>ṣ</span>
+						<span>ḥ</span>
+						<span>ɣ</span>
+						<span>ǧ</span>
+						<span>ẓ</span>
+						<span>ṭ</span>
+						<span>ř</span>
+						<span>č</span>
+					</div>
+					<button type="submit" class="search-button">
+						<i class="bi bi-search"></i>
+					</button>
+				</div>
+			</form>
+	</div>
+	
+			<div class="container mt-5">
+				<div class="conjugation-instructions">
+					<p style="font-weight: bold;">
+						Il est conseillé d'effectuer vos recherches de verbes en rifain. Pour ce faire, utiliser la forme impérative des verbes, par exemple : ecc pour "manger". 
+																								            Si vous ne connaissez pas le verbe en rifain, vous pouvez également partir du français en recherchant sa forme infinitive. Par exemple, 
+																								            en cherchant "manger", vous trouverez la conjugaison rifaine de ecc.
+					</p>
+					<p>
+						L’élaboration des tableaux de conjugaison repose sur le
+						<strong>
+							<em>Dictionnaire tarifit-français de Mohamed Serhoual (2002)</em>
+						</strong>. En effet, dans le 
+																								            dictionnaire de Mohamed Serhoual, chaque entrée de verbe présente les différentes formes verbales à la troisième personne du singulier masculin, 
+																								            couvrant les principaux aspects de la conjugaison rifaine : prétérit, prétérit négatif, aoriste intensif et aoriste.
+					</p>
+
+					<h3>Quelques éléments sur le verbe rifain.
+					</h3>
+					<p>
+						La conjugaison rifaine repose principalement sur l’aspect de l’action, c’est-à-dire la manière dont l’action est perçue (terminée, en cours, répétée), plutôt que sur une simple indication du temps (passé, présent, futur). Les verbes sont formés à partir de racines consonantiques, et l’utilisation de schémas vocaliques et de particules permet d’exprimer différents aspects et modalités d’action. Trois aspects principaux dominent la conjugaison rifaine : le prétérit, l’aoriste intensif et l’aoriste simple. La négation en rifain a parfois des formes spécifiques pour le passé, le futur, ainsi que pour les formes intensives.
+					</p>
+
+					<h3>I. La vocal neutre 'e' (schwa).</h3>
+					<p>
+						La voyelle neutre 'e' (schwa) est utilisée fréquemment en rifain pour des raisons phonétiques. Même si elle n’a pas de statut phonologique propre, elle est insérée dans les constructions verbales pour faciliter la prononciation, notamment pour éviter les successions de consonnes difficiles à articuler. Cette voyelle peut être flexible et disparaître selon le contexte phonétique.
+					</p>
+
+					<h3>II. Les différents aspects en rifain.</h3>
+
+					<h4>1. Prétérit</h4>
+					<p>1.1. Le prétérit est utilisé pour indiquer des actions terminées dans le passé. Cet aspect est simple et direct, signifiant que l’action est achevée.</p>
+					<p>
+						<em>Exemple :</em>
+					</p>
+					<p>
+						ufiɣ : signifie "j’ai trouvé" ou "je trouvai", marquant une action terminée dans le passé.<br/>
+						rajiɣ : signifie "j’ai attendu", exprimant une action accomplie.
+					</p>
+					<p>Le prétérit est utilisé pour décrire des actions définitivement achevées.</p>
+
+					<p>2.2. Lorsque le prétérit est précédé de la particule ttuɣa, il sert à exprimer une action qui s'est produite avant une autre action dans le passé.</p>
+					<p>
+						<em>Exemple :</em>
+					</p>
+					<p>ttuɣa yecca uca yeffeɣ : signifie "il avait mangé puis il est sorti."</p>
+
+					<p>Ces deux actions sont achevées dans le temps, mais l'une des actions (manger) précède l'autre (sortir).</p>
+
+					<h4>2. Prétérit négatif</h4>
+					<p>Le prétérit négatif est formé avec une particule négative. Il existe différentes particules pour exprimer la négation en rifain, telles que “wer”, “war”, “wa”, et “ur”. Dans les exemples suivants, “wer” est utilisé pour exprimer la négation.</p>
+					<p>
+						<em>Exemple :</em>
+					</p>
+					<p>
+						wer ufiɣ : signifie "je n’ai pas trouvé".<br/>
+						wer ggiɣ : signifie "je n’ai pas fait".
+					</p>
+					<p>De plus, pour certains types de verbes, il y a ajout d'une voyelle "i" dans la dernière syllabe du verbe lors du passage à la négation.</p>
+					<p>
+						<em>Exemple :</em>
+					</p>
+					<p>
+						icɣel : "il est occupé"<br/>
+						wer icɣil : "il n’est pas occupé".
+					</p>
+
+					<h4>3. L’aoriste</h4>
+					<p>L’aoriste exprime des actions non achevées, qui sont en cours ou se dérouleront dans le futur. Il est également utilisé pour donner des ordres via l’impératif.</p>
+					<p>3.1. Lorsqu'il est associé au préverbe
+						<strong>
+							<em>ad</em>
+						</strong>, l’aoriste exprime des actions qui se dérouleront dans le futur. C'est l'équivalent du futur en français.</p>
+					<p>
+						<em>Exemple :</em>
+					</p>
+					<p>
+						ad afeɣ : "je trouverai", où
+						<strong>
+							<em>ad</em>
+						</strong>
+						précède le verbe pour indiquer que l’action se déroulera à un moment ultérieur.
+					</p>
+					<p>3.2. Pour exprimer une négation dans le futur, le rifain utilise l’aoriste intensif négatif. Cela permet de nier une action qui se déroulera dans le futur.</p>
+					<p>
+						<em>Exemple :</em>
+					</p>
+					<p>
+						ad ibuẓẓel : "il s’étendra par terre"<br/>
+						wer ittbuẓẓul : "il ne s’étendra pas par terre".
+					</p>
+
+					<p>3.1. Lorsqu'il est associé à
+						<strong>
+							<em>ad yiři</em>
+						</strong>, l’aoriste exprime une action qui sera terminée à un moment donné dans le futur.</p>
+					<p>
+						<em>Exemple :</em>
+					</p>
+					<p>Badis ad yiři yaweḍ ɣar Meknas zzat ass n řheḍ : signifie "Badis sera arrivé à Meknès avant lundi".</p>
+
+					<p>Cette action se situe dans le futur. Badis arrivera à Meknès, ce qui n'a pas encore arrivé, car il n'est encore pas à Meknès. On sait qu'il arrivera avant lundi, un moment donné dans le futur qui n'est par définition pas encore arrivé.</p>
+
+					<h4>4. L’aoriste intensif</h4>
+
+					<p>L'aoriste intensif est une forme particulière de l’aoriste qui met l'accent sur la répétition ou la durée d’une action. Cet aspect est utilisé pour décrire des actions qui se répètent fréquemment ou qui sont habituelles.</p>
+					<p>4.1. Il peut exprimer le présent habituel. L’aoriste intensif équivaut souvent à un présent intensif, exprimant une action qui se répète régulièrement ou fait partie d’une routine.</p>
+					<p>
+						<em>Exemple :</em>
+					</p>
+					<p>ittraja : signifie "attendre habituellement ou de manière répétée", marquant une action qui se produit régulièrement dans le présent.</p>
+
+					<p>4.2. Il peut exprimer un présent immédiat (action en cours). Pour exprimer une action qui se déroule au moment même, le rifain utilise l'aoriste intensif, souvent accompagné de l'indicateur aqqa. Cet indicateur peut être traduit par "en train de" et permet de marquer que l’action est en cours au moment où l’on parle, où l’action est exécutée.</p>
+					<p>
+						<em>Exemple :</em>
+					</p>
+					<p>aqqa tteteɣ : signifie "je suis en train de manger", où aqqa indique que l'action est en train de se produire au moment même.</p>
+
+					<p>4.3. Il peut exprimer le passé habituel. Avec des indicateurs temporels comme ttuɣa, l’aoriste intensif peut également exprimer des actions répétées dans le passé.</p>
+					<p>
+						<em>Exemple :</em>
+					</p>
+					<p>ttuɣa ttazzleɣ : signifie "je courais régulièrement". Ici, l’action répétée dans le passé est indiquée par l’adverbe ttuɣa.</p>
+
+					<h3>III. Le participe</h3>
+					<p>Le participe en rifain est une forme verbale invariable en genre et en nombre, utilisée principalement dans les phrases relatives où le sujet du verbe correspond à un antécédent. Il est utilisé pour décrire des actions effectuées par le sujet.</p>
+					<p>
+						<em>Exemple :</em>
+					</p>
+					<p>
+						D ajeǧid ig issawařen : "C'est le roi qui parle".<br/>
+						Timɣarin ig ifetřen seysu : "les femmes qui ont roulé le couscous".<br/>
+						Iryazen ig icarrzen cal : "les hommes qui labourent la terre".
+					</p>
+
+					<h3>IV. Les formes verbales dérivées.</h3>
+
+					<p>Le rifain comporte plusieurs formes verbales dérivées de base qui peuvent être combinées pour exprimer des nuances supplémentaires.</p>
+
+					<h4>1. Le factitif ou causatif</h4>
+					<p>Cette forme permet d’exprimer l’idée de faire faire quelque chose à quelqu’un ou quelque chose. Elle est caractérisée par la préfixation d'un
+						<strong>ss</strong>
+						au verbe.</p>
+					<p>
+						<em>Exemple :</em>
+					</p>
+					<p>
+						cmeḍ : brûler<br/>
+						ssecmeḍ : faire brûler.
+					</p>
+
+					<h4>2. Réciproque</h4>
+					<p>Cette forme exprime une action réciproque, un échange entre plusieurs parties. Elle est caractérisée par la préfixation d'un
+						<strong>m</strong>
+						au verbe.</p>
+					<p>
+						<em>Exemple :</em>
+					</p>
+					<p>
+						jjaǧ : jurer<br/>
+						mjjaǧ : se jurer réciproquement.
+					</p>
+
+					<h4>3. Passif</h4>
+					<p>Cette forme permet d’exprimer qu’une action est subie par le sujet. Elle est caractérisée par la préfixation de
+						<strong>ttw</strong>
+						ou
+						<strong>nn</strong>
+						au verbe.</p>
+					<p>
+						<em>Exemple :</em>
+					</p>
+					<p>
+						nḍeř : enterrer<br/>
+						ttwanḍeř : être enterré.
+					</p>
+					<p>
+						ḍřem : commettre une injustice<br/>
+						nnḍřem : être victime d'une injustice.
+					</p>
+					<p>
+						fḍeḥ : dénoncer<br/>
+						nnfḍeḥ : être dénoncé
+					</p>
+
+					<h4>4. Combinaison de dérivés</h4>
+					<p>
+						<em>Exemple :</em>
+					</p>
+					<p>
+						eqqeř : examiner, regarder<br/>
+						muqqeř : regarder, voir, chercher<br/>
+						smuqqeř : regarder, voir, chercher, exorciser un possédé du démon, ausculter une femme enceinte.
+					</p>
+
+					<h3>V. Les verbes transitifs indirects.</h3>
+					<p>Dans le dictionnaire en ligne d’Amyaz, et celui de Mohamed Serhoual, vous trouverez souvent des verbes accompagnés de prépositions telles que
+						<strong>di</strong>,
+						<strong>ɣar</strong>,
+						<strong>adu</strong>,
+						<strong>zi</strong>,
+						<strong>ar</strong>,
+						<strong>ak</strong>,
+						<strong>jar</strong>,
+						<strong>s</strong>,
+						<strong>x</strong>, etc.</p>
+					<p>Ces prépositions modifient légèrement le sens du verbe.</p>
+					<p>Prenons l'exemple du verbe "ceř".</p>
+					<p>"ceř" seul signifie "passer la méridienne" ou "passer la journée".</p>
+					<p>
+						<em>Exemple :</em>
+					</p>
+					<p>cřiɣ ad qeccareɣ ibawen -> j'ai passé la journée à éplucher les fèves</p>
+					<p>Lorsqu'il est accompagné de la préposition "di", il prend le sens de "rester" ou "demeurer". Dans le dictionnaire, le verbe est noté ainsi : "ceř -di-". Il n’y a que ceř qui est conjugué, di n’est qu’une préposition accompagnant le verbe.</p>
+					<p>
+						<em>Exemple :</em>
+					</p>
+					<p>cřiɣ
+						<strong>di</strong>
+						taddart ass ikmeř -> je suis resté à la maison toute la journée.</p>
+				</div>
+			</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+const searchInput = document.getElementById('search-input');
+
+searchInput.addEventListener('input', function () {
+let inputValue = searchInput.value;
+// Remplacer toutes les variantes d'apostrophes par des apostrophes simples
+inputValue = inputValue.replace(/‘|’|ʼ|`|´|′|ʾ|ʿ|ˈ|‛|❛|❜|ʹ/g, "'");
+searchInput.value = inputValue;
+});
+});
+</script>
+		{% endblock %}

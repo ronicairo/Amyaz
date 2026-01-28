@@ -67,6 +67,48 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->flush();
     }
 
+    public function findUnverifiedUsersWithoutReminder()
+    {
+        return $this->createQueryBuilder('u')
+            ->where('u.isVerified = :verified')
+            ->andWhere('u.reminderSentAt IS NULL')
+            ->setParameter('verified', false)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findExpiredUnverifiedUsers(\DateTime $weekAgo)
+    {
+        return $this->createQueryBuilder('u')
+            ->where('u.isVerified = :verified')
+            ->andWhere('u.reminderSentAt <= :weekAgo')
+            ->setParameter('verified', false)
+            ->setParameter('weekAgo', $weekAgo)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findUnverifiedUsersWithLimitAndOffset(int $limit, int $offset)
+    {
+        return $this->createQueryBuilder('u')
+            ->where('u.isVerified = false')
+            ->andWhere('u.reminderSentAt IS NULL')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
+  public function findByRoles(array $roles): array
+    {
+        return $this->createQueryBuilder('u')
+            ->where('u.roles LIKE :adminRole')
+            ->orWhere('u.roles LIKE :moderatorRole')
+            ->setParameter('adminRole', '%"ROLE_ADMIN"%')
+            ->setParameter('moderatorRole', '%"ROLE_MODERATOR"%')
+            ->getQuery()
+            ->getResult();
+    }
     //    /**
     //     * @return User[] Returns an array of User objects
     //     */

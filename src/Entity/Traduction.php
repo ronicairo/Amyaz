@@ -56,6 +56,26 @@ class Traduction
     #[ORM\JoinColumn(nullable: true)]  // Permettre que status_id soit nul
     private ?Status $status = null;
 
+
+    #[ORM\Column(type: 'blob', nullable: true)]
+    private $rifainSingularRecord;
+
+
+    #[ORM\Column(type: 'blob', nullable: true)]
+    private $rifainPluralRecord;
+    
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $source = null;
+    
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $origin = null;
+    
+     #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $racine = null;
+    
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $example = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -219,4 +239,82 @@ class Traduction
 
         return $this;
     }
+
+
+    /**
+     * @return mixed
+     */
+    public function getRifainSingularRecord()
+    {
+        return $this->rifainSingularRecord;
+    }
+
+    /**
+     * @param mixed $rifainSingularRecord
+     */
+    public function setRifainSingularRecord($rifainSingularRecord): void
+    {
+        $this->rifainSingularRecord = $rifainSingularRecord;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRifainPluralRecord()
+    {
+        return $this->rifainPluralRecord;
+    }
+
+    /**
+     * @param mixed $rifainPluralRecord
+     */
+    public function setRifainPluralRecord($rifainPluralRecord): void
+    {
+        $this->rifainPluralRecord = $rifainPluralRecord;
+    }
+
+   public function getSource(): ?string
+    {
+        return $this->source;
+    }
+
+    public function setSource(?string $source): self
+    {
+        $this->source = $source;
+        return $this;
+    }
+
+    public function getOrigin(): ?string
+    {
+        return $this->origin;
+    }
+
+    public function setOrigin(?string $origin): self
+    {
+        $this->origin = $origin;
+        return $this;
+    }
+
+    public function getRacine(): ?string
+    {
+        return $this->racine;
+    }
+
+    public function setRacine(?string $racine): self
+    {
+        $this->racine = $racine;
+        return $this;
+    }
+    
+    public function getExample(): ?string
+    {
+        return $this->example;
+    }
+
+    public function setExample(?string $example): self
+    {
+        $this->example = $example;
+        return $this;
+    }
+
 }
