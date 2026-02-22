@@ -49,7 +49,7 @@ class AddWordType extends AbstractType
                 'label' => 'form.validate',
                 'validate' => false,
                 'attr' => [
-                    'class' => "d-block mt-4 mx-auto btn btn-outline-light col-5"
+                    'class' => "submit-trad-btn submit-btn"
                 ]
             ])
             ->add('captcha', Recaptcha3Type::class, [
@@ -206,7 +206,14 @@ class AddWordType extends AbstractType
                     'attr' => [
                         'class' => 'recorder d-none', // Add the 'recorder' class and hide it
                     ]
-                ]);
+                ])
+                     ->add('submit', SubmitType::class, [
+                'label' => 'form.validate',
+                'validate' => false,
+                'attr' => [
+                    'class' => "submit-trad-btn"
+                ]
+            ]);
     
                 // 'singular' field remains not required for regular users
             }

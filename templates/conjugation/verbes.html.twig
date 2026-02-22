@@ -12,12 +12,6 @@
 {% block body %}
 
 	<style>
-		/* Style pour le hover des th */
-		tr:hover {
-			background-color: #F26766; /* Couleur de fond gris lors du survol */
-			color: white; /* Couleur du texte en blanc lors du survol */
-		}
-
 		.search-form {
 			display: flex;
 			align-items: center;
@@ -294,6 +288,400 @@
 		#lang {
 			outline: none;
 		}
+
+		/* ========================================
+   SECTION VERBE INFO
+   ======================================== */
+.verb-info-section {
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.verb-info-card {
+    max-width: 600px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 24px;
+    padding: 40px;
+    box-shadow: 0 10px 40px rgba(26, 40, 77, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.verb-info-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, #1a284d, #b3e2ec);
+}
+
+.verb-info-card .verb-label {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.85rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+.verb-info-card .verb-rifain {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    color: #1a284d;
+    margin-bottom: 10px;
+}
+
+.verb-info-card .verb-tifinagh {
+    font-size: 1.5rem;
+    color: #b3e2ec;
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+}
+
+.verb-info-card .verb-french {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 25px;
+}
+
+.verb-info-card .btn-edit {
+    background: linear-gradient(135deg, #1a284d, #2d4a7c);
+    color: white;
+    padding: 12px 30px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.verb-info-card .btn-edit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(26, 40, 77, 0.3);
+    color: white;
+}
+
+/* ========================================
+   TABLES DE CONJUGAISON
+   ======================================== */
+.conjugation-section {
+    padding: 0 20px 60px;
+}
+
+.conjugation-tables-container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* Section titre */
+.section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    color: #1a284d;
+    text-align: center;
+    margin: 50px 0 30px;
+    position: relative;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, #1a284d, #b3e2ec);
+    border-radius: 2px;
+}
+
+/* Table container */
+.table-card {
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 10px 40px rgba(26, 40, 77, 0.08);
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.table-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, #1a284d, #b3e2ec);
+}
+
+/* Table */
+.conjugation-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+}
+
+.conjugation-table thead {
+    background: linear-gradient(135deg, #1a284d 0%, #2d4a7c 100%);
+}
+
+.conjugation-table thead th {
+    color: white;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 18px 12px;
+    text-align: center;
+    border: none;
+    position: relative;
+}
+
+.conjugation-table thead th:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 25%;
+    height: 50%;
+    width: 1px;
+    background: rgba(179, 226, 236, 0.3);
+}
+
+.conjugation-table thead th:first-child {
+    background: rgba(0, 0, 0, 0.15);
+}
+
+.conjugation-table tbody tr {
+    transition: all 0.3s ease;
+}
+
+.conjugation-table tbody tr:nth-child(even) {
+    background: #f8fbfc;
+}
+
+.conjugation-table tbody tr:hover {
+    background: rgba(179, 226, 236, 0.25);
+}
+
+.conjugation-table tbody td {
+    padding: 16px 12px;
+    text-align: center;
+    border: none;
+    border-bottom: 1px solid #eef5f7;
+    font-family: 'Outfit', sans-serif;
+    color: #2d4a7c;
+    font-size: 0.95rem;
+}
+
+.conjugation-table tbody td:first-child {
+    font-weight: 600;
+    color: #1a284d;
+    background: rgba(26, 40, 77, 0.05);
+    font-size: 1rem;
+}
+
+.conjugation-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* ========================================
+   TABLES MOBILE
+   ======================================== */
+.mobile-table-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(26, 40, 77, 0.08);
+    overflow: hidden;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.mobile-table-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #1a284d, #b3e2ec);
+}
+
+.mobile-table-header {
+    background: linear-gradient(135deg, #1a284d 0%, #2d4a7c 100%);
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.mobile-table-header i {
+    color: #b3e2ec;
+    font-size: 1rem;
+}
+
+.mobile-table-header h4 {
+    color: white;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.mobile-conjugation-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.mobile-conjugation-table thead {
+    background: #f8fbfc;
+}
+
+.mobile-conjugation-table thead th {
+    color: #1a284d;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    font-size: 0.8rem;
+    padding: 12px 15px;
+    text-align: center;
+    border-bottom: 2px solid #e8f4f8;
+}
+
+.mobile-conjugation-table tbody tr:nth-child(even) {
+    background: #fafcfd;
+}
+
+.mobile-conjugation-table tbody tr:hover {
+    background: rgba(179, 226, 236, 0.15);
+}
+
+.mobile-conjugation-table tbody td {
+    padding: 14px 15px;
+    text-align: center;
+    border-bottom: 1px solid #eef5f7;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem;
+}
+
+.mobile-conjugation-table tbody td:first-child {
+    font-weight: 600;
+    color: #1a284d;
+    background: rgba(26, 40, 77, 0.03);
+}
+
+.mobile-conjugation-table tbody td:last-child {
+    color: #2d4a7c;
+}
+
+.mobile-conjugation-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (max-width: 992px) {
+    .conjugation-table thead th {
+        font-size: 0.75rem;
+        padding: 15px 8px;
+    }
+    
+    .conjugation-table tbody td {
+        font-size: 0.85rem;
+        padding: 12px 8px;
+    }
+}
+
+@media (max-width: 768px) {
+    .conjugation-hero {
+        padding: 60px 15px 80px;
+    }
+    
+    .conjugation-hero h1 {
+        font-size: 2rem;
+    }
+    
+    .conjugation-hero .tifinagh-subtitle {
+        font-size: 1rem;
+        margin-bottom: 40px;
+    }
+    
+    .conjugation-hero .search-form > div {
+        flex-wrap: wrap;
+    }
+    
+    .conjugation-hero .search-form select {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .verb-info-section {
+        padding: 40px 15px;
+    }
+    
+    .verb-info-card {
+        padding: 30px 20px;
+    }
+    
+    .verb-info-card .verb-rifain {
+        font-size: 2rem;
+    }
+    
+    /* Cacher table desktop */
+    .desktop-only {
+        display: none !important;
+    }
+    
+    /* Afficher tables mobile */
+    .mobile-only {
+        display: block !important;
+    }
+    
+    .section-title {
+        font-size: 1.4rem;
+        margin: 40px 0 25px;
+    }
+}
+
+@media (min-width: 769px) {
+    .desktop-only {
+        display: block !important;
+    }
+    
+    .mobile-only {
+        display: none !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .conjugation-hero h1 {
+        font-size: 1.7rem;
+    }
+    
+    .conjugation-hero .tifinagh-subtitle {
+        font-size: 0.9rem;
+    }
+    
+    .verb-info-card .verb-rifain {
+        font-size: 1.7rem;
+    }
+    
+    .verb-info-card .verb-tifinagh {
+        font-size: 1.2rem;
+    }
+    
+    .mobile-table-header h4 {
+        font-size: 0.85rem;
+    }
+}
 	</style>
 
 	<main>
@@ -347,204 +735,222 @@
 			</form>
 		</div>
 
-		{% if verbExists == false %}
-			<h4 class="text-center" style="color:#F26766;">{{ 'home.noverbfound'|trans|raw }}</h4>
-		{% else %}
-			<h1 style="font-family: 'Arial', sans-serif;" class="text-center mt-5">{{ 'table_headers.conjug'|trans }}
-				{{ 'navigation.du_verbe'|trans }}
-				{{ verbe.verbeRifain }}</h1>
-			<h4 class="text-center">{{ verbe.verbeTifinagh }}</h4>
-			<h4 class="text-center">{{ verbe.verbeFrancais }}</h4>
+	  {% if verbExists != false %}
+    
+    {# ========== INFO VERBE ========== #}
+    <section class="verb-info-section">
+        <div class="verb-info-card">
+            <p class="verb-label">{{ 'table_headers.conjug'|trans }} {{ 'navigation.du_verbe'|trans }}</p>
+            <h2 class="verb-rifain">{{ verbe.verbeRifain }}</h2>
+            <p class="verb-tifinagh">{{ verbe.verbeTifinagh }}</p>
+            <p class="verb-french">{{ verbe.verbeFrancais }}</p>
+            
+            {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MODERATOR') %}
+                <a href="{{ path('edit_verb', { id: verbe.id }) }}" class="btn-edit">
+                    <i class="bi bi-pencil"></i>
+                    {{ 'button.edit'|trans }}
+                </a>
+            {% endif %}
+        </div>
+    </section>
 
-
-			{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MODERATOR') %}
-				<div class="text-center mb-3">
-					<a href="{{ path('edit_verb', { id: verbe.id }) }}" class="d-block mt-4 mx-auto btn btn-outline-dark col-7">{{ 'button.edit'|trans }}</a>
-				</div>
-			{% endif %}
-
-			<div class="d-none d-md-block col-10 mx-auto">
-				<table class="table">
-					<thead class="thead-dark">
-						<tr>
-							<th>{{ 'table_headers.pronoun'|trans }}</th>
-							<th>{{ 'table_headers.preterit'|trans }}</th>
-							<th>{{ 'table_headers.preterit_negatif'|trans }}</th>
-							<th>{{ 'table_headers.aoriste_intensif'|trans }}</th>
-							<th>{{ 'table_headers.aoriste_intensif_negatif'|trans }}</th>
-							<th>{{ 'table_headers.aoriste_futur'|trans }}</th>
-						</tr>
-					</thead>
-					<tbody>
-					{% if conjugations['preterit'] is defined and conjugations['preterit'] is not empty %}
-    {% for pronoun in conjugations['preterit']|keys %}
-        <tr>
-            <td>{{ pronoun }}</td>
-            <td>{{ conjugations['preterit'][pronoun]|raw }}</td>
-            <td>{{ conjugations['preterit_negatif'][pronoun]|raw }}</td>
-            <td>{{ conjugations['aoriste_intensif'][pronoun]|raw }}</td>
-            <td>{{ conjugations['aoriste_intensif_negatif'][pronoun]|raw }}</td>
-            <td>{{ conjugations['aoriste_futur'][pronoun]|raw }}</td>
-        </tr>
-    {% endfor %}
-{% endif %}
-
-					</tbody>
-				</table>
-
-			</div>
-
-			<div class="d-md-none">
-				<table class="table col-11 mx-auto">
-					<thead class="thead-dark">
-						<tr>
-							<th>{{ 'table_headers.pronoun'|trans }}</th>
-							<th>{{ 'table_headers.preterit'|trans }}</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% if conjugations['preterit'] is defined and conjugations['preterit'] is not empty %}
-    {% for pronoun in conjugations['preterit']|keys %}
-        <tr>
-            <td>{{ pronoun }}</td>
-            <td>{{ conjugations['preterit'][pronoun]|raw }}</td>
-        </tr>
-    {% endfor %}
-{% endif %}
-
-					</tbody>
-				</table>
-
-
-				<table class="table col-11 mx-auto">
-					<thead class="thead-dark">
-						<tr>
-							<th>{{ 'table_headers.pronoun'|trans }}</th>
-							<th>{{ 'table_headers.preterit_negatif'|trans }}</th>
-						</tr>
-					</thead>
-					<tbody>
-					{% if conjugations['preterit_negatif'] is defined and conjugations['preterit_negatif'] is not empty %}
-    {% for pronoun in conjugations['preterit_negatif']|keys %}
-        <tr>
-            <td>{{ pronoun }}</td>
-            <td>{{ conjugations['preterit_negatif'][pronoun]|raw }}</td>
-        </tr>
-    {% endfor %}
-{% endif %}
-
-					</tbody>
-				</table>
-
-
-				<table class="table col-11 mx-auto">
-					<thead class="thead-dark">
-						<tr>
-							<th>{{ 'table_headers.pronoun'|trans }}</th>
-							<th>{{ 'table_headers.aoriste_intensif'|trans }}</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% if conjugations['aoriste_intensif'] is defined and conjugations['aoriste_intensif'] is not empty %}
-    {% for pronoun in conjugations['aoriste_intensif']|keys %}
-        <tr>
-            <td>{{ pronoun }}</td>
-            <td>{{ conjugations['aoriste_intensif'][pronoun]|raw }}</td>
-        </tr>
-    {% endfor %}
-{% endif %}
-
-					</tbody>
-				</table>
-
-
-				<table class="table col-11 mx-auto">
-					<thead class="thead-dark">
-						<tr>
-							<th>{{ 'table_headers.pronoun'|trans }}</th>
-							<th>{{ 'table_headers.aoriste_intensif_negatif'|trans }}</th>
-						</tr>
-					</thead>
-					<tbody>
-					{% if conjugations['aoriste_intensif_negatif'] is defined and conjugations['aoriste_intensif_negatif'] is not empty %}
-    {% for pronoun in conjugations['aoriste_intensif_negatif']|keys %}
-        <tr>
-            <td>{{ pronoun }}</td>
-            <td>{{ conjugations['aoriste_intensif_negatif'][pronoun]|raw }}</td>
-        </tr>
-    {% endfor %}
-{% endif %}
-
-					</tbody>
-				</table>
-
-
-				<table class="table mx-auto col-11">
-					<thead class="thead-dark">
-						<tr>
-							<th>{{ 'table_headers.pronoun'|trans }}</th>
-							<th>{{ 'table_headers.aoriste_futur'|trans }}</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% if conjugations['aoriste_futur'] is defined and conjugations['aoriste_futur'] is not empty %}
-    {% for pronoun in conjugations['aoriste_futur']|keys %}
-        <tr>
-            <td>{{ pronoun }}</td>
-            <td>{{ conjugations['aoriste_futur'][pronoun]|raw }}</td>
-        </tr>
-    {% endfor %}
-{% endif %}
-					</tbody>
-				</table>
-			</div>
-
-			<h3 class="text-center mb-3 mt-6">{{ 'table_headers.participes'|trans }}</h3>
-			<div class="table-responsive">
-				<table class="table mx-auto col-10">
-					<thead class="thead-dark">
-						<tr>
-							<th style="vertical-align: middle;">{{ 'table_headers.participe_preterit'|trans }}</th>
-							<th>{{ 'table_headers.participe_preterit_negatif'|trans }}</th>
-							<th>{{ 'table_headers.participe_aoriste_intensif'|trans }}</th>
-							<th>{{ 'table_headers.participe_aoriste_intensif_negatif'|trans }}</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>
-								{% if conjugations['participe_preterit'][''] is defined %}
-									{{ conjugations['participe_preterit']['']|raw }}
-									{% else %}
-
-								{% endif %}
-							</td>
-							<td>
-								{% if conjugations['participe_preterit_negatif'][''] is defined %}
-									{{ conjugations['participe_preterit_negatif']['']|raw }}
-									{% else %}
-
-								{% endif %}
-							</td>
-							<td>
-								{% if conjugations['participe_aoriste_intensif'][''] is defined %}
-									{{ conjugations['participe_aoriste_intensif']['']|raw }}
-									{% else %}
-
-								{% endif %}
-							</td>
-							<td>
-								{% if conjugations['participe_aoriste_intensif_negatif'][''] is defined %}
-									{{ conjugations['participe_aoriste_intensif_negatif']['']|raw }}
-									{% else %}
-
-								{% endif %}
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		{% endif %}
+    {# ========== TABLES CONJUGAISON ========== #}
+    <section class="conjugation-section">
+        <div class="conjugation-tables-container">
+            
+            {# ===== TABLE DESKTOP ===== #}
+            <div class="table-card desktop-only">
+                <table class="conjugation-table">
+                    <thead>
+                        <tr>
+                            <th>{{ 'table_headers.pronoun'|trans }}</th>
+                            <th>{{ 'table_headers.preterit'|trans }}</th>
+                            <th>{{ 'table_headers.preterit_negatif'|trans }}</th>
+                            <th>{{ 'table_headers.aoriste_intensif'|trans }}</th>
+                            <th>{{ 'table_headers.aoriste_intensif_negatif'|trans }}</th>
+                            <th>{{ 'table_headers.aoriste_futur'|trans }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if conjugations['preterit'] is defined and conjugations['preterit'] is not empty %}
+                            {% for pronoun in conjugations['preterit']|keys %}
+                                <tr>
+                                    <td>{{ pronoun }}</td>
+                                    <td>{{ conjugations['preterit'][pronoun]|raw }}</td>
+                                    <td>{{ conjugations['preterit_negatif'][pronoun]|raw }}</td>
+                                    <td>{{ conjugations['aoriste_intensif'][pronoun]|raw }}</td>
+                                    <td>{{ conjugations['aoriste_intensif_negatif'][pronoun]|raw }}</td>
+                                    <td>{{ conjugations['aoriste_futur'][pronoun]|raw }}</td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+            
+            {# ===== TABLES MOBILE ===== #}
+            <div class="mobile-only">
+                
+                {# Prétérit #}
+                <div class="mobile-table-card">
+                    <div class="mobile-table-header">
+                        <i class="bi bi-clock-history"></i>
+                        <h4>{{ 'table_headers.preterit'|trans }}</h4>
+                    </div>
+                    <table class="mobile-conjugation-table">
+                        <thead>
+                            <tr>
+                                <th>{{ 'table_headers.pronoun'|trans }}</th>
+                                <th>Conjugaison</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if conjugations['preterit'] is defined and conjugations['preterit'] is not empty %}
+                                {% for pronoun in conjugations['preterit']|keys %}
+                                    <tr>
+                                        <td>{{ pronoun }}</td>
+                                        <td>{{ conjugations['preterit'][pronoun]|raw }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                {# Prétérit négatif #}
+                <div class="mobile-table-card">
+                    <div class="mobile-table-header">
+                        <i class="bi bi-x-circle"></i>
+                        <h4>{{ 'table_headers.preterit_negatif'|trans }}</h4>
+                    </div>
+                    <table class="mobile-conjugation-table">
+                        <thead>
+                            <tr>
+                                <th>{{ 'table_headers.pronoun'|trans }}</th>
+                                <th>Conjugaison</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if conjugations['preterit_negatif'] is defined and conjugations['preterit_negatif'] is not empty %}
+                                {% for pronoun in conjugations['preterit_negatif']|keys %}
+                                    <tr>
+                                        <td>{{ pronoun }}</td>
+                                        <td>{{ conjugations['preterit_negatif'][pronoun]|raw }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                {# Aoriste intensif #}
+                <div class="mobile-table-card">
+                    <div class="mobile-table-header">
+                        <i class="bi bi-arrow-repeat"></i>
+                        <h4>{{ 'table_headers.aoriste_intensif'|trans }}</h4>
+                    </div>
+                    <table class="mobile-conjugation-table">
+                        <thead>
+                            <tr>
+                                <th>{{ 'table_headers.pronoun'|trans }}</th>
+                                <th>Conjugaison</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if conjugations['aoriste_intensif'] is defined and conjugations['aoriste_intensif'] is not empty %}
+                                {% for pronoun in conjugations['aoriste_intensif']|keys %}
+                                    <tr>
+                                        <td>{{ pronoun }}</td>
+                                        <td>{{ conjugations['aoriste_intensif'][pronoun]|raw }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                {# Aoriste intensif négatif #}
+                <div class="mobile-table-card">
+                    <div class="mobile-table-header">
+                        <i class="bi bi-dash-circle"></i>
+                        <h4>{{ 'table_headers.aoriste_intensif_negatif'|trans }}</h4>
+                    </div>
+                    <table class="mobile-conjugation-table">
+                        <thead>
+                            <tr>
+                                <th>{{ 'table_headers.pronoun'|trans }}</th>
+                                <th>Conjugaison</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if conjugations['aoriste_intensif_negatif'] is defined and conjugations['aoriste_intensif_negatif'] is not empty %}
+                                {% for pronoun in conjugations['aoriste_intensif_negatif']|keys %}
+                                    <tr>
+                                        <td>{{ pronoun }}</td>
+                                        <td>{{ conjugations['aoriste_intensif_negatif'][pronoun]|raw }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                {# Aoriste futur #}
+                <div class="mobile-table-card">
+                    <div class="mobile-table-header">
+                        <i class="bi bi-forward"></i>
+                        <h4>{{ 'table_headers.aoriste_futur'|trans }}</h4>
+                    </div>
+                    <table class="mobile-conjugation-table">
+                        <thead>
+                            <tr>
+                                <th>{{ 'table_headers.pronoun'|trans }}</th>
+                                <th>Conjugaison</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if conjugations['aoriste_futur'] is defined and conjugations['aoriste_futur'] is not empty %}
+                                {% for pronoun in conjugations['aoriste_futur']|keys %}
+                                    <tr>
+                                        <td>{{ pronoun }}</td>
+                                        <td>{{ conjugations['aoriste_futur'][pronoun]|raw }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+                
+            </div>
+            
+            {# ===== PARTICIPES ===== #}
+            <h3 class="section-title">{{ 'table_headers.participes'|trans }}</h3>
+            
+            <div class="table-card">
+                <table class="conjugation-table">
+                    <thead>
+                        <tr>
+                            <th>{{ 'table_headers.participe_preterit'|trans }}</th>
+                            <th>{{ 'table_headers.participe_preterit_negatif'|trans }}</th>
+                            <th>{{ 'table_headers.participe_aoriste_intensif'|trans }}</th>
+                            <th>{{ 'table_headers.participe_aoriste_intensif_negatif'|trans }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{% if conjugations['participe_preterit'][''] is defined %}{{ conjugations['participe_preterit']['']|raw }}{% else %}—{% endif %}</td>
+                            <td>{% if conjugations['participe_preterit_negatif'][''] is defined %}{{ conjugations['participe_preterit_negatif']['']|raw }}{% else %}—{% endif %}</td>
+                            <td>{% if conjugations['participe_aoriste_intensif'][''] is defined %}{{ conjugations['participe_aoriste_intensif']['']|raw }}{% else %}—{% endif %}</td>
+                            <td>{% if conjugations['participe_aoriste_intensif_negatif'][''] is defined %}{{ conjugations['participe_aoriste_intensif_negatif']['']|raw }}{% else %}—{% endif %}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+        </div>
+    </section>
+    
+    {% endif %}
 	</main>
 
 	<script>

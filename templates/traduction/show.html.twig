@@ -3,94 +3,187 @@
 {% block title %}Details : "{{ traduction.wordFR }}"{% endblock %}
 
 {% block body %}
-    <style>
-        .traduction-container {
-            margin: 20px auto;
-            padding: 20px;
-            max-width: 80%;
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 10px;
-            color: #fff;
-            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
-        }
 
-        @media (min-width: 768px) {
-            .traduction-container {
-                max-width: 60%;
-            }
-        }
+<style>
+/* ========================================
+   TRADUCTION DETAILS PAGE
+   ======================================== */
 
-        .traduction-container h1 {
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 2rem;
-        }
+.traduction-page {
+    min-height: 80vh;
+    padding: 60px 20px;
+    display: flex;
+    justify-content: center;
+}
 
-        .traduction-container .table th {
-            width: 30%;
-            color: #fff;
-            font-weight: bold;
-        }
+.traduction-card {
+    width: 100%;
+    max-width: 800px;
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 15px 50px rgba(26,40,77,0.1);
+    padding: 40px;
+    position: relative;
+}
 
-        .traduction-container .table td {
-            color: #dcdcdc;
-        }
+.traduction-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, #1a284d, #b3e2ec);
+}
 
-        .traduction-container .btn-container {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
+/* Header */
+.traduction-title {
+    text-align: center;
+    margin-bottom: 35px;
+}
 
-        .traduction-container .delete-form {
-            margin-top: 20px;
-            text-align: center;
-        }
-    </style>
+.traduction-title h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: #1a284d;
+}
 
-    <div class="traduction-container">
-        <h1>Details : "{{ traduction.wordFR }}"</h1>
+.traduction-title span {
+    font-size: 1.2rem;
+    color: #888;
+}
 
-        <table class="table">
-            <tbody>
-                <tr>
-                    <th>{{ 'post.french_word'|trans }}</th>
-                    <td>{{ traduction.wordFR }}</td>
-                </tr>
-                <tr>
-                    <th>{{ 'post.english_word'|trans }}</th>
-                    <td>{{ traduction.wordEN }}</td>
-                </tr>
-                <tr>
-                    <th>{{ 'post.rifain_word'|trans }}</th>
-                    <td>{{ traduction.singular }}</td>
-                </tr>
-                <tr>
-                    <th>Origine</th>
-                    <td>{{ traduction.origin}}</td>
-                </tr>
-                 <tr>
-                    <th>Racine</th>
-                    <td>{{ traduction.racine}}</td>
-                </tr>
-                 <tr>
-                    <th>Exemple</th>
-                    <td>{{ traduction.example}}</td>
-                </tr>
-                <tr>
-                    <th>Source</th>
-                    <td>{{ traduction.source}}</td>
-                </tr>
-            </tbody>
-        </table>
+/* Info grid */
+.traduction-info {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 15px 25px;
+}
 
-        <div class="btn-container">
-            <a class="d-block mt-4 mx-auto btn btn-outline-light col-5" href="{{ path('app_traduction_index') }}">{{ 'button.back_list'|trans }}</a>
-            <a class="d-block mt-4 mx-auto btn btn-outline-light col-5" href="{{ path('app_traduction_edit', {'id': traduction.id}) }}">{{ 'button.edit'|trans }}</a>
+.traduction-label {
+    font-weight: 600;
+    color: #1a284d;
+}
+
+.traduction-value {
+    color: #555;
+}
+
+/* Buttons */
+.btn-group-custom {
+    display: flex;
+    gap: 15px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+}
+
+.btn-back {
+    padding: 12px 24px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #1a284d, #2d4a7c);
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-back:hover {
+    transform: translateX(-3px);
+    color: white;
+}
+
+.btn-edit {
+    padding: 12px 24px;
+    border-radius: 10px;
+    background: rgba(26,40,77,0.1);
+    color: #1a284d;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-edit:hover {
+    background: #1a284d;
+    color: white;
+}
+
+.delete-container {
+    margin-top: 25px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+
+    .traduction-card {
+        padding: 25px;
+    }
+
+    .traduction-info {
+        grid-template-columns: 1fr;
+    }
+
+    .btn-group-custom {
+        flex-direction: column;
+    }
+
+    .btn-back,
+    .btn-edit {
+        width: 100%;
+        text-align: center;
+    }
+}
+</style>
+
+<div class="traduction-page">
+
+    <div class="traduction-card">
+
+        <div class="traduction-title">
+            <h1>"{{ traduction.wordFR }}"</h1>
+            <span>{{ traduction.wordEN }}</span>
         </div>
 
-        <div class="delete-form">
+        <div class="traduction-info">
+
+            <div class="traduction-label">{{ 'post.french_word'|trans }}</div>
+            <div class="traduction-value">{{ traduction.wordFR }}</div>
+
+            <div class="traduction-label">{{ 'post.english_word'|trans }}</div>
+            <div class="traduction-value">{{ traduction.wordEN }}</div>
+
+            <div class="traduction-label">{{ 'post.rifain_word'|trans }}</div>
+            <div class="traduction-value">{{ traduction.singular }}</div>
+
+            <div class="traduction-label">Origine</div>
+            <div class="traduction-value">{{ traduction.origin }}</div>
+
+            <div class="traduction-label">Racine</div>
+            <div class="traduction-value">{{ traduction.racine }}</div>
+
+            <div class="traduction-label">Exemple</div>
+            <div class="traduction-value">{{ traduction.example }}</div>
+
+            <div class="traduction-label">Source</div>
+            <div class="traduction-value">{{ traduction.source }}</div>
+
+        </div>
+
+        <div class="btn-group-custom">
+            <a href="{{ path('app_traduction_index') }}" class="btn-back">
+                <i class="bi bi-arrow-left"></i>
+                {{ 'button.back_list'|trans }}
+            </a>
+
+            <a href="{{ path('app_traduction_edit', {'id': traduction.id}) }}" class="btn-edit">
+                <i class="bi bi-pencil"></i>
+                {{ 'button.edit'|trans }}
+            </a>
+        </div>
+
+        <div class="delete-container">
             {{ include('traduction/_delete_form.html.twig') }}
         </div>
+
     </div>
+
+</div>
+
 {% endblock %}

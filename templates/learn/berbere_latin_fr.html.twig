@@ -1,163 +1,482 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Amyaz - L’alphabet berbère latin{% endblock %}
+{% block title %}Amyaz - L'alphabet berbère latin{% endblock %}
 
 {% block body %}
 <style>
-    td{
-        font-family: 'Noto Sans', sans-serif;
-    }
-</style>
-    <div class="container">
-        <h1 class="text-left display-4">L’alphabet berbère latin</h1>
-        <p class="text-left lead">L’alphabet berbère est un dérivé de l’alphabet latin. Cet alphabet est le produit du linguiste berbère d’origine kabyle, Mouloud Mammeri, et dont la forme a été définitivement fixée en 1973. L’alphabet de Mouloud Mammeri, appelé aussi le Tamɛemmrit, est composé de 23 lettres standards de l’alphabet latin et 10 lettres supplémentaires.</p>
-        <p class="text-left lead">L’alphabet berbère latin est aujourd’hui l’alphabet le plus utilisé pour retranscrire les différentes variantes régionales de la langue berbère. En effet, l’usage du Tamɛemmrit par les écrivains d’expression berbère est devenu une norme bien que cet alphabet ne bénéficie d’aucune reconnaissance officielle au Maroc et en Algérie. Au Maroc, l’alphabet officiel pour retranscrire le berbère est le tifinagh dont l’usage quant à lui est fortement limité et non répandu dans la communauté berbérophone.</p>
-    </div>
-</div>
+/* ========================================
+   PAGE APPRENTISSAGE ALPHABET LATIN
+   ======================================== */
 
-<div class="container mt-5">
-    <div class="table-responsive">
-        <table class="table table-striped table-bordered text-center">
-            <thead class="thead-dark">
-                <tr>
-                    <th class="align-middle" scope="col">Alphabet latin berbère</th>
-                    <th class="align-middle" scope="col">Prononciation</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="letter-cell" style="color: black;">a</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td class="letter-cell" style="color: black;">b</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td class="letter-cell" style="color: black;">c</td>
-                    <td>se prononce <strong>"CH"</strong> ou <strong>"SH"</strong> comme le prénom Chaïma. C'est l'équivalent de la lettre arabe "ش".</td>
-                </tr>
-                <tr>
-                    <td class="letter-cell" style="color: black;">č</td>
-                    <td>se prononce <strong>"TCH"</strong></td>
-                </tr>
-                <tr>
-                    <td class="letter-cell" style="color: black;">d</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td class="letter-cell" style="color: black;">ḍ</td>
-                    <td>se prononce comme le <strong>"ض"</strong> de la langue arabe.</td>
-                </tr>
-                <tr>
-                    <td class="letter-cell" style="color: black;">e</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td class="letter-cell" style="color: black;">ɛ</td>
-                    <td>se prononce comme le <strong>"ع"</strong> de la langue arabe. Prenez en exemple le prénom Ali qui se prononce "عali" (ɛali) en arabe.</td>
-                </tr>
-                <tr>
-                    <td class="letter-cell" style="color: black;">f</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td class="letter-cell" style="color: black;">g</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td class="letter-cell" style="color: black;">ǧ</td>
-                    <td>se prononce <strong>"DJ"</strong> comme le <strong>"ج"</strong> de la langue arabe. Prenez simplement en exemple le prénom Djamila.</td>
-                </tr>
-                <tr>
-                    <td class="letter-cell" style="color: black;">ɣ</td>
-                    <td>se prononce comme le <strong>"غ"</strong> de la langue arabe. Prenez en exemple le prénom Ghizlène qui se prononce "غizlane" (ɣizlane) en arabe.</td>
-                </tr>
-                <tr>
-                    <td class="letter-cell" style="color: black;">h</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td class="letter-cell" style="color: black;">ḥ</td>
-                    <td>se prononce comme le <strong>"ح"</strong> de la langue arabe. Prenez en exemple le prénom Halima qui se prononce "حalima" (ḥalima) en arabe.</td>
-                </tr>
-                <tr>
-                    <td class="letter-cell" style="color: black;">i</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td class="letter-cell" style="color: black;">j</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td class="letter-cell" style="color: black;">k</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td class="letter-cell" style="color: black;">l</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td class="letter-cell" style="color: black;">m</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td class="letter-cell" style="color: black;">n</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td class="letter-cell" style="color: black;">q</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td class="letter-cell" style="color: black;">r</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td class="letter-cell" style="color: black;">ř</td>
-                    <td>mutation rifaine du "l" en "r"</td>
-                </tr>
-                <tr>
-                    <td class="letter-cell" style="color: black;">s</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td class="letter-cell" style="color: black;">ṣ</td>
-                    <td>se prononce avec une emphase</td>
-                </tr>
-                <tr>
-                    <td class="letter-cell" style="color: black;">t</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td class="letter-cell" style="color: black;">ṭ</td>
-                    <td>se prononce comme le <strong>"ط"</strong> de la langue arabe. Prenez en exemple mot avion en arabe qui se dit طَيّارة soit thiyaara.</td>
-                </tr>
-                <tr>
-                    <td class="letter-cell" style="color: black;">u</td>
-                    <td>se prononce <strong>"OU"</strong> comme dans le mot doudou en français.</td>
-                </tr>
-                <tr>
-                    <td class="letter-cell" style="color: black;">w</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td class="letter-cell" style="color: black;">x</td>
-                    <td>se prononce comme le <strong>"خ"</strong> de la langue arabe. Prenez le prénom Khadija qui se prononce "خadija" (xadija) en arabe.</td>
-                </tr>
-                <tr>
-                    <td class="letter-cell" style="color: black;">y</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td class="letter-cell" style="color: black;">z</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td class="letter-cell" style="color: black;">ẓ</td>
-                    <td>se prononce avec une emphase</td>
-                </tr>
-            </tbody>
-        </table>
+/* Header de la page */
+.learning-header {
+    text-align: center;
+    padding: 60px 20px 40px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.learning-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    color: #000000;
+    margin-bottom: 20px;
+    line-height: 1.3;
+}
+
+.learning-header .lead {
+    color: #555;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+/* ========================================
+   TABLE ALPHABET
+   ======================================== */
+.alphabet-table-section {
+    max-width: 900px;
+    width: 100%;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.alphabet-table-container {
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    position: relative;
+}
+
+.alphabet-table-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(135deg, #04068e, #aacff1);
+}
+
+.alphabet-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+}
+
+.alphabet-table thead {
+    background: white;
+    border-bottom: 2px solid #eee;
+}
+
+.alphabet-table thead th {
+    color: #000000;
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 20px 15px;
+    text-align: center;
+    border: none;
+    position: relative;
+}
+
+.alphabet-table thead th::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 3px;
+    background: linear-gradient(135deg, #04068e, #aacff1);
+    border-radius: 2px;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.alphabet-table thead th:hover::after {
+    opacity: 1;
+}
+
+.alphabet-table tbody tr {
+    transition: all 0.3s ease;
+}
+
+.alphabet-table tbody tr:nth-child(even) {
+    background: #fafafa;
+}
+
+.alphabet-table tbody tr:hover {
+    background: rgba(4, 6, 142, 0.05);
+}
+
+.alphabet-table tbody td {
+    padding: 15px;
+    text-align: center;
+    border: none;
+    border-bottom: 1px solid #f0f0f0;
+    font-family: 'Outfit', sans-serif;
+    color: #333;
+    font-size: 1rem;
+}
+
+/* Lettre latine plus grande */
+.alphabet-table tbody td:first-child {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #04068e;
+    font-family: 'Noto Sans', sans-serif;
+}
+
+/* Colonne prononciation */
+.alphabet-table tbody td:last-child {
+    text-align: left;
+    font-size: 0.95rem;
+    color: #555;
+    padding-left: 20px;
+}
+
+.alphabet-table tbody td:last-child strong {
+    color: #04068e;
+    background: linear-gradient(135deg, rgba(4, 6, 142, 0.1), rgba(170, 207, 241, 0.2));
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-weight: 600;
+}
+
+/* Cellule vide = pas de prononciation spéciale */
+.alphabet-table tbody td:last-child:empty::after {
+    content: '—';
+    color: #ccc;
+}
+
+/* ========================================
+   LIEN VERS TIFINAGH
+   ======================================== */
+.see-also-section {
+    max-width: 900px;
+    width: 100%;
+    margin: 40px auto 60px;
+    padding: 0 20px;
+}
+
+.see-also-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    padding: 30px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.see-also-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(135deg, #04068e, #aacff1);
+}
+
+.see-also-card .see-also-content h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: #000;
+    margin-bottom: 8px;
+}
+
+.see-also-card .see-also-content p {
+    color: #666;
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+.see-also-card .btn-see-also {
+    background: linear-gradient(135deg, #04068e, #2a5caa);
+    color: white;
+    padding: 14px 30px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(4, 6, 142, 0.3);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+.see-also-card .btn-see-also:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(4, 6, 142, 0.4);
+    color: white;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (max-width: 768px) {
+    .learning-header {
+        padding: 40px 15px 30px;
+    }
+    
+    .learning-header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .learning-header .lead {
+        font-size: 1rem;
+    }
+    
+    .alphabet-table-section {
+        padding: 0 15px;
+    }
+    
+    .alphabet-table thead th {
+        font-size: 0.9rem;
+        padding: 15px 10px;
+    }
+    
+    .alphabet-table tbody td {
+        padding: 12px 10px;
+        font-size: 0.9rem;
+    }
+    
+    .alphabet-table tbody td:first-child {
+        font-size: 1.6rem;
+    }
+    
+    .alphabet-table tbody td:last-child {
+        font-size: 0.85rem;
+        padding-left: 10px;
+    }
+    
+    .see-also-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 25px 20px;
+    }
+    
+    .see-also-card .btn-see-also {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .learning-header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .alphabet-table thead th {
+        font-size: 0.75rem;
+        padding: 12px 8px;
+    }
+    
+    .alphabet-table tbody td:first-child {
+        font-size: 1.4rem;
+    }
+    
+    .alphabet-table tbody td:last-child {
+        font-size: 0.8rem;
+    }
+    
+    .alphabet-table tbody td:last-child strong {
+        padding: 1px 5px;
+        font-size: 0.8rem;
+    }
+}
+</style>
+
+<main>
+    {# ========== HEADER ========== #}
+    <div class="learning-header">
+        <h1>L'alphabet berbère latin</h1>
+        <p class="lead">
+            L'alphabet berbère est un dérivé de l'alphabet latin. Cet alphabet est le produit du linguiste 
+            berbère d'origine kabyle, Mouloud Mammeri, et dont la forme a été définitivement fixée en 1973. 
+            L'alphabet de Mouloud Mammeri, appelé aussi le Tamɛemmrit, est composé de 23 lettres standards 
+            de l'alphabet latin et 10 lettres supplémentaires.
+        </p>
+        <p class="lead">
+            L'alphabet berbère latin est aujourd'hui l'alphabet le plus utilisé pour retranscrire les 
+            différentes variantes régionales de la langue berbère. En effet, l'usage du Tamɛemmrit par les 
+            écrivains d'expression berbère est devenu une norme bien que cet alphabet ne bénéficie d'aucune 
+            reconnaissance officielle au Maroc et en Algérie. Au Maroc, l'alphabet officiel pour retranscrire 
+            le berbère est le tifinagh dont l'usage quant à lui est fortement limité et non répandu dans 
+            la communauté berbérophone.
+        </p>
     </div>
+
+    {# ========== TABLE ALPHABET ========== #}
+    <section class="alphabet-table-section">
+        <div class="alphabet-table-container">
+            <table class="alphabet-table">
+                <thead>
+                    <tr>
+                        <th>Lettre</th>
+                        <th>Prononciation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>a</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>b</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>c</td>
+                        <td>se prononce <strong>CH</strong> ou <strong>SH</strong> comme le prénom Chaïma. C'est l'équivalent de la lettre arabe <strong>ش</strong>.</td>
+                    </tr>
+                    <tr>
+                        <td>č</td>
+                        <td>se prononce <strong>TCH</strong></td>
+                    </tr>
+                    <tr>
+                        <td>d</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>ḍ</td>
+                        <td>se prononce comme le <strong>ض</strong> de la langue arabe.</td>
+                    </tr>
+                    <tr>
+                        <td>e</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>ɛ</td>
+                        <td>se prononce comme le <strong>ع</strong> de la langue arabe. Ex: le prénom Ali se prononce <strong>ɛali</strong> en arabe.</td>
+                    </tr>
+                    <tr>
+                        <td>f</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>g</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>ǧ</td>
+                        <td>se prononce <strong>DJ</strong> comme le <strong>ج</strong> de la langue arabe. Ex: le prénom Djamila.</td>
+                    </tr>
+                    <tr>
+                        <td>ɣ</td>
+                        <td>se prononce comme le <strong>غ</strong> de la langue arabe. Ex: le prénom Ghizlène se prononce <strong>ɣizlane</strong>.</td>
+                    </tr>
+                    <tr>
+                        <td>h</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>ḥ</td>
+                        <td>se prononce comme le <strong>ح</strong> de la langue arabe. Ex: le prénom Halima se prononce <strong>ḥalima</strong>.</td>
+                    </tr>
+                    <tr>
+                        <td>i</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>j</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>k</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>l</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>m</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>n</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>q</td>
+                        <td>se prononce comme le <strong>ق</strong> de la langue arabe.</td>
+                    </tr>
+                    <tr>
+                        <td>r</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>ř</td>
+                        <td>mutation rifaine du <strong>l</strong> en <strong>r</strong></td>
+                    </tr>
+                    <tr>
+                        <td>s</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>ṣ</td>
+                        <td>se prononce avec une <strong>emphase</strong></td>
+                    </tr>
+                    <tr>
+                        <td>t</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>ṭ</td>
+                        <td>se prononce comme le <strong>ط</strong> de la langue arabe. Ex: le mot avion en arabe <strong>طَيّارة</strong>.</td>
+                    </tr>
+                    <tr>
+                        <td>u</td>
+                        <td>se prononce <strong>OU</strong> comme dans le mot doudou en français.</td>
+                    </tr>
+                    <tr>
+                        <td>w</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>x</td>
+                        <td>se prononce comme le <strong>خ</strong> de la langue arabe. Ex: le prénom Khadija se prononce <strong>xadija</strong>.</td>
+                    </tr>
+                    <tr>
+                        <td>y</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>z</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>ẓ</td>
+                        <td>se prononce avec une <strong>emphase</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    {# ========== VOIR AUSSI ========== #}
+    <section class="see-also-section">
+        <div class="see-also-card">
+            <div class="see-also-content">
+                <h3>Découvrez aussi le Tifinagh</h3>
+                <p>L'alphabet traditionnel berbère utilisé depuis l'Antiquité</p>
+            </div>
+            <a href="{{ path('berbere_traditionnel') }}" class="btn-see-also">
+                <i class="bi bi-arrow-right-circle"></i>
+                Voir l'alphabet Tifinagh
+            </a>
+        </div>
+    </section>
+</main>
 {% endblock %}

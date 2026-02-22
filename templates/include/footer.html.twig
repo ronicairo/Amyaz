@@ -1,51 +1,91 @@
 <style>
+/* ========================================
+   FOOTER PREMIUM
+   ======================================== */
+
 footer {
+    width: 100vw;
+    position: relative;
+    margin-top: 10px;
+    padding: 20px 20px 20px;
+    font-family: 'Outfit', sans-serif;
+     background: rgba(4, 5, 46, 0.9);
+    
+}
+
+
+.footer-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 25px;
+    margin-bottom: 20px;
+}
+
+.footer-nav a {
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 0.9rem;
+    font-weight: 500;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+
+.footer-nav a:hover {
+    color: #2d4a7c;
+}
+
+.footer-nav a:hover::after {
     width: 100%;
+}
+
+.footer-bottom {
     text-align: center;
-    background-color: transparent;
-    color: black;
-    font-family: "Open Sans", sans-serif;
-    padding-top: 20px;
-    padding-bottom: 10px;
-    margin-top: auto; /* Assure que le footer reste collé en bas */
+    font-size: 0.75rem;
+    color: #777;
+    letter-spacing: 0.5px;
 }
 
-footer li a {
-    color: black;
-}
+/* Responsive */
+@media (max-width: 600px) {
+    footer {
+        padding: 30px 15px 15px;
+    }
 
-footer li a:hover {
-    color: #F26766;
-}
+    .footer-nav {
+        gap: 18px;
+    }
 
+    .footer-nav a {
+        font-size: 0.85rem;
+    }
+
+    .footer-bottom {
+        font-size: 0.7rem;
+    }
+}
 </style>
-<footer class="footer m-0 p-0 pt-4">
-	<ul class="nav justify-content-center mb-3">
-		<li class="nav-item">
-			<a href="{{ path('show_home') }}" class="px-2">{{ 'footer.accueil'|trans }}</a>
-		</li>
-		<li class="nav-item">
-			<a href="{{ path('mentions_legales') }}" class="px-2">{{ 'footer.mentions_legales'|trans }}</a>
-		</li>
-		<li class="nav-item">
-			<a href="{{ path('a_propos') }}" class="px-2">{{ 'footer.about_us'|trans }}</a>
-		</li>
-		<li class="nav-item">
-			<a href="{{ path('cookie') }}" class="px-2">{{ 'footer.cookies'|trans }}</a>
-		</li>
-		{% if not is_granted('ROLE_USER') %}
-			<li class="nav-item">
-				<a href="{{ path('app_login') }}" class="px-2">{{ 'footer.se_connecter'|trans }}</a>
-			</li>
-		{% else %}
-			<li class="nav-item">
-				<a href="{{ path('app_logout') }}" class="px-2">{{ 'footer.se_deconnecter'|trans }}</a>
-			</li>
-		{% endif %}
-	</ul>
 
+<footer>
+    <div class="footer-nav">
+        <a href="{{ path('show_home') }}">{{ 'footer.accueil'|trans }}</a>
+        <a href="{{ path('mentions_legales') }}">{{ 'footer.mentions_legales'|trans }}</a>
+        <a href="{{ path('a_propos') }}">{{ 'footer.about_us'|trans }}</a>
+        <a href="{{ path('cookie') }}">{{ 'footer.cookies'|trans }}</a>
 
-	<p style="font-size: 0.5rem;">©
-		{{ "now"|date('Y') }}
-		Copyright : AMYAZ</p>
+        {% if not is_granted('ROLE_USER') %}
+            <a href="{{ path('app_login') }}">
+                {{ 'footer.se_connecter'|trans }}
+            </a>
+        {% else %}
+            <a href="{{ path('app_logout') }}">
+                {{ 'footer.se_deconnecter'|trans }}
+            </a>
+        {% endif %}
+    </div>
+
+    <div class="footer-bottom">
+        © {{ "now"|date('Y') }} — AMYAZ
+    </div>
 </footer>

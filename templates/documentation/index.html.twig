@@ -6,275 +6,629 @@
 
 {% block body %}
 	<style>
-		.favorite-icon {
-			position: absolute;
-			cursor: pointer;
-		}
+	/* ========================================
+   PAGE DOCUMENTATION - CARDS
+   ======================================== */
 
-		.favorite-icon i {
-			font-size: 24px;
-			color: rgba(0, 0, 0, 0.3);
-		}
+/* Header section */
+.documentation-header {
+    text-align: center;
+    padding: 60px 20px 40px;
+    max-width: 900px;
+    margin: 0 auto;
+}
 
-		.favorite-icon i:hover {
-			color: #ffc107;
-		}
+.documentation-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    color: #1a284d;
+    margin-bottom: 15px;
+}
 
-	.search-form {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-		}
-		
-			.search-form > *:not(#autocomplete-input) {
-			box-shadow: -3px 8px 5px -6px rgba(0, 0, 0, 0.5);
-			justify-content: center;
-		}
+.documentation-header p {
+    color: #555;
+    font-size: 1.1rem;
+    line-height: 1.7;
+}
 
-		.search-form input:focus {
-			outline: none;
-			box-shadow: none;
-		}
+/* Bouton créer */
+.btn-create-doc {
+    background: linear-gradient(135deg, #1a284d, #2d4a7c);
+    color: white !important;
+    padding: 12px 30px;
+    border-radius: 12px;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(26, 40, 77, 0.3);
+}
 
-		.search-form > div {
-			position: relative;
-			display: flex;
-			border-radius: 20px;
-			width: 100%;
-			max-width: 700px;
-		}
+.btn-create-doc:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(26, 40, 77, 0.4);
+    color: white;
+}
 
-	.search-form select {
-			padding: 12.5px 28px 12.5px 12.5px;
-			font-size: 16px;
-			border: none;
-			background-color: rgba(255, 255, 255, 0.8);
-			border-radius: 20px 0 0 20px;
-			flex: 1;
-			max-width: 100px;
-			appearance: none; /* Supprime l'apparence par défaut du select */
-			background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAiIGhlaWdodD0iNiIgdmlld0JveD0iMCAwIDEwIDYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTSAwLjQ1NzAzOTM5LDEuMzk2MDMgTCAxLjI5MzY4MywwLjU1MDI4NTcgTCA1LDAuNTUwMjg1NyBMIDguNzA2MzIsMC41NTAyODU3IEwgOS41NDI5NiwwLjU1MDI4NTcgTCA1LDQuNTc4OTcgWiIgZmlsbD0iIzAwMCIvPjwvc3ZnPg==');
-			background-repeat: no-repeat;
-			background-position: right 10px center;
-			color: #000; /* Couleur du texte noir */
-		}
+/* ========================================
+   BARRE DE RECHERCHE DOCUMENTATION
+   ======================================== */
+.doc-search-section {
+    max-width: 700px;
+    margin: 0 auto 40px;
+    padding: 0 20px;
+}
 
-		.search-form select::-ms-expand {
-			display: none; /* Masquer la flèche native dans IE */
-		}
+.doc-search-form {
+    display: flex;
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 5px 30px rgba(26, 40, 77, 0.1);
+    border: 2px solid #e8f4f8;
+}
 
-		.search-form input[type="text"] {
-			padding: 10px;
-			font-size: 16px;
-			border-radius: 0;
-			border: 2px rgba(255, 255, 255, 0.8) !important;
-			background-color: rgba(255, 255, 255, 0.8) !important;
-			background-color: rgba(255, 255, 255, 0.8) ;
-			flex: 2;
-			min-width: 0;
-		}
+.doc-search-form select {
+    border: none;
+    padding: 16px 20px;
+    font-size: 0.95rem;
+    font-family: 'Outfit', sans-serif;
+    background: #f8fbfc;
+    color: #1a284d;
+    cursor: pointer;
+    min-width: 140px;
+    border-right: 2px solid #e8f4f8;
+    appearance: none;
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAiIGhlaWdodD0iNiIgdmlld0JveD0iMCAwIDEwIDYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTSAwLjQ1NzAzOTM5LDEuMzk2MDMgTCAxLjI5MzY4MywwLjU1MDI4NTcgTCA1LDAuNTUwMjg1NyBMIDguNzA2MzIsMC41NTAyODU3IEwgOS41NDI5NiwwLjU1MDI4NTcgTCA1LDQuNTc4OTcgWiIgZmlsbD0iIzFhMjg0ZCIvPjwvc3ZnPg==');
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+}
 
-		.search-form .search-button {
-			padding: 10px 20px;
-			font-size: 16px;
-			background-color: rgba(0, 0, 0, 0.7);
-			color: white;
-			border: none;
-			cursor: pointer;
-			transition: background-color 0.3s ease;
-			border-radius: 0 20px 20px 0;
-		}
+.doc-search-form select:focus {
+    outline: none;
+}
 
-		.search-form button:hover {
-			background-color: #A0BBD4;
-		}
+.doc-search-form input[type="text"] {
+    flex: 1;
+    border: none;
+    padding: 16px 20px;
+    font-size: 1rem;
+    font-family: 'Outfit', sans-serif;
+    color: #333;
+}
 
-		/* Responsive Styles */
-		@media(max-width: 768px) {
-			.search-form,
-			.search-form > div {
-				max-width: 100%;
-			}
+.doc-search-form input[type="text"]::placeholder {
+    color: #999;
+}
 
-			.search-form select,
-			.search-form input[type="text"],
-			.search-form button {
-				font-size: 14px;
-			}
+.doc-search-form input[type="text"]:focus {
+    outline: none;
+}
 
-			.search-form select {
-				min-width: 60px;
-			}
+.doc-search-form .search-button {
+    background: linear-gradient(135deg, #1a284d, #2d4a7c);
+    border: none;
+    padding: 16px 28px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
 
-			.search-form input[type="text"] {
-				flex: 1;
-				padding: 8px;
-			}
+.doc-search-form .search-button:hover {
+    background: linear-gradient(135deg, #2d4a7c, #3d5a8c);
+}
 
-			.search-form .search-button {
-				padding: 8px 16px;
-			}
-		}
+.doc-search-form .search-button i {
+    color: white;
+    font-size: 1.1rem;
+}
 
-		@media(max-width: 480px) {
-			.search-form select,
-			.search-form input[type="text"],
-			.search-form button {
-				font-size: 12px;
-			}
+/* ========================================
+   GRILLE DES CARDS
+   ======================================== */
+.doc-cards-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px 60px;
+}
 
-			.search-form select {
-				min-width: 60px; /* Réduction encore plus importante sur les écrans < 480px */
-				max-width: 100px;
-			}
+/* ========================================
+   CARD DOCUMENTATION
+   ======================================== */
+.doc-card {
+    background: linear-gradient(135deg, #1a284d 0%, #2d4a7c 100%);
+    border-radius: 24px;
+    padding: 35px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(26, 40, 77, 0.25);
+    transition: all 0.3s ease;
+    min-height: 280px;
+    display: flex;
+    flex-direction: column;
+}
 
-			/* Enlever le bleu du select sur les téléphones */
-			.search-form select {
-				color: black !important;
-				background-color: rgba(255, 255, 255, 0.8) !important;
-			}
-		}
+.doc-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, #b3e2ec, #7fd4e4);
+}
 
-		.btn-container {
-			display: flex;
-			justify-content: center;
-			margin-bottom: 20px;
-		}
+.doc-card::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(179, 226, 236, 0.1) 0%, transparent 70%);
+    pointer-events: none;
+}
 
-		.card {
-			position: relative; /* This is important for absolute positioning within the card */
-			background-color: transparent;
-			border-radius: 20px;
-			box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
-		}
+.doc-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 50px rgba(26, 40, 77, 0.35);
+}
 
-		.card .edit-icon {
-			position: absolute;
-			top: 10px;
-			right: 10px;
-			color: black;
-		}
+/* ========================================
+   DOC CATEGORY AVEC FAVORI À DROITE
+   ======================================== */
+.doc-card .doc-category-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(179, 226, 236, 0.2);
+    padding: 8px 12px 8px 16px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(179, 226, 236, 0.3);
+    min-height: 46px;
+    position: relative;
+}
+
+.doc-card .doc-category-wrapper .doc-category {
+    display: flex;
+    align-items: center;
+    background: transparent;
+    color: #b3e2ec;
+    padding: 0;
+    border-radius: 0;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0;
+    border: none;
+    line-height: 1;
+}
+
+/* Icône favori À DROITE - POSITION STATIC */
+.doc-card .doc-category-wrapper .favorite-icon {
+    position: static;
+    width: 30px;
+    height: 30px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    margin-left: auto;
+}
+
+.doc-card .doc-category-wrapper .favorite-icon:hover {
+    transform: scale(1.15);
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.doc-card .doc-category-wrapper .favorite-icon i {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.5);
+    transition: color 0.3s ease;
+}
+
+.doc-card .doc-category-wrapper .favorite-icon:hover i,
+.doc-card .doc-category-wrapper .favorite-icon i.text-warning {
+    color: #f8b500 !important;
+}
+
+/* Icône édition */
+
+
+.doc-card .edit-icon:hover {
+    color: #b3e2ec;
+}
+
+.doc-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+}
+
+.doc-actions .edit-icon,
+.doc-actions .favorite-icon {
+    width: 30px;
+    height: 30px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.doc-actions .edit-icon i,
+.doc-actions .favorite-icon i {
+    font-size: 14px;
+    color: rgba(255,255,255,0.6);
+}
+
+.doc-actions .edit-icon:hover,
+.doc-actions .favorite-icon:hover {
+    transform: scale(1.15);
+    background: rgba(255,255,255,0.25);
+}
+
+.doc-actions .edit-icon:hover i {
+    color: #b3e2ec;
+}
+/* Contenu */
+.doc-card .doc-card-content {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.doc-card .doc-card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: white;
+    margin-bottom: 15px;
+    padding-right: 60px;
+    line-height: 1.3;
+}
+
+.doc-card .doc-card-text {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.75);
+    line-height: 1.7;
+    margin-bottom: 20px;
+    flex: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Catégorie tag */
+.doc-card .doc-category {
+    display: inline-block;
+    background: rgba(179, 226, 236, 0.2);
+    color: #b3e2ec;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(179, 226, 236, 0.3);
+}
+
+/* Bouton télécharger */
+.doc-card .doc-download {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, #b3e2ec, #7fd4e4);
+    color: #1a284d !important;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    margin-top: auto;
+    width: fit-content;
+}
+
+.doc-card .doc-download:hover {
+    background: linear-gradient(135deg, #c5ebf2, #9fe0ed);
+    transform: translateX(5px);
+}
+
+.doc-card .doc-download i {
+    font-size: 1rem;
+}
+
+/* ========================================
+   MESSAGE AUCUN RÉSULTAT
+   ======================================== */
+.doc-no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 5px 30px rgba(26, 40, 77, 0.08);
+}
+
+.doc-no-results i {
+    font-size: 3rem;
+    color: #b3e2ec;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.doc-no-results p {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+/* ========================================
+   PAGINATION
+   ======================================== */
+.doc-pagination {
+    display: flex;
+    justify-content: center;
+    padding: 20px 0 60px;
+}
+
+.doc-pagination .pagination {
+    gap: 8px;
+}
+
+.doc-pagination .page-link {
+    background: white;
+    border: 2px solid #e8f4f8;
+    color: #1a284d;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.doc-pagination .page-link:hover {
+    background: #1a284d;
+    border-color: #1a284d;
+    color: white;
+}
+
+.doc-pagination .page-item.active .page-link {
+    background: linear-gradient(135deg, #1a284d, #2d4a7c);
+    border-color: #1a284d;
+    color: white;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (max-width: 992px) {
+    .doc-cards-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+    }
+}
+
+@media (max-width: 768px) {
+    .documentation-header {
+        padding: 40px 15px 30px;
+    }
+    
+    .documentation-header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .doc-search-form {
+        flex-direction: column;
+    }
+    
+    .doc-search-form select {
+        border-right: none;
+        border-bottom: 2px solid #e8f4f8;
+        min-width: 100%;
+    }
+    
+    .doc-cards-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 0 15px 40px;
+    }
+    
+    .doc-card {
+        padding: 30px 25px;
+        min-height: auto;
+    }
+    
+    .doc-card .doc-card-title {
+        font-size: 1.3rem;
+        padding-right: 50px;
+    }
+}
+
+@media (max-width: 480px) {
+    .doc-card {
+        padding: 25px 20px;
+    }
+    
+    .doc-card .doc-card-title {
+        font-size: 1.2rem;
+    }
+    
+    .doc-card .doc-card-text {
+        font-size: 0.9rem;
+        -webkit-line-clamp: 3;
+    }
+    
+    .doc-card .doc-download {
+        width: 100%;
+        justify-content: center;
+        padding: 14px 20px;
+    }
+}
 	</style>
 
 	<div class="col-11 mx-auto">
-		{% include 'include/flashes.html.twig' %}
-	</div>
-
-	<div class="rounded-3">
-		<div class="container-fluid">
-			<h1 class="display-5 fw-bold text-center">{{ 'documentation.title'|trans }}</h1>
-			<p class="text-center">{{ 'documentation.resume'|trans|raw }}</p>
-		</div>
-	</div>
-
-	<div class="container">
-		<div class="btn-container">
-			{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MODERATOR') %}
-				<a href="{{ path('documentation_new') }}" class="btn btn-dark mb-2">{{ 'title.create_doc'|trans }}</a>
-			{% endif %}
-		</div>
-
-		<form id="searchForm" method="GET" action="{{ path('documentation_index') }}" class="search-form">
-    <div>
-        <select name="category" onchange="this.form.submit()">
-            <option value="" {% if selectedCategory is empty %} selected {% endif %}>{{ 'form.choisir_categorie'|trans }}</option>
-            {% for category in categories %}
-                <option value="{{ category.id }}" {% if category.id == selectedCategory %} selected {% endif %}>{{ category.name }}</option>
-            {% endfor %}
-        </select>
-        <input type="text" name="q" id="search-input" placeholder="{{ 'form.rechercher'|trans }}" value="{{ searchTerm }}" aria-label="Search">
-        <button type="submit" class="search-button">
-            <i class="bi bi-search"></i>
-        </button>
+        {% include 'include/flashes.html.twig' %}
     </div>
-</form>
 
-	</div>
+    {# ========== HEADER ========== #}
+    <div class="documentation-header">
+        <h1>{{ 'documentation.title'|trans }}</h1>
+        <p>{{ 'documentation.resume'|trans|raw }}</p>
+        
+        {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MODERATOR') %}
+            <a href="{{ path('documentation_new') }}" class="btn-create-doc mt-4">
+                <i class="bi bi-plus-circle"></i>
+                {{ 'title.create_doc'|trans }}
+            </a>
+        {% endif %}
+    </div>
 
-	<div class="container">
-		<div class="row">
-			{% for documentation in pagination %}
-				<div class="col-md-6 mb-4 mt-4">
-					<div class="card h-100 p-5 text-dark">
-						{% set isFavorite = false %}
-						{% for favorite in favorites %}
-							{% if favorite.getDocumentation() is not null and favorite.getDocumentation().id == documentation.id %}
-								{% set isFavorite = true %}
-							{% endif %}
-						{% endfor %}
-						<span class="favorite-icon" data-id="{{ documentation.id }}" style="{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MODERATOR') %}top: 2.5rem;{% else %}top: 0.5rem;{% endif %} right: 1rem;">
-							<i class="bi bi-star-fill {% if isFavorite %}text-warning{% endif %}"></i>
-						</span>
-						{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MODERATOR') %}
-							<a href="{{ path('documentation_edit', {'id': documentation.id}) }}" class="edit-icon">
-								<i class="bi bi-pencil"></i>
-							</a>
-						{% endif %}
-						<div class="d-flex justify-content-between align-items-center">
-							<h2 class="mb-0">
-								{% if app.request.locale == 'fr' %}
-									{{ documentation.titleFr }}
-								{% else %}
-									{{ documentation.titleEn }}
-								{% endif %}
-							</h2>
-						</div>
-						<p>
-							{% if app.request.locale == 'fr' %}
-								{{ documentation.contentFr }}
-							{% else %}
-								{{ documentation.contentEn }}
-							{% endif %}
-						</p>
-						<p>{{ documentation.category }}</p>
-						<a style="color: #333;" href="{{ asset('uploads/' ~ documentation.file) }}" download="{{ documentation.file }}">{{ 'button.pdf'|trans }}</a>
-					</div>
-				</div>
-			{% else %}
-				<div class="col-12 text-center">
-					<p class="mt-3">{{ 'p.no_result'|trans }}</p>
-				</div>
-			{% endfor %}
+    {# ========== RECHERCHE ========== #}
+    <div class="doc-search-section">
+        <form id="searchForm" method="GET" action="{{ path('documentation_index') }}" class="doc-search-form">
+            <select name="category" onchange="this.form.submit()">
+                <option value="" {% if selectedCategory is empty %} selected {% endif %}>{{ 'form.choisir_categorie'|trans }}</option>
+                {% for category in categories %}
+                    <option value="{{ category.id }}" {% if category.id == selectedCategory %} selected {% endif %}>{{ category.name }}</option>
+                {% endfor %}
+            </select>
+            <input type="text" name="q" id="search-input" placeholder="{{ 'form.rechercher'|trans }}..." value="{{ searchTerm }}">
+            <button type="submit" class="search-button">
+                <i class="bi bi-search"></i>
+            </button>
+        </form>
+    </div>
+{# ========== CARDS ========== #}
+<div class="doc-cards-container">
+    {% for documentation in pagination %}
+        <div class="doc-card">
+        
+            
+            <div class="doc-card-content">
+                {# Catégorie + Favori dans le même wrapper #}
+  <div class="doc-category-wrapper">
 
-		</div>
-	</div>
+    <span class="doc-category">
+        {% if documentation.category %}
+            {{ documentation.category }}
+        {% else %}
+            Document
+        {% endif %}
+    </span>
 
-	<div id="pagination-container" class="pagination justify-content-center mt-4">
-		{{ knp_pagination_render(pagination) }}
-	</div>
+    <div class="doc-actions">
 
-	<script>
-		document.addEventListener('DOMContentLoaded', function () {
-document.querySelectorAll('.favorite-icon').forEach(function (star) {
-star.addEventListener('click', function () {
-const documentationId = this.getAttribute('data-id');
-const isFavorite = this.querySelector('i').classList.contains('text-warning');
-const url = isFavorite ? '{{ path('favorite_remove_doc') }}' : '{{ path('favorite_add_doc') }}';
+        {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MODERATOR') %}
+            <a href="{{ path('documentation_edit', {'id': documentation.id}) }}" class="edit-icon">
+                <i class="bi bi-pencil"></i>
+            </a>
+        {% endif %}
 
-fetch(url, {
-method: 'POST',
-headers: {
-'Content-Type': 'application/json',
-'X-Requested-With': 'XMLHttpRequest',
-'X-CSRF-TOKEN': '{{ csrf_token('favorite_toggle') }}'
-},
-body: JSON.stringify(
-{documentation_id: documentationId}
-)
-}).then(response => response.json()).then(data => {
-if (data.status === 'success') {
-if (isFavorite) {
-this.querySelector('i').classList.remove('text-warning'); // Remove yellow color
-} else {
-this.querySelector('i').classList.add('text-warning'); // Add yellow color
-}
-location.reload(); // Reload the page to show flash messages
-} else {
-alert('Erreur: ' + data.message);
-}
+        {% set isFavorite = false %}
+        {% for favorite in favorites %}
+            {% if favorite.getDocumentation() is not null and favorite.getDocumentation().id == documentation.id %}
+                {% set isFavorite = true %}
+            {% endif %}
+        {% endfor %}
+
+        <span class="favorite-icon" data-id="{{ documentation.id }}">
+            <i class="bi bi-star-fill {% if isFavorite %}text-warning{% endif %}"></i>
+        </span>
+
+    </div>
+
+</div>
+                
+                {# Titre #}
+                <h2 class="doc-card-title">
+                    {% if app.request.locale == 'fr' %}
+                        {{ documentation.titleFr }}
+                    {% else %}
+                        {{ documentation.titleEn }}
+                    {% endif %}
+                </h2>
+                
+                {# Contenu #}
+                <p class="doc-card-text">
+                    {% if app.request.locale == 'fr' %}
+                        {{ documentation.contentFr }}
+                    {% else %}
+                        {{ documentation.contentEn }}
+                    {% endif %}
+                </p>
+                
+                {# Télécharger #}
+                <a href="{{ asset('uploads/' ~ documentation.file) }}" download="{{ documentation.file }}" class="doc-download">
+                    <i class="bi bi-file-earmark-pdf"></i>
+                    {{ 'button.pdf'|trans }}
+                </a>
+            </div>
+        </div>
+    {% else %}
+        <div class="doc-no-results">
+            <i class="bi bi-folder-x"></i>
+            <p>{{ 'p.no_result'|trans }}</p>
+        </div>
+    {% endfor %}
+</div>
+
+    {# ========== PAGINATION ========== #}
+    <div class="doc-pagination">
+        {{ knp_pagination_render(pagination) }}
+    </div>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.favorite-icon').forEach(function (star) {
+        star.addEventListener('click', function () {
+            const documentationId = this.getAttribute('data-id');
+            const isFavorite = this.querySelector('i').classList.contains('text-warning');
+            const url = isFavorite ? '{{ path('favorite_remove_doc') }}' : '{{ path('favorite_add_doc') }}';
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': '{{ csrf_token('favorite_toggle') }}'
+                },
+                body: JSON.stringify({ documentation_id: documentationId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    if (isFavorite) {
+                        this.querySelector('i').classList.remove('text-warning');
+                    } else {
+                        this.querySelector('i').classList.add('text-warning');
+                    }
+                    location.reload();
+                } else {
+                    alert('Erreur: ' + data.message);
+                }
+            });
+        });
+    });
 });
-});
-});
-});
-	</script>
+</script>
 {% endblock %}

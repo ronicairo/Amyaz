@@ -1,93 +1,305 @@
 {% extends "base.html.twig" %}
-
 {% form_theme form 'form/_form_errors.html.twig' %}
 
-{% block title %}
-	{{ 'title.edit_profile'|trans }}
-{% endblock %}
+{% block title %}{{ 'title.edit_profile'|trans }}{% endblock %}
 
 {% block body %}
-	<style>
-		.edit-profile-box {
-			width: 100%;
-			max-width: 500px;
-			margin: 0 auto;
-			padding: 40px;
-			background: rgba(0, 0, 0, 0.5);
-			box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
-			border-radius: 10px;
-		}
+<style>
+/* ========================================
+   PAGE MODIFICATION EMAIL
+   ======================================== */
+.edit-profile-page {
+    min-height: 80vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 40px 20px;
+}
 
-		@media(min-width: 768px) {
-			.edit-profile-box {
-				max-width: 60%;
-			}
-		}
+.edit-profile-page::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 20% 30%, rgba(26, 40, 77, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(179, 226, 236, 0.1) 0%, transparent 40%);
+    pointer-events: none;
+}
 
-		.edit-profile-box h1 {
-			margin: 0 0 30px;
-			padding: 0;
-			color: #fff;
-			text-align: center;
-		}
+/* Container principal */
+.edit-profile-container {
+    width: 100%;
+    max-width: 500px;
+    position: relative;
+    z-index: 1;
+}
 
-		.edit-profile-box p {
-			color: #fff;
-			text-align: center;
-			margin-bottom: 30px;
-		}
+/* Card */
+.edit-profile-card {
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 15px 50px rgba(26, 40, 77, 0.12);
+    padding: 40px 50px;
+    position: relative;
+    overflow: hidden;
+}
 
-		.edit-profile-box .user-box {
-			position: relative;
-		}
+.edit-profile-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #1a284d, #b3e2ec);
+}
 
-		.edit-profile-box .user-box input {
-			width: 100%;
-			padding: 2px 0;
-			font-size: 16px;
-			color: #fff;
-			margin-bottom: 30px;
-			border: none;
-			border-bottom: 1px solid #fff;
-			outline: none;
-			background: transparent;
-		}
+/* Icône */
+.edit-profile-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, rgba(26, 40, 77, 0.1), rgba(179, 226, 236, 0.2));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 15px;
+}
 
-		.edit-profile-box .user-box label {
-			position: relative;
-			top: 0;
-			left: 0;
-			padding: 10px 0;
-			font-size: 16px;
-			color: #03e9f4;
-			pointer-events: none;
-			transition: 0.5s;
-		}
+.edit-profile-icon i {
+    font-size: 1.5rem;
+    background: linear-gradient(135deg, #1a284d, #2d4a7c);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
 
-		.edit-profile-box .user-box input:focus ~ label,
-		.edit-profile-box .user-box input:valid ~ label {
-			top: -20px;
-			left: 0;
-			color: #03e9f4;
-			font-size: 12px;
-		}
-	</style>
+/* Titre */
+.edit-profile-card h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.7rem;
+    color: #1a284d;
+    text-align: center;
+    margin-bottom: 20px;
+}
 
-	<div class="row">
-		<div class="col-6 mx-auto">
-			{% include 'include/flashes.html.twig' %}
-		</div>
-	</div>
+/* Email actuel */
+.current-email-box {
+    background: rgba(179, 226, 236, 0.15);
+    border: 1px solid rgba(179, 226, 236, 0.3);
+    border-radius: 12px;
+    padding: 15px 20px;
+    margin-bottom: 25px;
+    text-align: center;
+}
 
-	<div class="edit-profile-box">
-		<h1 class="h3 mb-3 font-weight-normal">{{ 'title.edit_email'|trans }}</h1>
-		<p>{{ 'p.current_email'|trans }}
-			:
-			{{ app.user.email }}</p>
+.current-email-box .label {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 5px;
+}
 
-		<div class="user-box">
-			{{ form(form) }}
-			</div>
-		</div>
+.current-email-box .email {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1a284d;
+}
 
-	{% endblock %}
+/* Formulaire */
+.edit-profile-card .form-group {
+    margin-bottom: 20px;
+}
+
+.edit-profile-card label {
+    display: block;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #1a284d;
+    margin-bottom: 8px;
+}
+
+.edit-profile-card input[type="email"],
+.edit-profile-card input[type="text"],
+.edit-profile-card input[type="password"] {
+    width: 100%;
+    padding: 14px 18px;
+    font-size: 0.95rem;
+    font-family: 'Outfit', sans-serif;
+    color: #333;
+    background: #f8fbfc;
+    border: 2px solid #e8f4f8;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.edit-profile-card input:focus {
+    outline: none;
+    border-color: #b3e2ec;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(179, 226, 236, 0.2);
+}
+
+.edit-profile-card input::placeholder {
+    color: #aaa;
+}
+
+/* Bouton submit */
+.edit-profile-card button[type="submit"],
+.edit-profile-card .btn-primary {
+    width: 100%;
+    padding: 14px 25px;
+    background: linear-gradient(135deg, #1a284d, #2d4a7c);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(26, 40, 77, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.edit-profile-card button[type="submit"]:hover,
+.edit-profile-card .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(26, 40, 77, 0.4);
+}
+
+/* Lien retour */
+.back-link {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.back-link a {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem;
+    color: #2d4a7c;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.back-link a:hover {
+    color: #1a284d;
+    text-decoration: underline;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (max-width: 600px) {
+    .edit-profile-page {
+        padding: 20px 15px;
+    }
+    
+    .edit-profile-container {
+        max-width: 100%;
+    }
+    
+    .edit-profile-card {
+        padding: 35px 30px;
+        border-radius: 20px;
+    }
+    
+    .edit-profile-card h1 {
+        font-size: 1.5rem;
+    }
+    
+    .edit-profile-icon {
+        width: 55px;
+        height: 55px;
+    }
+    
+    .edit-profile-icon i {
+        font-size: 1.3rem;
+    }
+    
+    .edit-profile-card input[type="email"],
+    .edit-profile-card input[type="text"],
+    .edit-profile-card input[type="password"] {
+        padding: 12px 15px;
+        font-size: 0.9rem;
+    }
+    
+    .edit-profile-card button[type="submit"],
+    .edit-profile-card .btn-primary {
+        padding: 12px 20px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .edit-profile-card {
+        padding: 30px 22px;
+    }
+    
+    .edit-profile-card h1 {
+        font-size: 1.4rem;
+    }
+    
+    .edit-profile-icon {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .edit-profile-icon i {
+        font-size: 1.2rem;
+    }
+}
+</style>
+
+<div class="edit-profile-page">
+    <div class="edit-profile-container">
+        <div class="col-11 mx-auto mb-3">
+            {% include 'include/flashes.html.twig' %}
+        </div>
+        
+        <div class="edit-profile-card">
+            {# Icône #}
+            <div class="edit-profile-icon">
+                <i class="bi bi-envelope"></i>
+            </div>
+            
+            {# Titre #}
+            <h1>{{ 'title.edit_email'|trans }}</h1>
+            
+            {# Email actuel #}
+            <div class="current-email-box">
+                <p class="label">{{ 'p.current_email'|trans }}</p>
+                <p class="email">{{ app.user.email }}</p>
+            </div>
+            
+            {# Formulaire #}
+            {{ form_start(form) }}
+                {{ form_widget(form) }}
+            {{ form_end(form) }}
+            
+    {# Lien retour #}
+            <div class="back-link">
+                <a href="javascript:history.back()">
+                    <i class="bi bi-arrow-left"></i>
+					 {{ 'title.back'|trans|default('Annuler') }}
+                </a>
+            </div>
+        </div>
+    </div>
+	
+</div>
+{% endblock %}

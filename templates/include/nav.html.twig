@@ -1,252 +1,548 @@
 <style>
-	header {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		position: relative;
-		margin-top: 35px;
-		font-family: "Open Sans", sans-serif;
-	}
+/* ========================================
+   NAVBAR - VERSION CORRIGÉE
+   ======================================== */
+header {
+    position: fixed;
+    background: rgba(4, 5, 46, 0.9);
+    z-index: 1003 !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    padding: 15px 20px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    font-family: 'Outfit', sans-serif;
+    transition: all 0.3s ease;
+}
 
-	.dropdown-toggle::after {
-		display: none !important;
-	}
+header.scrolled {
+    padding: 10px 20px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.12);
+}
 
-	nav#menu {
-		margin-right: 20px;
-	}
+/* Logo */
+.logo-container {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
 
-	nav#menu ul {
-		list-style: none;
-		display: flex;
-	}
+.logo-container img {
+    width: 50px;
+    height: auto;
+    transition: transform 0.3s ease;
+}
 
-	nav#menu ul li {
-		margin-right: 15px;
-	}
+.logo-container:hover img {
+    transform: scale(1.05);
+}
 
-	nav#menu ul li a {
-		color: rgb(0, 0, 0);
-		text-decoration: none;
-	}
+/* Navigation Desktop */
+nav#menu {
+    display: flex;
+    align-items: center;
+}
 
-	#burger {
-		margin-right: 20px;
-		border-radius: 8px;
-		font-size: 1.2rem;
-		width: 45px;
-		height: 45px;
-		justify-content: center;
-		align-items: center;
-		display: none;
-		cursor: pointer;
-	}
+nav#menu ul {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin: 0;
+    padding: 0;
+}
 
-	.round-container {
-		border-radius: 50%;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 40px;
-		height: 40px;
-		overflow: hidden;
-	}
+nav#menu ul li {
+    position: relative;
+}
 
-	.round-container img {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		border-radius: 50%;
-	}
+nav#menu ul li a {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    padding: 10px 16px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+}
 
-	.dropdown-menu {
-		background-color: white;
-		border: none;
-		box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
-		border-radius: 0.25rem;
-		margin-top: 10px;
-		margin-right: 45px;
-	}
+nav#menu ul li a:hover {
+    color: #9ce1ff;
+}
 
-	.dropdown-item {
-		color: #333;
-	}
+/* Dropdown */
+.dropdown-toggle::after {
+    display: none !important;
+}
 
-	.dropdown-item:hover {
-		background-color: #e2e6ea;
-	}
+.dropdown-toggle .chevron {
+    font-size: 0.7rem;
+    transition: transform 0.3s ease;
+}
 
-	.dropdown-toggle {
-		display: flex;
-		align-items: center;
-	}
+.dropdown:hover .dropdown-toggle .chevron {
+    transform: rotate(180deg);
+}
 
-	#menu ul li a:hover {
-		color: #F26766;
-	}
+.dropdown .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: white;
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    padding: 12px;
+    min-width: 220px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1001;
+    display: block;
+}
 
-	@media screen and (max-width: 768px) {
-		#burger {
-			display: flex;
-			z-index: 99999;
-			cursor: pointer;
-		}
+.dropdown:hover .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(5px);
+}
 
-		#menu {
-			bottom: 0;
-			position: fixed;
-			left: 0;
-			right: 0;
-			z-index: 1002;
-			background: linear-gradient(to bottom, #aacff1,#abd5df,#eaccb1);
-			width: 100%;
-			height: 51%;
-			padding-top: 45px;
-			transform: translateY(100%);
-			box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.912);
-		}
+.dropdown-menu .dropdown-item {
+    color: #1a1a2e !important;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    background: transparent;
+}
 
-		#menu ul {
-			flex-direction: column;
-			align-items: center;
-			margin-right: 25px;
-		}
+.dropdown-menu .dropdown-item:hover {
+    background: rgba(5, 0, 72, 0.76)!important;
+    color: #a5e8ff !important;
+}
 
-		#menu ul li {
-			text-align: center;
-			margin: 10px;
-		}
+.dropdown-menu .dropdown-item i {
+    color: #e94560;
+    width: 18px;
+    text-align: center;
+}
 
-		#menu ul li a {
-			font-size: 20px;
-		}
+/* Profile */
+.profile-nav {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid #97cfff;
+    transition: all 0.3s ease;
+}
 
-		#menu.deploye {
-			transform: translateY(0);
-		}
+.profile-nav:hover {
+    transform: scale(1.1);
+    box-shadow: 0 5px 20px #97cfff;
+}
 
-		#menu.transition {
-			transition: 0.5s ease-in-out;
-		}
+.profile-nav img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
 
+/* Bouton Login */
+.btn-login {
+    padding: 10px 24px !important;
+    font-weight: 600 !important;
 
-		.dropdown-toggle {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-		}
-	}
+}
+
+/* Language switcher */
+.lang-switch {
+    padding: 8px 14px !important;
+    border-radius: 10px !important;
+    font-weight: 600 !important;
+    font-size: 0.85rem !important;
+    color: #8cc5e8 !important;
+}
+
+.lang-switch:hover {
+    background: #000000 !important;
+    color: white !important;
+}
+
+/* Burger */
+#burger {
+    display: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    background: transparent;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border: none;
+    z-index: 1005;
+    transition: all 0.3s ease;
+}
+
+#burger i {
+    font-size: 1.4rem;
+    color: #8cc5e8;
+    transition: all 0.3s ease;
+}
+
+/* Spacer */
+.header-spacer {
+    height: 80px;
+}
+
+/* ========================================
+   MOBILE MENU - FIX COMPLET
+   ======================================== */
+@media screen and (max-width: 768px) {
+    
+    #burger {
+        display: flex;
+        position: relative;
+        z-index: 1005;
+        background:rgba(4, 5, 46, 0.9);
+    }
+    
+        header#main-header{
+        position: relative !important;
+         background:transparent !important;
+        top: auto !important;
+        left: auto !important;
+        right: auto !important;
+    }
+
+  .header-spacer{
+    display:none !important;
+  }
+
+    #burger{
+        display: flex;
+        position: relative;
+        z-index: 3000; /* au-dessus du menu */
+    }
+    
+    nav#menu{
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100dvh !important;
+    background: white !important;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 2000 !important;
+    overflow-y: auto;
+    display: block !important;
+  }
+
+  nav#menu.deploye{
+    transform: translateX(0);
+  }
+    
+    nav#menu ul {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 8px;
+        width: 100%;
+        margin: 0 auto;
+        padding: 120px 20px 40px 20px; /* Padding en haut pour éviter le header */
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    
+    nav#menu ul li {
+        width: 100%;
+        list-style: none;
+    }
+    
+    nav#menu ul li a {
+        display: flex !important;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        padding: 18px 20px;
+        font-size: 1.15rem;
+        font-weight: 500;
+        border-radius: 16px;
+        width: 100%;
+        background: transparent;
+        text-decoration: none;
+        color: #1a1a2e;
+        transition: all 0.2s ease;
+    }
+    
+    nav#menu ul li a:hover,
+    nav#menu ul li a:active {
+        background: rgba(5, 0, 72, 0.66)!important;
+        color: #000000;
+    }
+    
+    /* Dropdown Mobile */
+    .dropdown .dropdown-menu {
+        position: static !important;
+        transform: none !important;
+        box-shadow: none !important;
+        background: #f5f5f5 !important;
+        border-radius: 16px;
+        margin-top: 10px;
+        padding: 0;
+        opacity: 0;
+        visibility: hidden;
+        max-height: 0;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+    
+    .dropdown:hover .dropdown-menu {
+        transform: none !important;
+        opacity: 0;
+        visibility: hidden;
+    }
+    
+    .dropdown.open .dropdown-menu {
+        opacity: 1;
+        visibility: visible;
+        max-height: 500px;
+        padding: 12px;
+    }
+    
+    .dropdown-menu .dropdown-item {
+        justify-content: center;
+        padding: 15px;
+        font-size: 1rem;
+    }
+    
+    /* Lang switch mobile */
+    nav#menu ul li a.lang-switch {
+        background: #f5f5f5 !important;
+        color: #000000 !important;
+    }
+    
+      nav#menu.deploye ~ #burger,
+  #burger.menu-open {
+      position: fixed !important;
+      top: 20px;
+      right: 20px;
+      left: auto;
+      z-index: 3000 !important;
+  }
+}
+
+/* Header - garder le burger visible au-dessus du menu */
+header {
+    z-index: 1003 !important;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: none !important;
+}
+
+header #burger {
+    z-index: 1005 !important;
+}
 </style>
 
-<header>
-	<h2>
-		<a href="{{ path('show_home') }}"><img style="width:50px; margin-left: 20px;" src="/img/logo.png" alt="logo Amyaz"></a>
-	</h2>
-	<div id="burger">
-		<i class="fa-solid fa-bars" id="menu-icon"></i>
-	</div>
-	<nav id="menu">
-		<ul>
-			<li>
-				<a href="{{ path('show_home') }}">{{ 'navigation.home'|trans }}</a>
-			</li>
-			<li class="dropdown">
-				<a href="{{ path('account') }}" class="dropdown-toggle" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ 'navigation.learning'|trans }}</a>
-				<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-					<a class="dropdown-item" href="{{ path('berbere_latin') }}">{{ 'navigation.berber_latin'|trans }}</a>
-					<a class="dropdown-item" href="{{ path('berbere_traditionnel') }}">{{ 'navigation.berber_traditional'|trans }}</a>
-					<a class="dropdown-item" href="{{ path('grammaire') }}">{{ 'navigation.grammar'|trans }}</a>
-					<a class="dropdown-item" href="{{ path('app_games') }}">{{ 'navigation.game'|trans }}</a>
-				</div>
-			</li>
-			<li>
-				<a href="{{ path('documentation_index') }}">{{ 'navigation.documentation'|trans }}</a>
-			</li>
-			<li>
-				<a href="{{ path('app_conjugation') }}">{{ 'navigation.conjugation'|trans }}</a>
-			</li>
-			
-			{% if not is_granted('ROLE_USER') %}
-				<li>
-					<a href="{{ path('app_login') }}">{{ 'navigation.login'|trans }}</a>
-				</li>
-			{% else %}
-				<li class="dropdown">
-					<a href="{{ path('account') }}" class="dropdown-toggle" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						<div class="flex-shrink-0" style="margin-top: -5px">
-							<div class="round-container">
-								{% if app.user.picture %}
-									<img src="{{ asset('uploads/profile/' ~ app.user.picture) }}" alt="user-profile-picture"/>
-								{% else %}
-									<img src="{{ asset('uploads/profile/default_profile_picture.jpg') }}" alt="user"/>
-								{% endif %}
-							</div>
-						</div>
-					</a>
-					<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-						<a class="dropdown-item" href="{{ path('account') }}">{{ 'navigation.profile'|trans }}</a>
-						{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MODERATOR') %}
-							<a class="dropdown-item" href="{{ path('dashboard') }}">{{ 'navigation.dashboard'|trans }}</a>
-						{% endif %}
-						<a class="dropdown-item" href="{{ path('app_logout') }}">{{ 'navigation.logout'|trans }}</a>
-					</div>
-				</li>
-			{% endif %}
-			<li>
-				{% if app.request.locale == 'fr' %}
-					<a style="text-decoration:underline; color:#F26766;" href="{{ path('change_locale', {locale: 'en'}) }}">ENG
-
-					</a>
-				{% elseif app.request.locale == 'en' %}
-					<a style="text-decoration:underline; color:#F26766;" href="{{ path('change_locale', {locale: 'fr'}) }}">FR
-
-					</a>
-				{% endif %}
-			</li>
-		</ul>
-	</nav>
+<header id="main-header">
+    <a href="{{ path('show_home') }}" class="logo-container">
+        <img src="/img/logo.png" alt="logo Amyaz">
+    </a>
+    
+    <button id="burger" aria-label="Menu">
+        <i class="fa-solid fa-bars" id="menu-icon"></i>
+    </button>
+    
+    <nav id="menu">
+        <ul>
+            <li>
+                <a href="{{ path('show_home') }}">{{ 'navigation.home'|trans }}</a>
+            </li>
+            
+            <li class="dropdown">
+                <a href="javascript:void(0)" class="dropdown-toggle">
+                    {{ 'navigation.learning'|trans }}
+                    <i class="bi bi-chevron-down chevron"></i>
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="{{ path('berbere_latin') }}">
+                        <i class="bi bi-alphabet-uppercase"></i>
+                        {{ 'navigation.berber_latin'|trans }}
+                    </a>
+                    <a class="dropdown-item" href="{{ path('berbere_traditionnel') }}">
+                        <i class="bi bi-fonts"></i>
+                        {{ 'navigation.berber_traditional'|trans }}
+                    </a>
+                    <a class="dropdown-item" href="{{ path('grammaire') }}">
+                        <i class="bi bi-book"></i>
+                        {{ 'navigation.grammar'|trans }}
+                    </a>
+                    <a class="dropdown-item" href="{{ path('app_games') }}">
+                        <i class="bi bi-controller"></i>
+                        {{ 'navigation.game'|trans }}
+                    </a>
+                </div>
+            </li>
+            
+            <li>
+                <a href="{{ path('documentation_index') }}">{{ 'navigation.documentation'|trans }}</a>
+            </li>
+            
+            <li>
+                <a href="{{ path('app_conjugation') }}">{{ 'navigation.conjugation'|trans }}</a>
+            </li>
+            
+            {% if not is_granted('ROLE_USER') %}
+                <li>
+                    <a href="{{ path('app_login') }}" class="btn-login">{{ 'navigation.login'|trans }}</a>
+                </li>
+            {% else %}
+                <li class="dropdown">
+                    <a href="javascript:void(0)" class="dropdown-toggle">
+                        <div class="profile-nav">
+                            {% if app.user.picture %}
+                                <img src="{{ asset('uploads/profile/' ~ app.user.picture) }}" alt="Profile"/>
+                            {% else %}
+                                <img src="{{ asset('uploads/profile/default_profile_picture.jpg') }}" alt="Profile"/>
+                            {% endif %}
+                        </div>
+                        <i class="bi bi-chevron-down chevron"></i>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="{{ path('account') }}">
+                            <i class="bi bi-person"></i>
+                            {{ 'navigation.profile'|trans }}
+                        </a>
+                        {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MODERATOR') %}
+                            <a class="dropdown-item" href="{{ path('dashboard') }}">
+                                <i class="bi bi-speedometer2"></i>
+                                {{ 'navigation.dashboard'|trans }}
+                            </a>
+                        {% endif %}
+                        <a class="dropdown-item" href="{{ path('app_logout') }}" style="color: #e94560;">
+                            <i class="bi bi-box-arrow-right"></i>
+                            {{ 'navigation.logout'|trans }}
+                        </a>
+                    </div>
+                </li>
+            {% endif %}
+            
+            <li>
+                {% if app.request.locale == 'fr' %}
+                    <a href="{{ path('change_locale', {locale: 'en'}) }}" class="lang-switch">
+                        <i class="bi bi-globe"></i> EN
+                    </a>
+                {% else %}
+                    <a href="{{ path('change_locale', {locale: 'fr'}) }}" class="lang-switch">
+                        <i class="bi bi-globe"></i> FR
+                    </a>
+                {% endif %}
+            </li>
+        </ul>
+    </nav>
 </header>
 
+<div class="header-spacer"></div>
+
 <script>
-	// MENU BURGER
-var burger = document.querySelector('#burger');
-var menu = document.querySelector('#menu');
-var menuIcon = document.querySelector('#menu-icon');
-
-burger.addEventListener('click', function () {
-menu.classList.toggle('deploye');
-menu.classList.toggle('transition');
-
-// Changer l'icône entre "bars" et "times"
-if (menu.classList.contains('deploye')) {
-menuIcon.classList.remove('fa-bars');
-menuIcon.classList.add('fa-times');
-} else {
-menuIcon.classList.remove('fa-times');
-menuIcon.classList.add('fa-bars');
+document.addEventListener('DOMContentLoaded', function() {
+    const header = document.getElementById('main-header');
+    const burger = document.getElementById('burger');
+    const menu = document.getElementById('menu');
+    const menuIcon = document.getElementById('menu-icon');
+    const dropdowns = document.querySelectorAll('.dropdown');
+    
+    let isMenuOpen = false;
+    
+    // Header scroll effect
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    });
+    
+    // Ouvrir le menu
+function openMenu() {
+    isMenuOpen = true;
+    menu.classList.add('deploye');
+    burger.classList.add('menu-open'); // 👈 AJOUT
+    menuIcon.classList.remove('fa-bars');
+    menuIcon.classList.add('fa-times');
+    document.body.style.overflow = 'hidden';
 }
-});
 
-// Fermer le menu lorsque l'utilisateur clique en dehors du menu
-document.addEventListener('click', function (event) {
-var isClickInsideMenu = menu.contains(event.target);
-var isClickOnBurger = burger.contains(event.target);
-
-if (! isClickInsideMenu && ! isClickOnBurger) {
-menu.classList.remove('deploye');
-menu.classList.remove('transition');
-menuIcon.classList.remove('fa-times');
-menuIcon.classList.add('fa-bars');
+function closeMenu() {
+    isMenuOpen = false;
+    menu.classList.remove('deploye');
+    burger.classList.remove('menu-open'); // 👈 AJOUT
+    menuIcon.classList.remove('fa-times');
+    menuIcon.classList.add('fa-bars');
+    document.body.style.overflow = '';
+    dropdowns.forEach(function(d) {
+        d.classList.remove('open');
+    });
 }
-});
 
-// Redimensionnement de fenêtre
-window.addEventListener('resize', function () {
-if (window.innerWidth >= 850) {
-menu.classList.remove('deploye');
-menu.classList.remove('transition');
-menuIcon.classList.remove('fa-times');
-menuIcon.classList.add('fa-bars');
-}
+    
+    // Burger menu toggle
+    burger.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        if (isMenuOpen) {
+            closeMenu();
+        } else {
+            openMenu();
+        }
+    });
+    
+    // Dropdown toggle sur mobile
+    dropdowns.forEach(function(dropdown) {
+        const toggle = dropdown.querySelector('.dropdown-toggle');
+        
+        toggle.addEventListener('click', function(e) {
+            if (window.innerWidth <= 768) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                dropdowns.forEach(function(d) {
+                    if (d !== dropdown) {
+                        d.classList.remove('open');
+                    }
+                });
+                dropdown.classList.toggle('open');
+            }
+        });
+    });
+    
+    // Resize
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 768 && isMenuOpen) {
+            closeMenu();
+        }
+    });
 });
 </script>

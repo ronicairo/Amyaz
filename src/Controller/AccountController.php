@@ -341,29 +341,53 @@ class AccountController extends AbstractController
         ]);
     }
 
-    #[Route('/favorites', name: 'show_favorites')]
-    public function showFavorites(Request $request, FavoriteRepository $favoriteRepository, PaginatorInterface $paginator): Response
-    {
-        $user = $this->security->getUser();
-        if (!$user) {
-            throw $this->createAccessDeniedException($this->translator->trans('home.fav_login'));
-        }
+   #[Route('/favorites', name: 'show_favorites')]
+public function showFavorites(
+    Request $request,
+    FavoriteRepository $favoriteRepository,
+    PaginatorInterface $paginator
+): Response {
+    $user = $this->security->getUser();
 
-        $queryBuilder = $favoriteRepository->createQueryBuilder('f')
-            ->where('f.user = :user')
-            ->setParameter('user', $user);
-
-        $pagination = $paginator->paginate(
-            $queryBuilder,
-            $request->query->getInt('page', 1), // Numéro de la page
-            10 // Limite par page
+    if (!$user) {
+        throw $this->createAccessDeniedException(
+            $this->translator->trans('home.fav_login')
         );
-
-
-        return $this->render('account/favorites.html.twig', [
-            'pagination' => $pagination,
-        ]);
     }
+
+    // =========================
+    // FAVORITES TRADUCTIONS
+    // =========================
+    $qbWords = $favoriteRepository->createQueryBuilder('f')
+        ->where('f.user = :user')
+        ->andWhere('f.traduction IS NOT NULL')
+        ->setParameter('user', $user);
+
+    $paginationWord = $paginator->paginate(
+        $qbWords,
+        $request->query->getInt('page_word', 1),
+        6
+    );
+
+    // =========================
+    // FAVORITES DOCUMENTS
+    // =========================
+    $qbDocs = $favoriteRepository->createQueryBuilder('f')
+        ->where('f.user = :user')
+        ->andWhere('f.documentation IS NOT NULL')
+        ->setParameter('user', $user);
+
+    $paginationDoc = $paginator->paginate(
+        $qbDocs,
+        $request->query->getInt('page_doc', 1),
+        6
+    );
+
+    return $this->render('account/favorites.html.twig', [
+        'pagination_word' => $paginationWord,
+        'pagination_doc' => $paginationDoc,
+    ]);
+}
 
     #[Route('/favorite/remove', name: 'fav_remove', methods: ['POST'])]
     public function removeFav(Request $request, EntityManagerInterface $em): JsonResponse

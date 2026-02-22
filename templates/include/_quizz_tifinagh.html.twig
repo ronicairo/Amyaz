@@ -1,0 +1,634 @@
+<style>
+/* ========================================
+   QUIZZ TIFINAGH
+   ======================================== */
+.quizz-section {
+    max-width: 900px;
+    width: 100%;
+    margin: 50px auto;
+    padding: 0 20px;
+}
+
+.quizz-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    padding: 25px 30px;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+}
+
+.quizz-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+}
+
+.quizz-card h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    color: #000000;
+    margin-bottom: 20px;
+}
+
+/* ========================================
+   QUIZZ ICON IMAGE
+   ======================================== */
+.quizz-card .quizz-icon {
+      width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px;
+    overflow: hidden;
+}
+
+.quizz-card .quizz-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* Score display */
+.score-display {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 20px;
+    padding: 15px 20px;
+    background: #f8f8f8;
+    border-radius: 12px;
+    max-width: 350px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.score-item {
+    text-align: center;
+}
+
+.score-item .label {
+    font-size: 0.7rem;
+    color: #6c757d;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 3px;
+}
+
+.score-item .value {
+    font-size: 1.4rem;
+    font-weight: 700;
+    font-family: 'Playfair Display', serif;
+}
+
+.score-item .value.correct-score {
+    color: #28a745;
+}
+
+.score-item .value.incorrect-score {
+    color: #dc3545;
+}
+
+.score-item .value.total-score {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Question box */
+.question-box {
+    margin: 20px 0;
+    animation: quizzFadeIn 0.4s ease;
+}
+
+.question-box h3 {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 15px;
+    font-weight: 400;
+}
+
+/* Grande lettre Tifinagh */
+.question-letter {
+    font-size: 4rem;
+    color: #1a284d;
+    display: block;
+    margin-bottom: 20px;
+    line-height: 1;
+}
+
+@keyframes quizzFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Boutons de réponse */
+.question-box > div {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.question-box button {
+    background: white;
+    border: 2px solid #e0e0e0;
+    color: #c71313;
+    padding: 14px 12px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.question-box button:hover:not(:disabled) {
+    border-color: #1a284d;
+    background: rgba(4, 6, 142, 0.05);
+    transform: translateY(-2px);
+}
+
+.question-box button:active:not(:disabled) {
+    transform: scale(0.98);
+}
+
+.question-box button:disabled {
+    cursor: not-allowed;
+}
+
+/* Feedback message */
+.quizz-card .feedback {
+    margin-top: 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: 'Outfit', sans-serif;
+    min-height: 25px;
+}
+
+.quizz-card .feedback .correct {
+    color: #28a745;
+}
+
+.quizz-card .feedback .incorrect {
+    color: #dc3545;
+}
+
+/* Bouton nouvelle question */
+.new-question-btn {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    color: white !important;
+    border: none;
+    padding: 14px 35px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(12, 81, 255, 0.422);
+    margin-top: 20px;
+}
+
+.new-question-btn:hover {
+    transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(12, 81, 255, 0.422);
+}
+
+/* ========================================
+   QUIZZ DANS DUAL-SECTION (version compacte)
+   ======================================== */
+.dual-section .quizz-section {
+    margin: 0;
+    padding: 0;
+    max-width: none;
+    width: 100%;
+}
+
+.dual-section .quizz-card {
+    height: 100%;
+    padding: 30px 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.dual-section .quizz-card .quizz-icon {
+    width: 70px;
+    height: 70px;
+    padding: 14px;
+    margin-bottom: 15px;
+}
+
+.dual-section .quizz-card h2 {
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+}
+
+.dual-section .score-display {
+    gap: 20px;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    max-width: 100%;
+}
+
+.dual-section .score-item .value {
+    font-size: 1.2rem;
+}
+
+.dual-section .question-letter {
+    font-size: 3rem;
+    margin-bottom: 15px;
+}
+
+.dual-section .question-box h3 {
+    font-size: 0.9rem;
+    margin-bottom: 12px;
+}
+
+.dual-section .question-box > div {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    max-width: 100%;
+}
+
+.dual-section .question-box button {
+    padding: 10px 8px;
+    font-size: 0.95rem;
+    border-radius: 10px;
+}
+
+.dual-section .quizz-card .feedback {
+    margin-top: 12px;
+    font-size: 0.9rem;
+}
+
+.dual-section .new-question-btn {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    margin-top: 12px;
+}
+
+/* ========================================
+   RESPONSIVE QUIZZ
+   ======================================== */
+@media (max-width: 992px) {
+    .quizz-card {
+        padding: 30px 35px;
+    }
+    
+    .question-letter {
+        font-size: 3.5rem;
+    }
+    
+    .dual-section .question-box > div {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .quizz-section {
+        margin: 40px auto;
+        padding: 0 15px;
+    }
+    
+    .quizz-card {
+        padding: 25px 20px;
+    }
+    
+    .quizz-card .quizz-icon {
+        width: 70px;
+        height: 70px;
+        padding: 14px;
+    }
+    
+    .quizz-card h2 {
+        font-size: 1.25rem;
+    }
+    
+    .question-letter {
+        font-size: 3rem;
+    }
+    
+    .question-box > div {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        max-width: 280px;
+    }
+    
+    .question-box button {
+        padding: 12px 10px;
+        font-size: 1rem;
+    }
+    
+    .score-display {
+        gap: 20px;
+        padding: 12px 15px;
+    }
+    
+    .score-item .value {
+        font-size: 1.2rem;
+    }
+    
+    .new-question-btn {
+        width: 100%;
+        padding: 12px 20px;
+    }
+    
+    .dual-section .quizz-card .quizz-icon {
+        width: 60px;
+        height: 60px;
+        padding: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .quizz-card {
+        padding: 20px 15px;
+    }
+    
+    .quizz-card .quizz-icon {
+        width: 60px;
+        height: 60px;
+        padding: 12px;
+        margin-bottom: 12px;
+    }
+    
+    .quizz-card h2 {
+        font-size: 1.1rem;
+        margin-bottom: 12px;
+    }
+    
+    .question-letter {
+        font-size: 2.5rem;
+        margin-bottom: 12px;
+    }
+    
+    .question-box h3 {
+        font-size: 0.9rem;
+        margin-bottom: 10px;
+    }
+    
+    .question-box > div {
+        gap: 8px;
+        max-width: 250px;
+    }
+    
+    .question-box button {
+        padding: 10px 8px;
+        font-size: 0.95rem;
+        border-radius: 10px;
+    }
+    
+    .score-display {
+        gap: 15px;
+        padding: 10px 12px;
+    }
+    
+    .score-item .label {
+        font-size: 0.65rem;
+    }
+    
+    .score-item .value {
+        font-size: 1rem;
+    }
+    
+    .quizz-card .feedback {
+        font-size: 0.9rem;
+        margin-top: 12px;
+    }
+    
+    .new-question-btn {
+        padding: 12px 15px;
+        font-size: 0.9rem;
+        margin-top: 12px;
+    }
+    
+    .dual-section .quizz-card .quizz-icon {
+        width: 50px;
+        height: 50px;
+        padding: 10px;
+    }
+}
+</style>
+
+{# ========== QUIZZ TIFINAGH - INCLUDE ========== #}
+<section class="quizz-section {{ sectionClass|default('') }}">
+    <div class="quizz-card">
+        <div class="quizz-icon">
+            <img src="/img/message.png" alt="Quizz Icon">
+        </div>
+        <h2>{{ quizzTitle|default('Quizz Tifinagh') }}</h2>
+        
+        {# Score #}
+        <div class="score-display">
+            <div class="score-item">
+                <div class="label">Correct</div>
+                <div class="value correct-score" id="correct-count">0</div>
+            </div>
+            <div class="score-item">
+                <div class="label">Incorrect</div>
+                <div class="value incorrect-score" id="incorrect-count">0</div>
+            </div>
+            <div class="score-item">
+                <div class="label">Total</div>
+                <div class="value total-score" id="total-count">0</div>
+            </div>
+        </div>
+        
+        {# Question #}
+        <div id="question-box" class="question-box"></div>
+        
+        {# Feedback #}
+        <div id="feedback" class="feedback"></div>
+        
+        {# Bouton nouvelle question #}
+        <button class="new-question-btn" onclick="generateQuestion()">
+            <i class="bi bi-arrow-repeat me-2"></i>
+            Nouvelle Question
+        </button>
+    </div>
+</section>
+
+<script>
+(function() {
+    // Éviter les conflits si le script est chargé plusieurs fois
+    if (window.quizzTifinaghLoaded) return;
+    window.quizzTifinaghLoaded = true;
+
+    const questions = [
+        { letter: "ⴰ", correct: "a" },
+        { letter: "ⴱ", correct: "b" },
+        { letter: "ⴷ", correct: "d" },
+        { letter: "ⴹ", correct: "ḍ" },
+        { letter: "ⴻ", correct: "e" },
+        { letter: "ⴼ", correct: "f" },
+        { letter: "ⴳ", correct: "g" },
+        { letter: "ⴳⵯ", correct: "ɡʷ" },
+        { letter: "ⵀ", correct: "h" },
+        { letter: "ⵃ", correct: "ḥ" },
+        { letter: "ⵉ", correct: "i" },
+        { letter: "ⵊ", correct: "j" },
+        { letter: "ⴽ", correct: "k" },
+        { letter: "ⴽⵯ", correct: "kʷ" },
+        { letter: "ⵍ", correct: "l" },
+        { letter: "ⵎ", correct: "m" },
+        { letter: "ⵏ", correct: "n" },
+        { letter: "ⵇ", correct: "q" },
+        { letter: "ⵔ", correct: "r" },
+        { letter: "ⵕ", correct: "ṛ" },
+        { letter: "ⵙ", correct: "s" },
+        { letter: "ⵚ", correct: "ṣ" },
+        { letter: "ⵜ", correct: "t" },
+        { letter: "ⵟ", correct: "ṭ" },
+        { letter: "ⵓ", correct: "u" },
+        { letter: "ⵡ", correct: "w" },
+        { letter: "ⵢ", correct: "y" },
+        { letter: "ⵣ", correct: "z" },
+        { letter: "ⵥ", correct: "ẓ" },
+        { letter: "ⵛ", correct: "c" },
+        { letter: "ⵖ", correct: "ɣ" },
+        { letter: "ⵄ", correct: "ɛ" },
+        { letter: "ⵅ", correct: "x" },
+        { letter: "ⴵ", correct: "ǧ" },
+        { letter: "ⵞ", correct: "č" },
+        { letter: "ⵁ", correct: "ř" }
+    ];
+
+    const allLetters = ["a", "b", "d", "ḍ", "e", "f", "g", "ɡʷ", "h", "ḥ", "i", "j", "k", "kʷ", "l", "m", "n", "q", "r", "ṛ", "s", "ṣ", "t", "ṭ", "u", "w", "y", "z", "ẓ", "c", "ɣ", "ɛ", "x", "ǧ", "č", "ř"];
+
+    let correctCount = 0;
+    let incorrectCount = 0;
+    let totalCount = 0;
+    let recentQuestions = [];
+    let remainingQuestions = [...questions];
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    window.generateQuestion = function() {
+        let randomQuestion;
+
+        if (remainingQuestions.length > 0) {
+            const randomIndex = Math.floor(Math.random() * remainingQuestions.length);
+            randomQuestion = remainingQuestions.splice(randomIndex, 1)[0];
+        } else {
+            do {
+                randomQuestion = questions[Math.floor(Math.random() * questions.length)];
+            } while (recentQuestions.includes(randomQuestion.letter));
+        }
+
+        if (remainingQuestions.length === 0) {
+            recentQuestions.push(randomQuestion.letter);
+            if (recentQuestions.length > 15) {
+                recentQuestions.shift();
+            }
+        }
+
+        let choices = [randomQuestion.correct];
+
+        while (choices.length < 4) {
+            const randomWrong = allLetters[Math.floor(Math.random() * allLetters.length)];
+            if (!choices.includes(randomWrong)) {
+                choices.push(randomWrong);
+            }
+        }
+
+        shuffleArray(choices);
+
+        const questionBox = document.getElementById('question-box');
+        if (questionBox) {
+            questionBox.innerHTML = `
+                <span class="question-letter">${randomQuestion.letter}</span>
+                <h3>Quelle est la lettre latine équivalente ?</h3>
+                <div>
+                    <button onclick="checkAnswer('${choices[0]}', '${randomQuestion.correct}', this)">${choices[0]}</button>
+                    <button onclick="checkAnswer('${choices[1]}', '${randomQuestion.correct}', this)">${choices[1]}</button>
+                    <button onclick="checkAnswer('${choices[2]}', '${randomQuestion.correct}', this)">${choices[2]}</button>
+                    <button onclick="checkAnswer('${choices[3]}', '${randomQuestion.correct}', this)">${choices[3]}</button>
+                </div>
+            `;
+        }
+
+        const feedback = document.getElementById('feedback');
+        if (feedback) {
+            feedback.innerHTML = '';
+        }
+    }
+
+    window.checkAnswer = function(selected, correct, btn) {
+        const feedback = document.getElementById('feedback');
+        const allBtns = document.querySelectorAll('.question-box button');
+        
+        // Désactiver tous les boutons
+        allBtns.forEach(b => b.disabled = true);
+        
+        totalCount++;
+        
+        if (selected === correct) {
+            btn.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
+            btn.style.borderColor = '#28a745';
+            btn.style.color = 'white';
+            if (feedback) {
+                feedback.innerHTML = "<p class='correct'>✓ Bonne réponse !</p>";
+            }
+            correctCount++;
+            setTimeout(generateQuestion, 1500);
+        } else {
+            btn.style.background = 'linear-gradient(135deg, #dc3545, #e94560)';
+            btn.style.borderColor = '#dc3545';
+            btn.style.color = 'white';
+            
+            // Montrer la bonne réponse
+            allBtns.forEach(b => {
+                if (b.textContent === correct) {
+                    b.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
+                    b.style.borderColor = '#28a745';
+                    b.style.color = 'white';
+                }
+            });
+            
+            if (feedback) {
+                feedback.innerHTML = `<p class='incorrect'>✗ La bonne réponse était : ${correct}</p>`;
+            }
+            incorrectCount++;
+            setTimeout(generateQuestion, 3000);
+        }
+        
+        // Mettre à jour les scores
+        const correctEl = document.getElementById('correct-count');
+        const incorrectEl = document.getElementById('incorrect-count');
+        const totalEl = document.getElementById('total-count');
+        
+        if (correctEl) correctEl.textContent = correctCount;
+        if (incorrectEl) incorrectEl.textContent = incorrectCount;
+        if (totalEl) totalEl.textContent = totalCount;
+    }
+
+    // Initialiser au chargement
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', generateQuestion);
+    } else {
+        generateQuestion();
+    }
+})();
+</script>

@@ -31,35 +31,32 @@ class AppLoginAuthenticator extends AbstractLoginFormAuthenticator
         $this->validator = $validator;
     }
 
-    public function authenticate(Request $request): Passport
-    {
+  public function authenticate(Request $request): Passport
+{
+    if ($_ENV['APP_ENV'] !== 'dev') {
 
         $recaptchaResponse = $request->request->get('recaptcha_response');
 
-        // Création de la contrainte de validation
         $recaptchaConstraint = new Recaptcha3();
-
-        // Exécution de la validation
         $violations = $this->validator->validate($recaptchaResponse, $recaptchaConstraint);
 
-        // Vérification des violations
         if (count($violations) > 0) {
             throw new RecaptchaValidationException();
-        }    
-        
-        $email = $request->request->get('email', '');
-
-        $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $email);
-
-        return new Passport(
-            new UserBadge($email),
-            new PasswordCredentials($request->request->get('password', '')),
-            [
-                new CsrfTokenBadge('authenticate', $request->request->get('_csrf_token')),
-                new RememberMeBadge(),
-            ]
-        );
+        }
     }
+
+    $email = $request->request->get('email', '');
+    $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $email);
+
+    return new Passport(
+        new UserBadge($email),
+        new PasswordCredentials($request->request->get('password', '')),
+        [
+            new CsrfTokenBadge('authenticate', $request->request->get('_csrf_token')),
+            new RememberMeBadge(),
+        ]
+    );
+}
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {

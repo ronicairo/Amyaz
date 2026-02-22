@@ -4,9 +4,10 @@ meta:
 
 home:
     back_to_home': "Back to home"
+    results_for_letter : "Results for the letter %letter%"
     browse_dictionary: "Browse the dictionary alphabetically"
-    welcome_message: 'Welcome to  <span style="color: #F26766;">Amyaz</span> !<br>Your English-Riffian dictionary.'
-    welcome_message_conjugaison: 'Welcome to <span style="color: #F26766;">Amyaz</span> !<br> Your Riffian conjugator.'
+    welcome_message: '<span style="color: #F26766;">Amyaz</span><br>Your English-Riffian dictionary.'
+    welcome_message_conjugaison: '<span style="color: #F26766;">Amyaz</span> !<br> Your Riffian conjugator.'
     search_results: "Search Results:"
     search_bar: "Search"
     no_results_logged_in: "No results found.<br><a style=\"text-decoration:none; color: #F26766\" href=\"%path_traduction_new%\">Request a word.</a>"
@@ -32,6 +33,7 @@ home:
     favorite_remove_ogin_required: "You must be logged in to delete favourites."
     favorite_remove_not_found: "Favorite not found."
     noverbfound: "No results found."
+    no_words_for_letter : "No words found for the letter %letter%."
 
 navigation:
     home: 'Dictionary'
@@ -133,6 +135,7 @@ account-user:
     no_comments: "No comments."
     no_translation: "No translation."
     delete_user: "Delete user"
+    info: "Information"
 
 article:
     particule_d: "D particle"
@@ -186,6 +189,8 @@ form:
     regex_commentaire: "You cannot insert HTML code in your comment."
     edit_grammar: "Edit grammar sheet"
     create_grammar: "Create new grammar sheet"
+    email_placeholder: "Enter your email"
+    password_placeholder: "Enter your password"
 
 title:
     edit_traduction: "Edit translation"
@@ -207,6 +212,8 @@ title:
     verifier_code: "Verify your account"
     verification_code: "Verification code received by email"
     rappel_verification: "Activate your Amyaz account"
+    back: "Back"
+    cancel: "Cancel"
 
 addflash:
     obligation_connexion: "You must be logged in to access this feature."
@@ -309,3 +316,6 @@ table_headers:
     participe_aoriste_intensif_negatif: 'Negative intensive aorist'
     participes: 'Participles'
     conjug: 'conjugation'
+
+grammaire:
+    description: "Discover the essential grammar rules to master Riffian. Our detailed grammar sheets cover the fundamental aspects of the language, accompanied by concrete examples to facilitate your learning."

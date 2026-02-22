@@ -1,125 +1,419 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}
-	{{ 'navigation.dashboard'|trans }}
-{% endblock %}
+{% block title %}{{ 'navigation.dashboard'|trans }}{% endblock %}
 
 {% block body %}
-	<style>
-		.card {
-			position: relative;
-			background: rgba(0, 0, 0, 0.5);
-			box-sizing: border-box;
-			box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
-			border: 1px solid black;
-			border-radius: 15px;
-			margin: auto;
-			padding: 20px;
-		}
+<style>
+/* ========================================
+   PAGE DASHBOARD
+   ======================================== */
+.dashboard-page {
+    min-height: 80vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 40px 20px;
+}
 
-		.card-body {
-			padding: 20px;
-		}
+.dashboard-page::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 20% 30%, rgba(26, 40, 77, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(179, 226, 236, 0.1) 0%, transparent 40%);
+    pointer-events: none;
+}
 
-		.btn-rounded {
-			border-radius: 50px;
-		}
+.dashboard-container {
+    width: 100%;
+    max-width: 550px;
+    position: relative;
+    z-index: 1;
+}
 
-		.btn-lg {
-			padding: 10px 20px;
-		}
+/* ========================================
+   CARD DASHBOARD
+   ======================================== */
+.dashboard-card {
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 15px 50px rgba(26, 40, 77, 0.12);
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+}
 
-		.btn-block {
-			width: 100%;
-			margin-bottom: 10px;
-		}
+.dashboard-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, #1a284d, #b3e2ec);
+}
 
-		.btn-light {
-			background-color: #f8f9fa;
-			color: #343a40;
-			border: 1px solid black;
-		}
+/* ========================================
+   PROFIL HEADER
+   ======================================== */
+.profile-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
 
-		.btn-light:hover {
-			background-color: #e2e6ea;
-		}
+.profile-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #b3e2ec;
+    box-shadow: 0 5px 20px rgba(26, 40, 77, 0.15);
+    margin-bottom: 15px;
+}
 
-		.profile-header {
-			text-align: center; /* Centre le texte */
-		}
+.profile-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: #1a284d;
+    margin-bottom: 5px;
+}
 
-		.profile-header img {
-			display: block;
-			margin: 0 auto; /* Centre l'image */
-		}
+.profile-header .role-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #1a284d, #2d4a7c);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
 
-		.profile-header h6,
-		.profile-header p {
-			margin: 0;
-			padding: 5px 0; /* Espacement vertical */
-		}
+/* ========================================
+   TITRE DASHBOARD
+   ======================================== */
+.dashboard-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: #1a284d;
+    text-align: center;
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #f0f4f8;
+}
 
-		.profile-img {
-			width: 100px; /* Augmenté pour plus de visibilité */
-			height: 100px; /* Augmenté pour plus de visibilité */
-			border-radius: 50%;
-			object-fit: cover;
-			border: 2px solid #ddd;
-		}
-	</style>
+/* ========================================
+   MENU LINKS
+   ======================================== */
+.dashboard-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
 
-	{% include "include/flashes.html.twig" %}
+.dashboard-link {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 16px 20px;
+    background: #f8fbfc;
+    border: 2px solid #e8f4f8;
+    border-radius: 14px;
+    text-decoration: none;
+    color: #1a284d;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
 
-	<section class="vh-50">
-		{% if app.user and (is_granted('ROLE_ADMIN') or is_granted('ROLE_MODERATOR')) %}
-			<div class="container h-50">
-				<div class="row d-flex justify-content-center align-items-center h-100">
-					<div class="col col-md-9 col-lg-7 col-xl-5">
-						<div class="card">
-							<div class="profile-header">
-								<img class="profile-img mt-2" src="{{ app.user.picture ? asset('uploads/profile/' ~ app.user.picture) : asset('uploads/profile/default_profile_picture.jpg') }}" alt="user-profile-picture"/>
-								<h6 class="mt-2 text-white">{{ app.user.username }}</h6>
-							</div>
-							<div class="card-body text-black">
-								<h4 class="text-center text-white mb-2">{{ 'navigation.dashboard'|trans }}</h4>
-								<hr>
-								<a href="{{ path('grammar_index') }}" class="btn btn-light btn-rounded btn-block btn-md">
-									{{ 'account.grammar_learn'|trans }}
-								</a>
-								{% if is_granted('ROLE_ADMIN') %}
-									<a href="{{ path('app_user_index') }}" class="btn btn-light btn-rounded btn-block btn-md">
-										{{ 'account.show_user'|trans }}
-									</a>
-								{% endif %}
-								<a href="{{ path('account_pending_translations') }}" class="btn btn-light btn-rounded btn-block btn-md">
-									{{ 'account.pending_request'|trans }}
-								</a>
-								<a href="{{ path('app_traduction_index') }}" class="btn btn-light btn-rounded btn-block btn-md">
-									{{ 'account.list_word'|trans }}
-								</a>
-								<a href="{{ path('documentation_index') }}" class="btn btn-light btn-rounded btn-block btn-md">
-									Documentation
-								</a>
-								<a href="{{ path('category_doc_index') }}" class="btn btn-light btn-rounded btn-block btn-md">
-									{{ 'account.category_doc'|trans }}
-								</a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		{% else %}
-			<div class="container py-5 h-50">
-				<div class="row d-flex justify-content-center align-items-center h-100">
-					<div class="col col-md-9 col-lg-7 col-xl-5">
-						<div class="card">
-							<div class="card-body text-black text-center">
-								<h4>{{ 'addflash.restreindre_acces'|trans }}</h4>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		{% endif %}
-	</section>
+.dashboard-link:hover {
+    background: linear-gradient(135deg, #1a284d, #2d4a7c);
+    border-color: #1a284d;
+    color: white;
+    transform: translateX(5px);
+    box-shadow: 0 5px 20px rgba(26, 40, 77, 0.2);
+}
+
+.dashboard-link i {
+    font-size: 1.2rem;
+    width: 24px;
+    text-align: center;
+    color: #2d4a7c;
+    transition: color 0.3s ease;
+}
+
+.dashboard-link:hover i {
+    color: #b3e2ec;
+}
+
+.dashboard-link .link-arrow {
+    margin-left: auto;
+    font-size: 1rem;
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: all 0.3s ease;
+}
+
+.dashboard-link:hover .link-arrow {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* ========================================
+   SECTION SÉPARATEUR
+   ======================================== */
+.dashboard-section {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 2px solid #f0f4f8;
+}
+
+.dashboard-section-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+}
+
+/* ========================================
+   CARD ACCÈS RESTREINT
+   ======================================== */
+.restricted-card {
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 15px 50px rgba(220, 53, 69, 0.1);
+    padding: 50px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.restricted-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, #dc3545, #ff6b6b);
+}
+
+.restricted-icon {
+    width: 70px;
+    height: 70px;
+    background: rgba(220, 53, 69, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+}
+
+.restricted-icon i {
+    font-size: 1.8rem;
+    color: #dc3545;
+}
+
+.restricted-card h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: #1a1a2e;
+    margin-bottom: 10px;
+}
+
+.restricted-card p {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.95rem;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.btn-back-home {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 25px;
+    background: linear-gradient(135deg, #1a284d, #2d4a7c);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-back-home:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(26, 40, 77, 0.3);
+    color: white;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (max-width: 600px) {
+    .dashboard-page {
+        padding: 20px 15px;
+    }
+    
+    .dashboard-container {
+        max-width: 100%;
+    }
+    
+    .dashboard-card {
+        padding: 30px 25px;
+        border-radius: 20px;
+    }
+    
+    .profile-avatar {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .profile-header h2 {
+        font-size: 1.3rem;
+    }
+    
+    .dashboard-title {
+        font-size: 1.1rem;
+    }
+    
+    .dashboard-link {
+        padding: 14px 16px;
+        font-size: 0.9rem;
+    }
+    
+    .dashboard-link i {
+        font-size: 1.1rem;
+    }
+    
+    .restricted-card {
+        padding: 40px 25px;
+    }
+}
+
+@media (max-width: 400px) {
+    .dashboard-card {
+        padding: 25px 20px;
+    }
+    
+    .profile-avatar {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .profile-header h2 {
+        font-size: 1.2rem;
+    }
+    
+    .dashboard-link {
+        padding: 12px 14px;
+        gap: 12px;
+    }
+}
+</style>
+
+<div class="dashboard-page">
+    <div class="dashboard-container">
+        <div class="col-11 mx-auto mb-3">
+            {% include 'include/flashes.html.twig' %}
+        </div>
+        
+        {% if app.user and (is_granted('ROLE_ADMIN') or is_granted('ROLE_MODERATOR')) %}
+        <div class="dashboard-card">
+            {# Profil Header #}
+            <div class="profile-header">
+                <img class="profile-avatar" 
+                     src="{{ app.user.picture ? asset('uploads/profile/' ~ app.user.picture) : asset('uploads/profile/default_profile_picture.jpg') }}" 
+                     alt="Photo de profil">
+                <h2>{{ app.user.username }}</h2>
+                <span class="role-badge">
+                    {% if is_granted('ROLE_ADMIN') %}
+                        Admin
+                    {% else %}
+                        Modérateur
+                    {% endif %}
+                </span>
+            </div>
+            
+            {# Titre #}
+            <h3 class="dashboard-title">{{ 'navigation.dashboard'|trans }}</h3>
+            
+            {# Menu principal #}
+            <div class="dashboard-menu">
+                <a href="{{ path('grammar_index') }}" class="dashboard-link">
+                    <i class="bi bi-book"></i>
+                    {{ 'account.grammar_learn'|trans }}
+                    <i class="bi bi-chevron-right link-arrow"></i>
+                </a>
+                
+                {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('app_user_index') }}" class="dashboard-link">
+                    <i class="bi bi-people"></i>
+                    {{ 'account.show_user'|trans }}
+                    <i class="bi bi-chevron-right link-arrow"></i>
+                </a>
+                {% endif %}
+                
+                <a href="{{ path('account_pending_translations') }}" class="dashboard-link">
+                    <i class="bi bi-hourglass-split"></i>
+                    {{ 'account.pending_request'|trans }}
+                    <i class="bi bi-chevron-right link-arrow"></i>
+                </a>
+                
+                <a href="{{ path('app_traduction_index') }}" class="dashboard-link">
+                    <i class="bi bi-translate"></i>
+                    {{ 'account.list_word'|trans }}
+                    <i class="bi bi-chevron-right link-arrow"></i>
+                </a>
+            </div>
+            
+            {# Section Documentation #}
+            <div class="dashboard-section">
+                <p class="dashboard-section-title">Documentation</p>
+                <div class="dashboard-menu">
+                    <a href="{{ path('documentation_index') }}" class="dashboard-link">
+                        <i class="bi bi-file-earmark-text"></i>
+                        Documentation
+                        <i class="bi bi-chevron-right link-arrow"></i>
+                    </a>
+                    
+                    <a href="{{ path('category_doc_index') }}" class="dashboard-link">
+                        <i class="bi bi-folder"></i>
+                        {{ 'account.category_doc'|trans }}
+                        <i class="bi bi-chevron-right link-arrow"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        {% else %}
+        {# Accès restreint #}
+        <div class="restricted-card">
+            <div class="restricted-icon">
+                <i class="bi bi-lock"></i>
+            </div>
+            <h4>{{ 'addflash.restreindre_acces'|trans }}</h4>
+            <p>{{ 'dashboard.restricted_message'|trans|default('Vous n\'avez pas les permissions nécessaires pour accéder à cette page.') }}</p>
+            <a href="{{ path('show_home') }}" class="btn-back-home">
+                <i class="bi bi-house"></i>
+                {{ 'button.back_home'|trans|default('Retour à l\'accueil') }}
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
 {% endblock %}

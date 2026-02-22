@@ -1,591 +1,541 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Amyaz - Apprentissage
-{% endblock %}
+{% block title %}Amyaz - Apprentissage{% endblock %}
 
 {% block body %}
-	<style>
-		button {
-			background-color: #ffffff;
-			border: 2px solid #ddd;
-			color: #333;
-			padding: 15px 20px;
-			margin: 10px;
-			border-radius: 8px;
-			cursor: pointer;
-			font-size: 1.2em;
-			transition: background-color 0.3s ease, border-color 0.3s ease;
-		}
+<style>
+/* ========================================
+   PAGE APPRENTISSAGE TIFINAGH
+   ======================================== */
+
+/* Header de la page */
+.learning-header {
+    text-align: center;
+    padding: 60px 20px 40px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.learning-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    color: #000000;
+    margin-bottom: 20px;
+    line-height: 1.3;
+}
+
+.learning-header .lead {
+    color: #555;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 20px;
+}
+
+/* ========================================
+   TABLE ALPHABET
+   ======================================== */
+.alphabet-table-section {
+    max-width: 900px;
+	width: 100%;
+    padding: 0 20px;
+}
+
+.alphabet-table-container {
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    position: relative;
+}
+
+.alphabet-table-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    linear-gradient(135deg, #04068e, #aacff1);}
+
+.alphabet-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+}
+
+.alphabet-table thead {
+    background: white;
+    border-bottom: 2px solid #eee;
+}
+
+.alphabet-table thead th {
+    color: #000000;
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 20px 15px;
+    text-align: center;
+    border: none;
+    position: relative;
+}
+
+.alphabet-table thead th::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 3px;
+    linear-gradient(135deg, #04068e, #aacff1);    border-radius: 2px;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.alphabet-table thead th:hover::after {
+    opacity: 1;
+}
+
+.alphabet-table tbody tr {
+    transition: all 0.3s ease;
+}
+
+.alphabet-table tbody tr:nth-child(even) {
+    background: #fafafa;
+}
+
+.alphabet-table tbody tr:hover {
+    background: rgba(160, 93, 5, 0.05);
+}
+
+.alphabet-table tbody td {
+    padding: 15px;
+    text-align: center;
+    border: none;
+    border-bottom: 1px solid #f0f0f0;
+    font-family: 'Outfit', sans-serif;
+    color: #333;
+    font-size: 1rem;
+}
+
+/* Lettre Tifinagh plus grande */
+.alphabet-table tbody td:first-child {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #000000;
+}
+
+/* Valeur phonétique - nouveau style */
+.phonetic-tag {
+    display: inline-block;
+    background: white;
+    color: #333;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    font-family: 'Outfit', sans-serif;
+    border: 1px solid #e0e0e0;
+    transition: all 0.3s ease;
+}
+
+.alphabet-table tbody tr:hover .phonetic-tag {
+    border-color: #000000;
+    color: #000000;
+}
+
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (max-width: 768px) {
+    .alphabet-table thead th {
+        font-size: 0.9rem;
+        padding: 15px 10px;
+    }
     
-        td{
-            font-family: 'Noto Sans', sans-serif;
-        }
-
-		.parent {
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			margin-top: 15vh;
-			margin-bottom: 15vh;
-		}
-
-		.containe {
-			background-color: transparent;
-			border-radius: 20px;
-			box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
-			text-align: center;
-			justify-content: center;
-			align-items: center;
-		}
-
-
-		button:hover {
-			background-color: #f0f0f0;
-			border-color: #bbb;
-		}
-
-		button:active {
-			background-color: #e0e0e0;
-		}
-
-		/* Style des réponses */
-		.question-box button {
-			background-color: #ffffff;
-			border: 2px solid #ccc;
-			color: #333;
-			font-size: 1.1em;
-			padding: 10px 15px;
-			margin: 10px;
-			border-radius: 8px;
-			cursor: pointer;
-			transition: background-color 0.3s ease, border-color 0.3s ease;
-		}
-
-		.question-box button:hover {
-			background-color: #f0f0f0;
-			border-color: #bbb;
-		}
-
-		.question-box button:active {
-			background-color: #e0e0e0;
-			transform: scale(0.95);
-		}
-
-		/* Animation d'apparition */
-		.question-box {
-			animation: fadeIn 0.5s ease;
-		}
-
-		@keyframes fadeIn {
-			from {
-				opacity: 0;
-				transform: translateY(-20px);
-			}
-
-			to {
-				opacity: 1;
-				transform: translateY(0);
-			}
-		}
-
-		/* Style du message de feedback */
-		.feedback {
-			margin-top: 20px;
-			font-size: 1.2em;
-			font-weight: bold;
-		}
-
-		.correct {
-			color: #28a745;
-		}
-
-		.incorrect {
-			color: #dc3545;
-		}
-	</style>
-	<div class="container">
-		<div class="table-responsive">
-			<h1 class="text-left display-4">L'alphabet traditionnel berbère : le tifinagh</h1>
-			<p class="text-left lead">Le tifinagh est un ancien système d’écriture utilisé depuis l’Antiquité en Afrique du Nord. Toutefois, la zone d'usage de cette écriture s'est considérablement réduite au fil des siècles. Le tifinagh a survécut chez les Berbères touarègues qui étaient les seuls, jusque très récemment, à utiliser cette écriture antique.</p>
-			<p class="text-left lead">Aujourd'hui, le tifinagh est la graphie officielle avec laquelle les institutions marocaines écrivent le berbère. Le tifinagh utilisé au Maroc demeure cependant quelque peu différent du tifinagh utilisés par les Touarègues. En effet, dans un objectif de normalisation du tifinagh, l'Institut royal de la culture amazighe a développé un néo-tifinagh, appelé Tifinagh-Ircam, en s'inspirant fortement de la graphie ancienne.</p>
-		</div>
-	</div>
-
-	<div class="container mt-5">
-
-		<table class="table table-striped table-bordered text-center">
-
-			<thead class="thead-dark">
-				<tr>
-					<th scope="col">Tifinagh</th>
-					<th scope="col">Appelation en français</th>
-					<th scope="col">Valeur phonétique</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td>ⴰ</td>
-					<td>ya</td>
-					<td>a</td>
-				</tr>
-				<tr>
-					<td>ⴱ</td>
-					<td>yab</td>
-					<td>b</td>
-				</tr>
-				<tr>
-					<td>ⴷ</td>
-					<td>yad</td>
-					<td>d</td>
-				</tr>
-				<tr>
-					<td>ⴹ</td>
-					<td>yadd</td>
-					<td>ḍ (prononcé comme le "ض" en arabe)</td>
-				</tr>
-				<tr>
-					<td>ⴻ</td>
-					<td>yey</td>
-					<td>e</td>
-				</tr>
-				<tr>
-					<td>ⴼ</td>
-					<td>yaf</td>
-					<td>f</td>
-				</tr>
-				<tr>
-					<td>ⴳ</td>
-					<td>yag</td>
-					<td>g</td>
-				</tr>
-				<tr>
-					<td>ⴳⵯ</td>
-					<td>yagw</td>
-					<td>ɡʷ</td>
-				</tr>
-				<tr>
-					<td>ⵀ</td>
-					<td>yah</td>
-					<td>h</td>
-				</tr>
-				<tr>
-					<td>ⵃ</td>
-					<td>yahh</td>
-					<td>ḥ (prononcé comme le "ح" en arabe)</td>
-				</tr>
-				<tr>
-					<td>ⵉ</td>
-					<td>yi</td>
-					<td>i</td>
-				</tr>
-				<tr>
-					<td>ⵊ</td>
-					<td>yaj</td>
-					<td>j</td>
-				</tr>
-				<tr>
-					<td>ⴽ</td>
-					<td>yak</td>
-					<td>k</td>
-				</tr>
-				<tr>
-					<td>ⴽⵯ</td>
-					<td>yakw</td>
-					<td>kʷ</td>
-				</tr>
-				<tr>
-					<td>ⵍ</td>
-					<td>yal</td>
-					<td>l</td>
-				</tr>
-				<tr>
-					<td>ⵎ</td>
-					<td>yam</td>
-					<td>m</td>
-				</tr>
-				<tr>
-					<td>ⵏ</td>
-					<td>yan</td>
-					<td>n</td>
-				</tr>
-				<tr>
-					<td>ⵇ</td>
-					<td>yaq</td>
-					<td>q (prononcé comme le "ق" en arabe)</td>
-				</tr>
-				<tr>
-					<td>ⵔ</td>
-					<td>yar</td>
-					<td>r</td>
-				</tr>
-				<tr>
-					<td>ⵙ</td>
-					<td>yas</td>
-					<td>s</td>
-				</tr>
-				<tr>
-					<td>ⵚ</td>
-					<td>yass</td>
-					<td>ṣ</td>
-				</tr>
-				<tr>
-					<td>ⵜ</td>
-					<td>yat</td>
-					<td>t</td>
-				</tr>
-				<tr>
-					<td>ⵟ</td>
-					<td>yatt</td>
-					<td>ṭ (prononcé comme le "ط" en arabe)</td>
-				</tr>
-				<tr>
-					<td>ⵓ</td>
-					<td>you</td>
-					<td>ou</td>
-				</tr>
-				<tr>
-					<td>ⵡ</td>
-					<td>yaw</td>
-					<td>w</td>
-				</tr>
-				<tr>
-					<td>ⵢ</td>
-					<td>yay</td>
-					<td>y</td>
-				</tr>
-				<tr>
-					<td>ⵣ</td>
-					<td>yaz</td>
-					<td>z</td>
-				</tr>
-				<tr>
-					<td>ⵥ</td>
-					<td>yazz</td>
-					<td>ẓ</td>
-				</tr>
-				<tr>
-					<td>ⵛ</td>
-					<td>yach</td>
-					<td>ch (prononcé comme le "ش" en arabe)</td>
-				</tr>
-				<tr>
-					<td>ⵖ</td>
-					<td>yagh</td>
-					<td>ɣ (prononcé comme le "غ" en arabe)</td>
-				</tr>
-				<tr>
-					<td>ⵄ</td>
-					<td>yaa</td>
-					<td>ɛ (prononcé comme le "ع" en arabe)</td>
-				</tr>
-				<tr>
-					<td>ⵅ</td>
-					<td>yakh</td>
-					<td>x (prononcé comme le "خ" en arabe)</td>
-				</tr>
-				<tr>
-					<td>ⴵ</td>
-					<td>yadj</td>
-					<td>ǧ (prononcé comme le "dj" de djamila)</td>
-				</tr>
-				<tr>
-					<td>ⵞ</td>
-					<td>yatch</td>
-					<td>č (prononcé comme le "tch" de tchat)</td>
-				</tr>
-								<tr>
-					<td>ⵁ</td>
-					<td></td>
-					<td>ř (mutation rifaine du "l" en "r")</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
-
-	<div class="parent">
-		<div class="card containe col-8 text-center align-center" style="padding: 30px;">
-			<h2 style="padding: 30px;">Quizz d'apprentissage Tifinagh</h2>
-			<div
-				id="question-box" class="question-box"><!-- Question et réponses seront injectées ici par JavaScript -->
-			</div>
-			<div
-				id="feedback" class="feedback"><!-- Message de feedback sera injecté ici par JavaScript -->
-			</div>
-			<button onclick="generateQuestion()">Nouvelle Question</button>
-		</div>
-	</div>
-
-
-	<div class="container">
-		<p class="text-left lead">Pour apprendre la prononciation des lettres de l'alphabet berbère, consulter les liens Youtube ci-dessous :
-		</p>
-		<p class="text-left lead">1 -
-			<a href="https://www.youtube.com/watch?v=ASkEo4Y9IEI" target="_blank">ⵉⵙⴽⴽⵉⵍⵏ ⵏ ⵜⵎⴰⵣⵉⵖⵜ - #Amazigh #alphabet - الحروف #الامازيغية</a>
-		</p>
-		<p class="text-left lead">2 -
-			<a href="https://www.youtube.com/watch?v=nQHywQialCY" target="_blank">تعلم حروف تيفيناغ بالصوت والصورة</a>
-		</p>
-		<p class="text-left lead">3 -
-			<a href="https://www.youtube.com/watch?v=1TiQ_VymkvU" target="_blank">Tifinagh - Amazigh Alphabet</a>
-		</p>
-	</div>
-</div>
-
-<script>
-	const questions = [
-{
-letter: "ⴰ",
-correct: "a"
-},
-{
-letter: "ⴱ",
-correct: "b"
-},
-{
-letter: "ⴷ",
-correct: "d"
-},
-{
-letter: "ⴹ",
-correct: "ḍ"
-}, {
-letter: "ⴻ",
-correct: "e"
-}, {
-letter: "ⴼ",
-correct: "f"
-}, {
-letter: "ⴳ",
-correct: "g"
-}, {
-letter: "ⴳⵯ",
-correct: "ɡʷ"
-}, {
-letter: "ⵀ",
-correct: "h"
-}, {
-letter: "ⵃ",
-correct: "ḥ"
-}, {
-letter: "ⵉ",
-correct: "i"
-}, {
-letter: "ⵊ",
-correct: "j"
-}, {
-letter: "ⴽ",
-correct: "k"
-}, {
-letter: "ⴽⵯ",
-correct: "kʷ"
-}, {
-letter: "ⵍ",
-correct: "l"
-}, {
-letter: "ⵎ",
-correct: "m"
-}, {
-letter: "ⵏ",
-correct: "n"
-}, {
-letter: "ⵇ",
-correct: "q"
-}, {
-letter: "ⵔ",
-correct: "r"
-}, {
-letter: "ⵕ",
-correct: "ṛ"
-}, {
-letter: "ⵙ",
-correct: "s"
-}, {
-letter: "ⵚ",
-correct: "ṣ"
-}, {
-letter: "ⵜ",
-correct: "t"
-}, {
-letter: "ⵟ",
-correct: "ṭ"
-}, {
-letter: "ⵓ",
-correct: "u"
-}, {
-letter: "ⵡ",
-correct: "w"
-}, {
-letter: "ⵢ",
-correct: "y"
-}, {
-letter: "ⵣ",
-correct: "z"
-}, {
-letter: "ⵥ",
-correct: "ẓ"
-}, {
-letter: "ⵛ",
-correct: "c"
-}, {
-letter: "ⵖ",
-correct: "ɣ"
-}, {
-letter: "ⵄ",
-correct: "ɛ"
-}, {
-letter: "ⵅ",
-correct: "x"
-}, {
-letter: "ⴵ",
-correct: "ǧ"
-}, {
-letter: "ⵞ",
-correct: "č"
-}, {
-letter: "ⵁ",
-correct: "ř"
-}
-];
-
-// Liste complète des lettres pour les réponses incorrectes
-const allLetters = [
-"a",
-"b",
-"d",
-"ḍ",
-"e",
-"f",
-"g",
-"ɡʷ",
-"h",
-"ḥ",
-"i",
-"j",
-"k",
-"kʷ",
-"l",
-"m",
-"n",
-"q",
-"r",
-"ṛ",
-"s",
-"ṣ",
-"t",
-"ṭ",
-"u",
-"w",
-"y",
-"z",
-"ẓ",
-"c",
-"ɣ",
-"ɛ",
-"x",
-'ǧ',
-'č',
-'ř'
-];
-
-let recentQuestions = [];
-let remainingQuestions = [... questions]; // Clone du tableau pour gérer les 33 premières questions
-let questionCount = 0;
-
-function shuffleArray(array) {
-for (let i = array.length - 1; i > 0; i--) {
-const j = Math.floor(Math.random() * (i + 1));
-[
-array[i], array[j]
-] = [
-array[j], array[i]
-];
-}
+    .alphabet-table tbody td {
+        padding: 12px 8px;
+        font-size: 0.9rem;
+    }
+    
+    .alphabet-table tbody td:first-child {
+        font-size: 1.4rem;
+    }
+    
+    .phonetic-tag {
+        padding: 4px 10px;
+        font-size: 0.8rem;
+    }
+    
 }
 
-function generateQuestion() {
-let randomQuestion;
-
-// Si nous sommes encore dans les 33 premières questions
-if (remainingQuestions.length > 0) { // Choisir une lettre aléatoire parmi celles qui restent
-const randomIndex = Math.floor(Math.random() * remainingQuestions.length);
-randomQuestion = remainingQuestions.splice(randomIndex, 1)[0]; // Enlever la question sélectionnée de la liste
-} else { // À partir de la 34ème question, choisir aléatoirement mais éviter les répétitions récentes
-do {
-randomQuestion = questions[Math.floor(Math.random() * questions.length)];
-} while (recentQuestions.includes(randomQuestion.letter));
+/* ========================================
+   RESSOURCES SECTION
+   ======================================== */
+.resources-section {
+    max-width: 900px;
+	width: 100%;
+    margin: 60px auto;
+    padding: 0 20px;
 }
 
-// Mettre à jour les questions récentes si on est à partir de la 34ème question
-if (remainingQuestions.length === 0) {
-recentQuestions.push(randomQuestion.letter);
-if (recentQuestions.length > 15) { // Limite à 15 dernières questions
-recentQuestions.shift(); // Retirer la plus ancienne question
-}
-}
-
-let choices = [randomQuestion.correct];
-
-// Ajout des réponses incorrectes
-while (choices.length < 4) {
-const randomWrong = allLetters[Math.floor(Math.random() * allLetters.length)];
-if (! choices.includes(randomWrong)) {
-choices.push(randomWrong);
-}
+.resources-card {
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
 }
 
-shuffleArray(choices);
+.resources-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    linear-gradient(135deg, #04068e, #aacff1);}
 
-const questionBox = document.getElementById('question-box');
-questionBox.innerHTML = `
-                <h3>Quelle est la lettre latine équivalente à ${
-randomQuestion.letter
-} ?</h3>
-                <button onclick="checkAnswer('${
-choices[0]
-}', '${
-randomQuestion.correct
-}')">${
-choices[0]
-}</button>
-                <button onclick="checkAnswer('${
-choices[1]
-}', '${
-randomQuestion.correct
-}')">${
-choices[1]
-}</button>
-                <button onclick="checkAnswer('${
-choices[2]
-}', '${
-randomQuestion.correct
-}')">${
-choices[2]
-}</button>
-                <button onclick="checkAnswer('${
-choices[3]
-}', '${
-randomQuestion.correct
-}')">${
-choices[3]
-}</button>
-            `;
-
-// Réinitialiser le feedback pour chaque nouvelle question
-document.getElementById('feedback').innerHTML = '';
-
-questionCount++;
+.resources-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: #000000;
+    margin-bottom: 25px;
 }
 
-function checkAnswer(selected, correct) {
-const feedback = document.getElementById('feedback');
-if (selected === correct) {
-feedback.innerHTML = "<p class='correct'>Bonne réponse !</p>";
-setTimeout(generateQuestion, 2000); // Pause de 2 secondes pour les bonnes réponses
-} else {
-feedback.innerHTML = `<p class='incorrect'>Mauvaise réponse, la bonne était : ${correct}</p>`;
-setTimeout(generateQuestion, 5000); // Pause de 5 secondes pour les mauvaises réponses
-}
+.resource-link {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 20px;
+    background: #f8f8f8;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    text-decoration: none;
+    color: #333;
+    transition: all 0.3s ease;
 }
 
-window.onload = generateQuestion;
-</script>{% endblock %}
+.resource-link:hover {
+    background: rgba(160, 93, 5, 0.1);
+    transform: translateX(5px);
+    color: #000000;
+}
+
+.resource-link i {
+    font-size: 1.5rem;
+    color: #e94560;
+}
+
+.resource-link span {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1rem;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (max-width: 768px) {
+    .learning-header {
+        padding: 40px 15px 30px;
+    }
+    
+    .learning-header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .learning-header .lead {
+        font-size: 1rem;
+    }
+    
+    .alphabet-table thead th {
+        font-size: 0.85rem;
+        padding: 15px 10px;
+    }
+    
+    .alphabet-table tbody td {
+        padding: 12px 10px;
+        font-size: 0.9rem;
+    }
+    
+    .alphabet-table tbody td:first-child {
+        font-size: 1.5rem;
+    }
+
+    
+    .resources-card {
+        padding: 30px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .alphabet-table thead th {
+        font-size: 0.75rem;
+        padding: 12px 8px;
+    }
+    
+    .alphabet-table tbody td:first-child {
+        font-size: 1.3rem;
+    }
+    
+    .phonetic-tag {
+        padding: 3px 10px;
+        font-size: 0.8rem;
+    }
+    
+    .question-letter {
+        font-size: 3rem;
+    }
+    
+    .new-question-btn {
+        width: 100%;
+        padding: 14px 20px;
+    }
+    
+    .question-box button {
+        padding: 12px 15px;
+        font-size: 0.95rem;
+        min-width: 70px;
+    }
+}
+</style>
+
+<main>
+    {# ========== HEADER ========== #}
+    <div class="learning-header">
+        <h1>L'alphabet traditionnel berbère : le Tifinagh</h1>
+        <p class="lead">
+            Le tifinagh est un ancien système d'écriture utilisé depuis l'Antiquité en Afrique du Nord. 
+            Toutefois, la zone d'usage de cette écriture s'est considérablement réduite au fil des siècles. 
+            Le tifinagh a survécu chez les Berbères touarègues qui étaient les seuls, jusque très récemment, 
+            à utiliser cette écriture antique.
+        </p>
+        <p class="lead">
+            Aujourd'hui, le tifinagh est la graphie officielle avec laquelle les institutions marocaines 
+            écrivent le berbère. Le tifinagh utilisé au Maroc demeure cependant quelque peu différent du 
+            tifinagh utilisé par les Touarègues. En effet, dans un objectif de normalisation du tifinagh, 
+            l'Institut royal de la culture amazighe a développé un néo-tifinagh, appelé Tifinagh-Ircam, 
+            en s'inspirant fortement de la graphie ancienne.
+        </p>
+    </div>
+
+    {# ========== TABLE ALPHABET ========== #}
+    <section class="alphabet-table-section">
+        <div class="alphabet-table-container">
+            <table class="alphabet-table">
+                <thead>
+                    <tr>
+                        <th>Tifinagh</th>
+                        <th>Appellation en français</th>
+                        <th>Valeur phonétique</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>ⴰ</td>
+                        <td>ya</td>
+                        <td><span class="phonetic-tag">a</span></td>
+                    </tr>
+                    <tr>
+                        <td>ⴱ</td>
+                        <td>yab</td>
+                        <td><span class="phonetic-tag">b</span></td>
+                    </tr>
+                    <tr>
+                        <td>ⴷ</td>
+                        <td>yad</td>
+                        <td><span class="phonetic-tag">d</span></td>
+                    </tr>
+                    <tr>
+                        <td>ⴹ</td>
+                        <td>yadd</td>
+                        <td><span class="phonetic-tag">ḍ (prononcé comme le "ض" en arabe)</span></td>
+                    </tr>
+                    <tr>
+                        <td>ⴻ</td>
+                        <td>yey</td>
+                        <td><span class="phonetic-tag">e</span></td>
+                    </tr>
+                    <tr>
+                        <td>ⴼ</td>
+                        <td>yaf</td>
+                        <td><span class="phonetic-tag">f</span></td>
+                    </tr>
+                    <tr>
+                        <td>ⴳ</td>
+                        <td>yag</td>
+                        <td><span class="phonetic-tag">g</span></td>
+                    </tr>
+                    <tr>
+                        <td>ⴳⵯ</td>
+                        <td>yagw</td>
+                        <td><span class="phonetic-tag">ɡʷ</span></td>
+                    </tr>
+                    <tr>
+                        <td>ⵀ</td>
+                        <td>yah</td>
+                        <td><span class="phonetic-tag">h</span></td>
+                    </tr>
+                    <tr>
+                        <td>ⵃ</td>
+                        <td>yahh</td>
+                        <td><span class="phonetic-tag">ḥ (prononcé comme le "ح" en arabe)</span></td>
+                    </tr>
+                    <tr>
+                        <td>ⵉ</td>
+                        <td>yi</td>
+                        <td><span class="phonetic-tag">i</span></td>
+                    </tr>
+                    <tr>
+                        <td>ⵊ</td>
+                        <td>yaj</td>
+                        <td><span class="phonetic-tag">j</span></td>
+                    </tr>
+                    <tr>
+                        <td>ⴽ</td>
+                        <td>yak</td>
+                        <td><span class="phonetic-tag">k</span></td>
+                    </tr>
+                    <tr>
+                        <td>ⴽⵯ</td>
+                        <td>yakw</td>
+                        <td><span class="phonetic-tag">kʷ</span></td>
+                    </tr>
+                    <tr>
+                        <td>ⵍ</td>
+                        <td>yal</td>
+                        <td><span class="phonetic-tag">l</span></td>
+                    </tr>
+                    <tr>
+                        <td>ⵎ</td>
+                        <td>yam</td>
+                        <td><span class="phonetic-tag">m</span></td>
+                    </tr>
+                    <tr>
+                        <td>ⵏ</td>
+                        <td>yan</td>
+                        <td><span class="phonetic-tag">n</span></td>
+                    </tr>
+                    <tr>
+                        <td>ⵇ</td>
+                        <td>yaq</td>
+                        <td><span class="phonetic-tag">q (prononcé comme le "ق" en arabe)</span></td>
+                    </tr>
+                    <tr>
+                        <td>ⵔ</td>
+                        <td>yar</td>
+                        <td><span class="phonetic-tag">r</span></td>
+                    </tr>
+                    <tr>
+                        <td>ⵙ</td>
+                        <td>yas</td>
+                        <td><span class="phonetic-tag">s</span></td>
+                    </tr>
+                    <tr>
+                        <td>ⵚ</td>
+                        <td>yass</td>
+                        <td><span class="phonetic-tag">ṣ</span></td>
+                    </tr>
+                    <tr>
+                        <td>ⵜ</td>
+                        <td>yat</td>
+                        <td><span class="phonetic-tag">t</span></td>
+                    </tr>
+                    <tr>
+                        <td>ⵟ</td>
+                        <td>yatt</td>
+                        <td><span class="phonetic-tag">ṭ (prononcé comme le "ط" en arabe)</span></td>
+                    </tr>
+                    <tr>
+                        <td>ⵓ</td>
+                        <td>you</td>
+                        <td><span class="phonetic-tag">ou</span></td>
+                    </tr>
+                    <tr>
+                        <td>ⵡ</td>
+                        <td>yaw</td>
+                        <td><span class="phonetic-tag">w</span></td>
+                    </tr>
+                    <tr>
+                        <td>ⵢ</td>
+                        <td>yay</td>
+                        <td><span class="phonetic-tag">y</span></td>
+                    </tr>
+                    <tr>
+                        <td>ⵣ</td>
+                        <td>yaz</td>
+                        <td><span class="phonetic-tag">z</span></td>
+                    </tr>
+                    <tr>
+                        <td>ⵥ</td>
+                        <td>yazz</td>
+                        <td><span class="phonetic-tag">ẓ</span></td>
+                    </tr>
+                    <tr>
+                        <td>ⵛ</td>
+                        <td>yach</td>
+                        <td><span class="phonetic-tag">ch (prononcé comme le "ش" en arabe)</span></td>
+                    </tr>
+                    <tr>
+                        <td>ⵖ</td>
+                        <td>yagh</td>
+                        <td><span class="phonetic-tag">ɣ (prononcé comme le "غ" en arabe)</span></td>
+                    </tr>
+                    <tr>
+                        <td>ⵄ</td>
+                        <td>yaa</td>
+                        <td><span class="phonetic-tag">ɛ (prononcé comme le "ع" en arabe)</span></td>
+                    </tr>
+                    <tr>
+                        <td>ⵅ</td>
+                        <td>yakh</td>
+                        <td><span class="phonetic-tag">x (prononcé comme le "خ" en arabe)</span></td>
+                    </tr>
+                    <tr>
+                        <td>ⴵ</td>
+                        <td>yadj</td>
+                        <td><span class="phonetic-tag">ǧ (prononcé comme le "dj" de djamila)</span></td>
+                    </tr>
+                    <tr>
+                        <td>ⵞ</td>
+                        <td>yatch</td>
+                        <td><span class="phonetic-tag">č (prononcé comme le "tch" de tchat)</span></td>
+                    </tr>
+                    <tr>
+                        <td>ⵁ</td>
+                        <td></td>
+                        <td><span class="phonetic-tag">ř (mutation rifaine du "l" en "r")</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    {# ========== RESSOURCES ========== #}
+    <section class="resources-section">
+        <div class="resources-card">
+            <h3><i class="bi bi-youtube me-2" style="color: #e94560;"></i>Ressources vidéo</h3>
+            <p style="color: #6c757d; margin-bottom: 20px;">
+                Pour apprendre la prononciation des lettres de l'alphabet berbère, consultez ces liens :
+            </p>
+            
+            <a href="https://www.youtube.com/watch?v=ASkEo4Y9IEI" target="_blank" class="resource-link">
+                <i class="bi bi-play-circle-fill"></i>
+                <span>ⵉⵙⴽⴽⵉⵍⵏ ⵏ ⵜⵎⴰⵣⵉⵖⵜ - Amazigh alphabet - الحروف الامازيغية</span>
+            </a>
+            
+            <a href="https://www.youtube.com/watch?v=nQHywQialCY" target="_blank" class="resource-link">
+                <i class="bi bi-play-circle-fill"></i>
+                <span>تعلم حروف تيفيناغ بالصوت والصورة</span>
+            </a>
+            
+            <a href="https://www.youtube.com/watch?v=1TiQ_VymkvU" target="_blank" class="resource-link">
+                <i class="bi bi-play-circle-fill"></i>
+                <span>Tifinagh - Amazigh Alphabet</span>
+            </a>
+        </div>
+    </section>
+</main>
+{% endblock %}

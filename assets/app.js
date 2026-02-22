@@ -1,4 +1,6 @@
 import './bootstrap.js';
+import './home.js';
+
 /*
  * Welcome to your app's main JavaScript file!
  *
@@ -6,6 +8,7 @@ import './bootstrap.js';
  * which should already be in your base.html.twig.
  */
 import './styles/app.css';
+import './styles/home.css';
 
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -16,7 +19,11 @@ const searchInput = document.getElementById('search-input');
 
 // Visibilité du clavier Rifain
 function toggleRifainKeyboard() {
-rifainCharacters.style.display = rifainCharacters.style.display === 'none' || rifainCharacters.style.display === '' ? 'block' : 'none';
+    if (rifainCharacters.style.display === 'none' || rifainCharacters.style.display === '') {
+        rifainCharacters.style.display = 'flex';
+    } else {
+        rifainCharacters.style.display = 'none';
+    }
 }
 
 // Insérer un caractère dans le clavier
@@ -74,17 +81,19 @@ toggleKeyboard.style.display = 'none';
 
 function reveal() {
   var reveals = document.querySelectorAll(".reveal");
+
   for (var i = 0; i < reveals.length; i++) {
     var windowHeight = window.innerHeight;
     var elementTop = reveals[i].getBoundingClientRect().top;
-    var elementVisible = 150;
+    var elementVisible = 120;
+
     if (elementTop < windowHeight - elementVisible) {
       reveals[i].classList.add("activ");
-    } else {
-      reveals[i].classList.remove("activ");
     }
   }
 }
+
 window.addEventListener("scroll", reveal);
+window.addEventListener("load", reveal);
 
 reveal();

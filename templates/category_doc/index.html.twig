@@ -1,70 +1,203 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-	{{ 'category.title'|trans }}
+    {{ 'category.title'|trans }}
 {% endblock %}
 
 {% block body %}
-	<style>
 
+<style>
+/* ========================================
+   CATEGORY INDEX - MODERN STYLE
+   ======================================== */
 
-		.btn {
-			margin: 0 5px; /* Spacing between action buttons */
-		}
+.category-page {
+    min-height: 80vh;
+    padding: 60px 20px;
+}
 
-		.container {
-			max-width: 1000px; /* Maximum width of the container */
-		}
+.category-container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
 
-		.text-center {
-			text-align: center; /* Center-align text */
-		}
+/* Header */
+.category-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
 
-	</style>
+.category-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    color: #1a284d;
+    margin-bottom: 15px;
+}
 
+/* Create button */
+.btn-create-category {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 28px;
+    background: linear-gradient(135deg, #1a284d, #2d4a7c);
+    color: white;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
 
-    {% include 'include/flashes.html.twig' %}
+.btn-create-category:hover {
+    transform: translateY(-2px);
+    color: white;
+}
 
+/* Grid */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+}
 
-	<div class="container mt-2">
-		<h1 class="text-center mb-4">{{ 'category.title'|trans }}</h1>
+/* Card */
+.category-card {
+    background: white;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 10px 40px rgba(26,40,77,0.08);
+    position: relative;
+    transition: all 0.3s ease;
+	  overflow: hidden;
+}
 
-		<div class="text-center mt-4">
-			<a class="btn btn-dark mb-4" href="{{ path('category_doc_new') }}">{{ 'button.create_new'|trans }}</a>
-		</div>
-		<div class="table-responsive">
-			<table class="table table-striped table-bordered text-center">
-				<thead class="thead-dark">
-					<tr>
-						<th>Id</th>
-						<th>Name</th>
-						<th>Actions</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for category_doc in category_docs %}
-						<tr>
-							<td>{{ category_doc.id }}</td>
-							<td>{{ category_doc.name }}</td>
-						{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MODERATOR') %}
-								<td>
-									<a class="btn btn-outline-secondary btn-sm" href="{{ path('category_doc_show', {'id': category_doc.id}) }}">
-										<i class="bi bi-eye"></i>
-									</a>
-									<a class="btn btn-outline-dark btn-sm" href="{{ path('category_doc_edit', {'id': category_doc.id}) }}">
-										<i class="bi bi-pencil"></i>
-									</a>
-								</td>
-							{% endif %}
-						</tr>
-					{% else %}
-						<tr>
-							<td colspan="{% if is_granted('ROLE_ADMIN') %}3{% else %}2{% endif %}" class="text-center">{{ 'p.no_result'|trans }}</td>
-						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
-		</div>
-	</div>
+.category-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #1a284d, #b3e2ec);
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+.category-card:hover {
+    transform: translateY(-4px);
+}
+
+/* Category name */
+.category-name {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #1a284d;
+    margin-bottom: 10px;
+}
+
+/* ID */
+.category-id {
+    font-size: 0.85rem;
+    color: #888;
+    margin-bottom: 15px;
+}
+
+/* Actions */
+.category-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.category-actions a {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: rgba(26,40,77,0.08);
+    color: #1a284d;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.category-actions a:hover {
+    background: #1a284d;
+    color: white;
+}
+
+/* No result */
+.no-category {
+    text-align: center;
+    padding: 60px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(26,40,77,0.05);
+    grid-column: 1 / -1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .category-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .category-page {
+        padding: 40px 15px;
+    }
+}
+</style>
+
+<div class="category-page">
+    <div class="category-container">
+
+        {% include 'include/flashes.html.twig' %}
+
+        <div class="category-header">
+            <h1>{{ 'category.title'|trans }}</h1>
+
+            {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MODERATOR') %}
+                <a href="{{ path('category_doc_new') }}" class="btn-create-category">
+                    <i class="bi bi-plus-circle"></i>
+                    {{ 'button.create_new'|trans }}
+                </a>
+            {% endif %}
+        </div>
+
+        <div class="category-grid">
+
+            {% for category_doc in category_docs %}
+                <div class="category-card">
+
+                    <div class="category-name">
+                        {{ category_doc.name }}
+                    </div>
+
+                    <div class="category-id">
+                        ID: {{ category_doc.id }}
+                    </div>
+
+                    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MODERATOR') %}
+                        <div class="category-actions">
+                            <a href="{{ path('category_doc_show', {'id': category_doc.id}) }}">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            <a href="{{ path('category_doc_edit', {'id': category_doc.id}) }}">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                        </div>
+                    {% endif %}
+
+                </div>
+            {% else %}
+                <div class="no-category">
+                    {{ 'p.no_result'|trans }}
+                </div>
+            {% endfor %}
+
+        </div>
+
+    </div>
+</div>
 
 {% endblock %}

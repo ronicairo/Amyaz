@@ -181,57 +181,79 @@ $results = $qb->getQuery()->getResult();
             ->getResult();
     } 
 
- public function findByFirstLetter(string $letter, string $locale): array
-{
-    $field = $locale === 'en' ? 'wordEN' : 'wordFR';
-    
-    $results = $this->createQueryBuilder('t')
-        ->leftJoin('t.status', 's')
-        ->addSelect('s')
-        ->where('LOWER(SUBSTRING(t.' . $field . ', 1, 1)) = :letter')
-        ->setParameter('letter', strtolower($letter))
-        // Exclure les traductions avec status_id = 1 ou 2
-        ->andWhere('(s.id NOT IN (:excludedStatuses) OR s.id IS NULL)')
-        ->setParameter('excludedStatuses', [1, 2])
-        ->orderBy('t.' . $field, 'ASC')
-        ->getQuery()
-        ->getResult();
-    
-    // Ajouter les propriétés hasRifainSingularRecord et hasRifainPluralRecord
-    foreach ($results as $key => $result) {
-        $rifainSingularRecord = $result->getRifainSingularRecord();
-        $rifainPluralRecord = $result->getRifainPluralRecord();
+    public function findByFirstLetter(string $letter, string $locale): array
+    {
+        $field = $locale === 'en' ? 'wordEN' : 'wordFR';
         
-        // Vérifier si les flux ne sont pas nuls avant de les lire
-        $results[$key]->hasRifainSingularRecord = $rifainSingularRecord && is_resource($rifainSingularRecord) && !empty(stream_get_contents($rifainSingularRecord));
-        $results[$key]->hasRifainPluralRecord = $rifainPluralRecord && is_resource($rifainPluralRecord) && !empty(stream_get_contents($rifainPluralRecord));
+        $possibleChars = $this->getAccentedChars($letter);
+
+        $results = $this->createQueryBuilder('t')
+            ->leftJoin('t.status', 's')
+            ->addSelect('s')
+            ->where('LOWER(SUBSTRING(TRIM(t.' . $field . '), 1, 1)) IN (:letters)')
+            ->setParameter('letters', $possibleChars)
+            // Exclure les traductions avec status_id = 1 ou 2
+            ->andWhere('(s.id NOT IN (:excludedStatuses) OR s.id IS NULL)')
+            ->setParameter('excludedStatuses', [1, 2])
+            ->orderBy('t.' . $field, 'ASC')
+            ->getQuery()
+            ->getResult();
+        
+        // Ajouter les propriétés hasRifainSingularRecord et hasRifainPluralRecord
+        foreach ($results as $key => $result) {
+            $rifainSingularRecord = $result->getRifainSingularRecord();
+            $rifainPluralRecord = $result->getRifainPluralRecord();
+            
+            // Vérifier si les flux ne sont pas nuls avant de les lire
+            $results[$key]->hasRifainSingularRecord = $rifainSingularRecord && is_resource($rifainSingularRecord) && !empty(stream_get_contents($rifainSingularRecord));
+            $results[$key]->hasRifainPluralRecord = $rifainPluralRecord && is_resource($rifainPluralRecord) && !empty(stream_get_contents($rifainPluralRecord));
+        }
+        
+        return $results;
     }
-    
-    return $results;
-}
 
-    //    /**
-    //     * @return Traduction[] Returns an array of Traduction objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('t')
-    //            ->andWhere('t.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('t.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function findAvailableLetters(string $locale): array
+    {
+        $field = $locale === 'en' ? 'wordEN' : 'wordFR';
 
-    //    public function findOneBySomeField($value): ?Traduction
-    //    {
-    //        return $this->createQueryBuilder('t')
-    //            ->andWhere('t.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        $qb = $this->createQueryBuilder('t')
+            ->select('DISTINCT LOWER(SUBSTRING(TRIM(t.' . $field . '), 1, 1)) as letter')
+            ->leftJoin('t.status', 's')
+            ->where('t.' . $field . ' IS NOT NULL')
+            ->andWhere("TRIM(t." . $field . ") != ''")
+            ->andWhere('(s.id NOT IN (:excludedStatuses) OR s.id IS NULL)')
+            ->setParameter('excludedStatuses', [1, 2])
+            ->orderBy('letter', 'ASC');
+
+        $result = $qb->getQuery()->getScalarResult();
+
+        $letters = array_column($result, 'letter');
+
+        $unaccentedLetters = [];
+        foreach ($letters as $letter) {
+            if ($letter) {
+                // transliterate accents
+                $unaccented = \Symfony\Component\String\s($letter)->ascii()->lower()->toString();
+                // The result of ascii() can be multi-character, we only want the first one.
+                if (!empty($unaccented) && ctype_alpha($unaccented[0]) && !in_array($unaccented[0], $unaccentedLetters)) {
+                    $unaccentedLetters[] = $unaccented[0];
+                }
+            }
+        }
+        sort($unaccentedLetters);
+        return $unaccentedLetters;
+    }
+
+    private function getAccentedChars(string $char): array
+    {
+        $map = [
+            'a' => ['a', 'à', 'â', 'ä'],
+            'e' => ['e', 'é', 'è', 'ê', 'ë'],
+            'i' => ['i', 'î', 'ï'],
+            'o' => ['o', 'ô', 'ö'],
+            'u' => ['u', 'ù', 'û', 'ü'],
+            'c' => ['c', 'ç'],
+        ];
+        return $map[strtolower($char)] ?? [strtolower($char)];
+    }
 }

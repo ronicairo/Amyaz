@@ -56,30 +56,41 @@ class DefaultController extends AbstractController
         GrammarSheetRepository $grammarSheetRepository // Injecter le repository
     ): Response {
 
-        $searchTerm = $request->query->get('q');
-        $langOption = $request->query->get('lang', $request->query->get('selected_lang', ''));
+    $searchTerm = $request->query->get('q');
+    $langOption = $request->query->get('lang', $request->query->get('selected_lang', ''));
+    $letter = $request->query->get('letter'); // Paramètre lettre
 
-        // Initialiser les variables error et sanitizedSearchTerm
-        $error = '';
-        $sanitizedSearchTerm = '';
+    // Initialiser les variables
+    $error = '';
+    $sanitizedSearchTerm = '';
+    $traductions = [];
+    $searchType = null; // Pour savoir quel type de recherche est actif
 
-        // Vérifier la présence de balises HTML dans le terme de recherche
-        if ($searchTerm && $this->containsHtml($searchTerm)) {
+    // PRIORITÉ 1: Recherche par terme (barre de recherche)
+    if ($searchTerm) {
+        if ($this->containsHtml($searchTerm)) {
             $error = 'Le terme de recherche ne doit pas contenir de code HTML.';
         } else {
-            // Assainir le terme de recherche pour éviter le code HTML ou les balises
             $sanitizedSearchTerm = htmlspecialchars($searchTerm, ENT_NOQUOTES, 'UTF-8');
-
-            // Validation de la longueur du terme de recherche
             if (strlen($sanitizedSearchTerm) > 60) {
-                $sanitizedSearchTerm = substr($sanitizedSearchTerm, 0, 60); // Tronquer le terme si nécessaire
+                $sanitizedSearchTerm = substr($sanitizedSearchTerm, 0, 60);
             }
+            $traductions = $traductionRepository->findBySearchTerm($sanitizedSearchTerm, $langOption);
+            $searchType = 'term';
         }
-
-        // Recherche des traductions
-        $traductions = $sanitizedSearchTerm
-            ? $traductionRepository->findBySearchTerm($sanitizedSearchTerm, $langOption)
-            : [];
+    }
+    // PRIORITÉ 2: Recherche par lettre (navigation alphabétique)
+    elseif ($letter && preg_match('/^[a-z]$/i', $letter)) {
+        $letter = strtolower($letter);
+        $locale = $request->getLocale();
+        $traductions = $traductionRepository->findByFirstLetter($letter, $locale);
+        $searchType = 'letter';
+        
+        // Définir langOption selon la locale pour l'affichage
+        if (empty($langOption)) {
+            $langOption = $locale === 'en' ? 'en-rif' : 'fr-rif';
+        }
+    }
 
             $user = $this->security->getUser();
 
@@ -102,7 +113,7 @@ class DefaultController extends AbstractController
         $pagination = $paginator->paginate(
             $traductions,
             $request->query->getInt('page', 1),
-            6
+            12
         );
 
         // Pagination des commentaires
@@ -181,6 +192,9 @@ class DefaultController extends AbstractController
 
             return $this->redirectToRoute('show_home');
         }
+
+        $availableLetters = $traductionRepository->findAvailableLetters($request->getLocale());
+
         return $this->render('default/show_home.html.twig', [
             'traductions' => $traductions,
             'favorites' => $favorites,
@@ -195,7 +209,10 @@ class DefaultController extends AbstractController
             'formNews' => $formNews->createView(),
             'error' => $error,
             'wordOfTheDay' => $wordOfTheDay,
-            'grammarSheets' => $grammarSheets
+            'grammarSheets' => $grammarSheets,
+            'selectedLetter' => $letter,      
+            'searchType' => $searchType,
+            'availableLetters' => $availableLetters
         ]);
     }
 
@@ -339,59 +356,18 @@ class DefaultController extends AbstractController
         return new JsonResponse(['status' => 'success']);
     }
 
-    #[Route('/alphabet/{letter}', name: 'browse_by_letter')]
-/**
- * Parcourir le dictionnaire par lettre alphabétique
- *
- * @param string $letter
- * @param TraductionRepository $traductionRepository
- * @param FavoriteRepository $favoriteRepository
- * @param Request $request
- * @param PaginatorInterface $paginator
- * @return Response
- */
-public function browseByLetter(
-    string $letter,
-    TraductionRepository $traductionRepository,
-    FavoriteRepository $favoriteRepository,
-    Request $request,
-    PaginatorInterface $paginator
-): Response {
+   #[Route('/alphabet/{letter}', name: 'browse_by_letter')]
+public function browseByLetter(string $letter): Response
+{
     // Valider la lettre (a-z uniquement)
     $letter = strtolower($letter);
     if (!preg_match('/^[a-z]$/', $letter)) {
         throw $this->createNotFoundException($this->translator->trans('error.invalid_letter'));
     }
-
-    $locale = $request->getLocale();
-    $user = $this->security->getUser();
     
-    // Récupérer les traductions commençant par la lettre
-    $traductions = $traductionRepository->findByFirstLetter($letter, $locale);
-    
-    // Récupérer les favoris de l'utilisateur
-    $favorites = [];
-    if ($user) {
-        $favorites = $favoriteRepository->findBy(['user' => $user]);
-    }
-    
-    // Pagination
-    $pagination = $paginator->paginate(
-        $traductions,
-        $request->query->getInt('page', 1),
-        20 // 20 résultats par page
-    );
+    // Rediriger vers la page d'accueil avec le paramètre letter
+    return $this->redirectToRoute('show_home', ['letter' => $letter]);
 
-    // Déterminer l'option de langue pour l'affichage
-    $langOption = $locale === 'en' ? 'en-rif' : 'fr-rif';
-
-    return $this->render('default/browse_alphabet.html.twig', [
-    'letter' => strtoupper($letter),
-    'traductions' => $traductions,
-    'favorites' => $favorites,
-    'pagination' => $pagination,
-    'langOption' => $langOption
-]);
 }
 
 }

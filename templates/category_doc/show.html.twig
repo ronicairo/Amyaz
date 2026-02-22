@@ -3,93 +3,168 @@
 {% block title %}{{ category_doc.name }}{% endblock %}
 
 {% block body %}
-    <style>
-        .category-details-box {
-            margin: 20px auto;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.5);
-            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
-            border-radius: 10px;
-            max-width: 80%;
-        }
 
-        @media(min-width: 768px) {
-            .category-details-box {
-                max-width: 60%;
-            }
-        }
+<style>
+/* ========================================
+   CATEGORY DETAILS - PREMIUM
+   ======================================== */
 
-        .category-details-box h1 {
-            color: #fff;
-            text-align: center;
-            margin-bottom: 20px;
-        }
+.category-page {
+    min-height: 80vh;
+    padding: 60px 20px;
+    display: flex;
+    justify-content: center;
+    animation: fadeInPage 0.4s ease;
+}
 
-        .category-details-box .table {
-            width: 100%;
-            color: #fff;
-        }
+@keyframes fadeInPage {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 
-        .category-details-box .table th,
-        .category-details-box .table td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #fff;
-        }
+.category-card {
+    width: 100%;
+    max-width: 700px;
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 15px 50px rgba(26,40,77,0.1);
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+}
 
-        .category-details-box .table th {
-            width: 30%;
-            color: #fff;
-            font-weight: bold;
-        }
+.category-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, #1a284d, #b3e2ec);
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+}
 
-        .category-details-box .table td {
-            color: #e9e9e9;
-        }
+/* Header */
+.category-title {
+    text-align: center;
+    margin-bottom: 35px;
+}
 
-        .category-details-box a {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px 20px;
-            text-align: center;
-            border-radius: 5px;
-            text-decoration: none;
-            transition: background-color 0.3s;
-        }
+.category-title h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: #1a284d;
+}
 
-        .category-details-box form {
-            text-align: center;
-            margin-top: 20px;
-        }
-    </style>
+/* Info grid */
+.category-info {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 15px 25px;
+}
 
-    <div class="category-details-box">
-        <h1>{{ category_doc.name }}</h1>
+.category-label {
+    font-weight: 600;
+    color: #1a284d;
+}
 
-        <table class="table">
-            <tbody>
-                <tr>
-                    <th>Id</th>
-                    <td>{{ category_doc.id }}</td>
-                </tr>
-                <tr>
-                    <th>{{ 'td.name'|trans }}</th>
-                    <td>{{ category_doc.name }}</td>
-                </tr>
-                <tr>
-                    <th>{{ 'td.create'|trans }}</th>
-                    <td>{{ category_doc.createdAt ? category_doc.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                </tr>
-                <tr>
-                    <th>{{ 'td.update'|trans }}</th>
-                    <td>{{ category_doc.updatedAt ? category_doc.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-                </tr>
-            </tbody>
-        </table>
+.category-value {
+    color: #555;
+}
 
-        {{ include('category_doc/_delete_form.html.twig') }}
+/* Actions */
+.category-actions {
+    margin-top: 35px;
+    text-align: center;
+}
 
-        <a class="d-block mt-4 mx-auto btn btn-outline-light col-5" href="{{ path('category_doc_index') }}">{{ 'button.back_list'|trans }}</a>
+.category-actions a {
+    display: inline-block;
+    padding: 12px 24px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #1a284d, #2d4a7c);
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.category-actions a:hover {
+    transform: translateY(-2px);
+}
+
+/* Delete section */
+.delete-section {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.delete-section button {
+    padding: 12px 20px;
+    border-radius: 10px;
+    border: none;
+    background: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.delete-section button:hover {
+    background: #dc3545;
+    color: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .category-card {
+        padding: 25px;
+    }
+
+    .category-info {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
+<div class="category-page">
+    <div class="category-card">
+
+        <div class="category-title">
+            <h1>{{ category_doc.name }}</h1>
+        </div>
+
+        <div class="category-info">
+
+            <div class="category-label">ID</div>
+            <div class="category-value">{{ category_doc.id }}</div>
+
+            <div class="category-label">{{ 'td.name'|trans }}</div>
+            <div class="category-value">{{ category_doc.name }}</div>
+
+            <div class="category-label">{{ 'td.create'|trans }}</div>
+            <div class="category-value">
+                {{ category_doc.createdAt ? category_doc.createdAt|date('Y-m-d H:i') : '-' }}
+            </div>
+
+            <div class="category-label">{{ 'td.update'|trans }}</div>
+            <div class="category-value">
+                {{ category_doc.updatedAt ? category_doc.updatedAt|date('Y-m-d H:i') : '-' }}
+            </div>
+
+        </div>
+
+        <div class="delete-section">
+            {{ include('category_doc/_delete_form.html.twig') }}
+        </div>
+
+        <div class="category-actions">
+            <a href="{{ path('category_doc_index') }}">
+                ← {{ 'button.back_list'|trans }}
+            </a>
+        </div>
+
     </div>
+</div>
 
 {% endblock %}

@@ -1,171 +1,165 @@
 {% extends 'base.html.twig' %}
-
 {% form_theme form 'form/_form_errors.html.twig' %}
 
-{% block title %}Edit Status{% endblock %}
+{% block title %}Modifier le statut{% endblock %}
 
 {% block body %}
-    <style>
-        .edit-status-box {
-            margin: 20px auto;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.5);
-            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
-            border-radius: 10px;
-            max-width: 80%;
-        }
 
-        @media(min-width: 768px) {
-            .edit-status-box {
-                max-width: 60%;
-            }
-        }
+<style>
+/* ========================================
+   EDIT STATUS PREMIUM
+   ======================================== */
 
-        .edit-status-box h1 {
-            color: #fff;
-            text-align: center;
-            margin-bottom: 20px;
-        }
+.edit-status-page {
+    min-height: 80vh;
+    padding: 60px 20px;
+    display: flex;
+    justify-content: center;
+}
 
-        .edit-status-box .form-group {
-            margin-bottom: 20px;
-        }
+.edit-status-card {
+    width: 100%;
+    max-width: 800px;
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 15px 50px rgba(26,40,77,0.1);
+    padding: 40px;
+    position: relative;
+}
 
-        .edit-status-box .control-label {
-            color: #fff;
-            font-weight: bold;
-        }
+.edit-status-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, #1a284d, #b3e2ec);
+}
 
-        .edit-status-box .form-control {
-            background-color: rgba(255, 255, 255, 0.1);
-            color: #fff;
-            border: 1px solid #03e9f4;
-        }
+.edit-status-card h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    color: #1a284d;
+    margin-bottom: 25px;
+    text-align: center;
+}
 
-        .edit-status-box .form-control:focus {
-            background-color: rgba(255, 255, 255, 0.2);
-            border-color: #03e9f4;
-        }
+.form-section {
+    margin-top: 25px;
+    padding: 20px;
+    border-radius: 15px;
+    background: rgba(26,40,77,0.03);
+}
 
-        .edit-status-box .form-control::placeholder {
-            color: #bbb;
-        }
+.form-section-title {
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #1a284d;
+    font-size: 0.95rem;
+}
 
-        .edit-status-box .btn-primary {
-            background-color: #03e9f4;
-            border: none;
-            transition: background-color 0.3s;
-        }
+.form-control {
+    border-radius: 10px;
+    padding: 10px 14px;
+}
 
-        .edit-status-box .btn-primary:hover {
-            background-color: #029dbb;
-        }
+.form-control:focus {
+    border-color: #1a284d;
+    box-shadow: 0 0 0 3px rgba(26,40,77,0.1);
+}
 
-        .edit-status-box .btn-primary:focus {
-            background-color: #027d94;
-        }
-    </style>
+.btn-save {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    background: linear-gradient(135deg, #1a284d, #2d4a7c);
+    color: white;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+}
 
-    <div class="container mt-5">
-        <div class="edit-status-box">
-            <h1>Statut pour le mot {{ traduction.wordFR }}</h1>
+.btn-save:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(26,40,77,0.3);
+}
 
-            {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
-                <div class="form-group">
-                    {{ form_label(form.status, 'Statut', {'label_attr': {'class': 'control-label col-sm-2'}}) }}
-                    <div class="col-sm-10">
-                        {{ form_widget(form.status, {'attr': {'class': 'form-control'}}) }}
-                    </div>
-                    {{ form_errors(form.status) }}
-                </div>
+/* Animation smooth */
+.fade-section {
+    transition: all 0.3s ease;
+}
+</style>
 
-                <div id="change-fields" class="mt-3" style="display: none;">
-                    <div class="form-group">
-                        {{ form_label(form.wordFR, 'Mot en français', {'label_attr': {'class': 'control-label col-sm-2'}}) }}
-                        <div class="col-sm-10">
-                            {{ form_widget(form.wordFR, {'attr': {'class': 'form-control'}}) }}
-                        </div>
-                        {{ form_errors(form.wordFR) }}
-                    </div>
-                    <div class="form-group">
-                        {{ form_label(form.wordEN, 'Mot en anglais', {'label_attr': {'class': 'control-label col-sm-2'}}) }}
-                        <div class="col-sm-10">
-                            {{ form_widget(form.wordEN, {'attr': {'class': 'form-control'}}) }}
-                        </div>
-                        {{ form_errors(form.wordEN) }}
-                    </div>
-                    <div class="form-group">
-                        {{ form_label(form.singular, 'Singulier', {'label_attr': {'class': 'control-label col-sm-2'}}) }}
-                        <div class="col-sm-10">
-                            {{ form_widget(form.singular, {'attr': {'class': 'form-control'}}) }}
-                        </div>
-                        {{ form_errors(form.singular) }}
-                    </div>
-                    <div class="form-group">
-                        {{ form_label(form.plural, 'Pluriel', {'label_attr': {'class': 'control-label col-sm-2'}}) }}
-                        <div class="col-sm-10">
-                            {{ form_widget(form.plural, {'attr': {'class': 'form-control'}}) }}
-                        </div>
-                        {{ form_errors(form.plural) }}
-                    </div>
-                    <div class="form-group">
-                        {{ form_label(form.phoneticSingular, 'Phonétique singulier', {'label_attr': {'class': 'control-label col-sm-2'}}) }}
-                        <div class="col-sm-10">
-                            {{ form_widget(form.phoneticSingular, {'attr': {'class': 'form-control'}}) }}
-                        </div>
-                        {{ form_errors(form.phoneticSingular) }}
-                    </div>
-                    <div class="form-group">
-                        {{ form_label(form.phoneticPlural, 'Phonétique pluriel', {'label_attr': {'class': 'control-label col-sm-2'}}) }}
-                        <div class="col-sm-10">
-                            {{ form_widget(form.phoneticPlural, {'attr': {'class': 'form-control'}}) }}
-                        </div>
-                        {{ form_errors(form.phoneticPlural) }}
-                    </div>
-                </div>
+<div class="edit-status-page">
 
-                <div id="justification-field" class="form-group mt-3" style="display: none;">
-                    {{ form_label(form.justification, 'Justification', {'label_attr': {'class': 'control-label col-sm-2'}}) }}
-                    <div class="col-sm-10">
-                        {{ form_widget(form.justification, {'attr': {'class': 'form-control'}}) }}
-                    </div>
-                    {{ form_errors(form.justification) }}
-                </div>
+    <div class="edit-status-card">
 
-                <div class="form-group mt-3">
-                    <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="btn btn-primary">Save</button>
-                    </div>
-                </div>
-            {{ form_end(form) }}
+        <h1>Statut pour le mot "{{ traduction.wordFR }}"</h1>
 
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    var statusField = document.getElementById('{{ form.status.vars.id }}');
-                    var justificationField = document.getElementById('justification-field');
-                    var changeFields = document.getElementById('change-fields');
+        {{ form_start(form) }}
 
-                    function updateFields() {
-                        if (statusField.value === '4' || statusField.value === '2') {
-                            justificationField.style.display = 'block';
-                        } else {
-                            justificationField.style.display = 'none';
-                        }
-
-                        if (statusField.value === '4') {
-                            changeFields.style.display = 'block';
-                        } else {
-                            changeFields.style.display = 'none';
-                        }
-                    }
-
-                    statusField.addEventListener('change', function() {
-                        updateFields();
-                    });
-
-                    updateFields();
-                });
-            </script>
+        {# STATUS #}
+        <div class="form-group">
+            {{ form_row(form.status, {'attr': {'class': 'form-control'}}) }}
         </div>
+
+        {# CHAMPS MODIFICATION #}
+        <div id="change-fields" class="form-section fade-section" style="display:none;">
+            <div class="form-section-title">Modification du contenu</div>
+
+            {{ form_row(form.wordFR) }}
+            {{ form_row(form.wordEN) }}
+            {{ form_row(form.singular) }}
+            {{ form_row(form.plural) }}
+            {{ form_row(form.phoneticSingular) }}
+            {{ form_row(form.phoneticPlural) }}
+        </div>
+
+        {# JUSTIFICATION #}
+        <div id="justification-field" class="form-section fade-section" style="display:none;">
+            <div class="form-section-title">Justification</div>
+            {{ form_row(form.justification) }}
+        </div>
+
+        <button type="submit" class="btn-save">
+            <i class="bi bi-check-circle me-2"></i>
+            Enregistrer
+        </button>
+
+        {{ form_end(form) }}
+
     </div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+    var statusField = document.getElementById('{{ form.status.vars.id }}');
+    var justificationField = document.getElementById('justification-field');
+    var changeFields = document.getElementById('change-fields');
+
+    function updateFields() {
+
+        if (statusField.value === '4' || statusField.value === '2') {
+            justificationField.style.display = 'block';
+        } else {
+            justificationField.style.display = 'none';
+        }
+
+        if (statusField.value === '4') {
+            changeFields.style.display = 'block';
+        } else {
+            changeFields.style.display = 'none';
+        }
+    }
+
+    statusField.addEventListener('change', updateFields);
+
+    updateFields();
+});
+</script>
+
 {% endblock %}

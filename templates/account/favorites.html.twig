@@ -7,148 +7,157 @@
 {% block body %}
 
 	<style>
-		.accordion-flush .accordion-item .accordion-button,
-		.accordion-flush .accordion-item .accordion-button.collapsed {
-			border-radius: 8px;
-			border-color: none !important;
-		}
+	/* ===============================
+   FAVORITES PAGE – MODERN STYLE
+================================ */
 
-		button.accordion-button:focus {
-			outline: none;
-			box-shadow: none;
-		}
-		.accordion {
-			--bs-accordion-color: rgba(0, 0, 0, 0.7);
-			--bs-accordion-bg: transparent;
-			--bs-accordion-transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, border-radius 0.15s ease;
-			--bs-accordion-btn-padding-x: 1.25rem;
-			--bs-accordion-btn-padding-y: 1rem;
-			--bs-accordion-btn-color: #212529;
-			--bs-accordion-btn-bg: var(--bs-accordion-bg);
-			--bs-accordion-btn-icon: url("data:image/svg+xml, %3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23212529'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
-			--bs-accordion-btn-icon-width: 1.25rem;
-			--bs-accordion-btn-icon-transform: rotate(-180deg);
-			--bs-accordion-btn-icon-transition: transform 0.2s ease-in-out;
-			--bs-accordion-btn-active-icon: url("data:image/svg+xml, %3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23ffffff'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
-			--bs-accordion-btn-focus-border-color: transparent;
-			--bs-accordion-body-padding-x: 1.25rem;
-			--bs-accordion-body-padding-y: 1rem;
-			--bs-accordion-active-color: white;
-			--bs-accordion-active-bg: rgba(0, 0, 0, 0.624);
-			border-radius: 8px;
-		}
-		.accordion-body {
-			background-color: transparent;
-		}
-		button accordion-button {
-			height: 50px;
-			width: 200px;
-			background-color: #C09F6A;
-			color: #222222;
-			font-family: 'DM Serif Display', serif;
-			border: 5px solid #C09F6A;
-			box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.912);
-			text-align: center;
-			align-items: center;
-			justify-content: center;
-			position: relative;
-			border-radius: 15px;
-			outline: none;
-			cursor: pointer;
-		}
+.favorite-page {
+    min-height: 80vh;
+    padding: 60px 20px;
+    max-width: 1100px;
+    margin: auto;
+}
 
-		button:hover accordion-button {
-			background-color: #222222;
-			color: #C09F6A;
-			border: 5px solid #222222;
-		}
+.favorite-title {
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    margin-bottom: 40px;
+    color: #1a284d;
+}
 
-		p {
-			color: white;
-		}
-		h5 {
-			color: #dec5a5;
-		}
-		span {
-			font-family: 'Arial', sans-serif;
-		}
-		.card {
-			box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
-			border: 1px solid #333;
-			border-radius: 20px;
-			width: 100%;
-			color: #ffffff;
-			padding: 0;
-			position: relative;
-			text-align: center;
-			margin: 20px;
-		}
-		.card-container {
-			display: flex;
-			justify-content: center;
-			flex-wrap: wrap;
-		}
-		.custom-card {
-			margin: 10px;
-		}
+.accordion-item {
+    border: none;
+    margin-bottom: 15px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+}
+
+.accordion-button {
+    background: white;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #1a284d;
+}
+
+.accordion-button:not(.collapsed) {
+    background: #1a284d;
+    color: white;
+}
+
+.accordion-button:focus {
+    box-shadow: none;
+}
+
+.accordion-body {
+    background: #f8f9fb;
+}
+
+/* Cards */
+.favorite-card {
+    background: white;
+    border-radius: 20px;
+    padding: 25px;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(26,40,77,0.08);
+    transition: 0.3s;
+}
+
+.favorite-card:hover {
+    transform: translateY(-4px);
+}
+
+.favorite-card h5 {
+    color: #1a284d;
+    font-weight: 600;
+}
+
+.favorite-card p {
+    color: #555;
+}
+
+.remove-favorite {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    border: none;
+    background: transparent;
+    font-size: 22px;
+    cursor: pointer;
+    color: #dc3545;
+}
+
+.remove-favorite:hover {
+    transform: scale(1.2);
+}
+
+/* Pagination */
+.pagination {
+    margin-top: 30px;
+}
 	</style>
 
-	<h1 class="text-center mb-5">{{ 'account.favorite'|trans }}</h1>
 
-	<div class="accordion accordion-flush" id="accordionFlushExample">
+    <h1 class="favorite-title">
+        {{ 'account.favorite'|trans }}
+    </h1>
 
+    <div class="accordion mb-4" id="accordionTraductions">
 		<div class="accordion-item">
 			<h2 class="accordion-header">
 				<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
 					Traductions
 				</button>
 			</h2>
-			<div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+			<div id="flush-collapseOne" class="accordion-collapse collapse">
 				<div class="accordion-body">
 					{% if pagination_word.items is not empty %}
 						<div class="card-container">
-							{% set hasTranslation = false %}
-							{% for favorite in pagination_word.items %}
-								{% if favorite.getTraduction() is not null %}
-									{% set hasTranslation = true %}
-									<div
-										class="card col-11 col-md-9 col-lg-6 custom-card" style="background: rgba(0, 0, 0, 0.624); border: 1px solid black; position: relative;">
-										<!-- Ajout de position: relative -->
-										<button style="color: white; position: absolute; top: 0; right: 0; margin: 0.5rem;" type="button" class="btn btn-md remove-favorite" data-type="word" data-id="{{ favorite.getTraduction().id }}">
-											&times;
-										</button>
-										<div class="card-body">
-											<h5 class="card-title">
-												{% if app.request.locale == 'fr' %}
-													{{ favorite.getTraduction().wordFR() }}
-												{% else %}
-													{{ favorite.getTraduction().wordEN() }}
-												{% endif %}
-											</h5>
-											<p class="card-text">
-												{% if favorite.getTraduction().plural() %}
-													<span>{{ 'home.singular'|trans }}:
-														{{ favorite.getTraduction().singular() }}</span>
-													<span>{{ 'home.plural'|trans }}:
-														{{ favorite.getTraduction().plural() }}</span>
-													<br>
-												{% else %}
-													<span>{{ favorite.getTraduction().singular() }}</span>
-												{% endif %}
-												<br>
-												{% if favorite.getTraduction().phoneticPlural() %}
-													<span>{{ 'home.tifinagh_singular'|trans }}:
-														{{ favorite.getTraduction().phoneticSingular() }}</span>
-													<span>{{ 'home.tifinagh_plural'|trans }}:
-														{{ favorite.getTraduction().phoneticPlural() }}</span>
-												{% else %}
-													<span>{{ favorite.getTraduction().phoneticSingular() }}</span>
-												{% endif %}
-											</p>
+							<div class="row">
+								{% set hasTranslation = false %}
+								{% for favorite in pagination_word.items %}
+									{% if favorite.getTraduction() is not null %}
+										{% set hasTranslation = true %}
+										<div class="col-12 col-md-6 col-lg-4 mb-4">
+											<div class="favorite-card">
+												<!-- Ajout de position: relative -->
+												<button style="color: white; position: absolute; top: 0; right: 0; margin: 0.5rem;" type="button" class="btn btn-md remove-favorite" data-type="word" data-id="{{ favorite.getTraduction().id }}">
+													&times;
+												</button>
+												<div class="card-body">
+													<h5 class="card-title">
+														{% if app.request.locale == 'fr' %}
+															{{ favorite.getTraduction().wordFR() }}
+														{% else %}
+															{{ favorite.getTraduction().wordEN() }}
+														{% endif %}
+													</h5>
+													<p class="card-text">
+														{% if favorite.getTraduction().plural() %}
+															<span>{{ 'home.singular'|trans }}:
+																{{ favorite.getTraduction().singular() }}</span>
+															<span>{{ 'home.plural'|trans }}:
+																{{ favorite.getTraduction().plural() }}</span>
+															<br>
+														{% else %}
+															<span>{{ favorite.getTraduction().singular() }}</span>
+														{% endif %}
+														<br>
+														{% if favorite.getTraduction().phoneticPlural() %}
+															<span>{{ 'home.tifinagh_singular'|trans }}:
+																{{ favorite.getTraduction().phoneticSingular() }}</span>
+															<span>{{ 'home.tifinagh_plural'|trans }}:
+																{{ favorite.getTraduction().phoneticPlural() }}</span>
+														{% else %}
+															<span>{{ favorite.getTraduction().phoneticSingular() }}</span>
+														{% endif %}
+													</p>
+												</div>
+											</div>
 										</div>
-									</div>
-								{% endif %}
-							{% endfor %}
+									{% endif %}
+								{% endfor %}
+							</div>
 						</div>
 						{% if not hasTranslation %}
 							<h6 class="text-dark text-center mt-4">{{ 'account.no_fav'|trans }}</h6>
@@ -162,14 +171,16 @@
 				</div>
 			</div>
 		</div>
+	</div>
 
+	<div class="accordion" id="accordionDocuments">
 		<div class="accordion-item">
 			<h2 class="accordion-header">
 				<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
 					Documents
 				</button>
 			</h2>
-			<div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+			<div id="flush-collapseTwo" class="accordion-collapse collapse">
 				<div class="accordion-body">
 					{% if pagination_doc.items is not empty %}
 						<div class="card-container">
@@ -179,7 +190,7 @@
 									{% if favorite.getDocumentation() is not null %}
 										{% set hasDocument = true %}
 										<div class="col-md-6 mb-4 mt-4">
-											<div class="justify-content-center card h-100 p-5 text-dark" style="background: transparent; border: 1px solid black;">
+											<div class="favorite-card h-100">
 												<button style="color: black; right: 0; margin-right: 1rem;" type="button" class="btn btn-md position-absolute top-0 mt-2 me-2 remove-favorite" data-type="doc" data-id="{{ favorite.getDocumentation().id }}">
 													&times;
 												</button>
@@ -219,53 +230,59 @@
 				</div>
 			</div>
 		</div>
-
+    </div>
 
 	</div>
-	<script>
-		document.addEventListener('DOMContentLoaded', function () {
-document.querySelectorAll('.remove-favorite').forEach(function (button) {
-button.addEventListener('click', function () {
-const id = this.getAttribute('data-id');
-const type = this.getAttribute('data-type'); // Récupérer le type (word ou doc)
+<script>
+document.addEventListener('DOMContentLoaded', function () {
 
-let url = '';
-// URL de la route à appeler
+    document.querySelectorAll('.remove-favorite').forEach(function (button) {
 
-// Choix de la route en fonction du type de favori
+        button.addEventListener('click', function () {
 
-url = '{{ path('fav_remove') }}';
+            const id = this.getAttribute('data-id');
+            const type = this.getAttribute('data-type');
+            const card = this.closest('.favorite-card');
+            const accordionBody = this.closest('.accordion-body');
 
+            fetch('{{ path('fav_remove') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': '{{ csrf_token('favorite_remove') }}'
+                },
+                body: JSON.stringify({ id: id, type: type })
+            })
+            .then(response => response.json())
+            .then(data => {
 
-fetch(url, {
-method: 'POST',
-headers: {
-'Content-Type': 'application/json',
-'X-Requested-With': 'XMLHttpRequest',
-'X-CSRF-TOKEN': '{{ csrf_token('favorite_remove') }}'
-},
-body: JSON.stringify(
-{id: id, type: type}
-)
-}).then(response => {
-if (!response.ok) {
-throw new Error('Network response was not ok');
-}
-return response.json();
-}).then(data => {
-if (data.status === 'success') {
-location.reload();
-} else if (data.status === 'error' && data.message) {
-alert(data.message);
-}
-}).catch(error => {
-console.error('Error:', error);
-alert('An unexpected error occurred. Please try again later.');
+                if (data.status === 'success') {
+
+                    card.remove();
+
+                    // Vérifie s'il reste des cards
+                    if (!accordionBody.querySelector('.favorite-card')) {
+                        accordionBody.innerHTML =
+                            '<h6 class="text-center mt-4">{{ "account.no_fav"|trans }}</h6>';
+                    }
+
+                } else if (data.status === 'error' && data.message) {
+                    alert(data.message);
+                }
+
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Une erreur est survenue.');
+            });
+
+        });
+
+    });
+
 });
-});
-});
-});
-	</script>
+</script>
 
 
 {% endblock %}

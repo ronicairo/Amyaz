@@ -7,164 +7,192 @@
 {% endblock %}
 
 {% block body %}
-	<style>
-	.form-box {
-		width: 100%;
-		max-width: 600px;
-		margin: 0px auto;
-		padding: 30px;
-		background: #1e1e2f;
-		border-radius: 12px;
-		box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-		color: #fff;
-	}
+<style>
+/* ========================================
+   EDIT TRADUCTION PAGE
+   ======================================== */
 
-	.form-box h1 {
-		font-size: 24px;
-		margin-bottom: 20px;
-		color: #f4f4f8;
-		text-align: center;
-	}
+.edit-page {
+    min-height: 80vh;
+    padding: 60px 20px;
+    display: flex;
+    justify-content: center;
+}
 
-	.form-box .user-box {
-		margin-bottom: 20px;
-	}
+.edit-card {
+    width: 100%;
+    max-width: 900px;
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 15px 50px rgba(26,40,77,0.1);
+    padding: 40px;
+    position: relative;
+}
 
-	.form-box .user-box input,
-	.form-box .user-box textarea,
-	.form-box .user-box select {
-		width: 100%;
-		padding: 10px 15px;
-		border: 1px solid #444;
-		border-radius: 8px;
-		background-color: #2c2c3e;
-		color: #fff;
-		font-size: 16px;
-		transition: border-color 0.3s;
-	}
+.edit-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, #1a284d, #b3e2ec);
+}
 
-	.form-box .user-box input:focus,
-	.form-box .user-box textarea:focus,
-	.form-box .user-box select:focus {
-		border-color: #03e9f4;
-		outline: none;
-	}
+/* Header */
+.edit-title {
+    text-align: center;
+    margin-bottom: 30px;
+}
 
-	.form-box .user-box label {
-		display: block;
-		margin-bottom: 5px;
-		color: #aaa;
-		font-size: 14px;
-	}
+.edit-title h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: #1a284d;
+}
 
-	.form-box .recordLang {
-		margin-bottom: 20px;
-		padding: 10px;
-		border: 1px solid #444;
-		border-radius: 8px;
-		background: rgba(255, 255, 255, 0.05);
-	}
+.required-text {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #888;
+    margin-bottom: 30px;
+}
 
-	.form-box .recordLang div {
-		color: #fff;
-		font-size: 14px;
-	}
+/* Form fields */
+.form-group-modern {
+    margin-bottom: 20px;
+}
 
-	.form-box button[type="submit"] {
-		width: 100%;
-		padding: 10px 15px;
-		background: linear-gradient(45deg, #03e9f4, #0378f4);
-		border: none;
-		border-radius: 8px;
-		color: #fff;
-		font-size: 16px;
-		font-weight: bold;
-		cursor: pointer;
-		transition: background 0.3s;
-	}
+.form-group-modern input,
+.form-group-modern textarea,
+.form-group-modern select {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 10px;
+    border: 1px solid #e0e0e0;
+    font-size: 15px;
+    transition: all 0.3s ease;
+}
 
-	.form-box button[type="submit"]:hover {
-		background: linear-gradient(45deg, #0378f4, #03e9f4);
-	}
+.form-group-modern input:focus,
+.form-group-modern textarea:focus,
+.form-group-modern select:focus {
+    border-color: #1a284d;
+    box-shadow: 0 0 0 3px rgba(26,40,77,0.08);
+    outline: none;
+}
 
-	.form-box a {
-		display: block;
-		margin-top: 15px;
-		color: #aaa;
-		text-align: center;
-		text-decoration: none;
-		transition: color 0.3s;
-	}
+/* Audio Section */
+.record-section {
+    background: #f8f9fb;
+    border-radius: 14px;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+}
 
-	.form-box a:hover {
-		color: #03e9f4;
-	}
+.record-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    color: #1a284d;
+}
 
-	/* Responsive Design */
-	@media (max-width: 768px) {
-		.form-box {
-			padding: 20px;
-			font-size: 14px;
-		}
-	}
+.record-icons i {
+    font-size: 20px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.record-icons i:hover {
+    opacity: 0.7;
+}
+
+/* Submit button */
+.submit-btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    background: linear-gradient(135deg, #1a284d, #2d4a7c);
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+}
+
+/* Bottom links */
+.bottom-actions {
+    margin-top: 25px;
+    text-align: center;
+}
+
+.bottom-actions a {
+    color: #1a284d;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.bottom-actions a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .edit-card {
+        padding: 25px;
+    }
+}
 </style>
 
 	<div class="col-6 mx-auto">
 		{% include 'include/flashes.html.twig' %}
 	</div>
 
-	<div class="form-box">
-		<h1 class="h3 mb-3 font-weight-normal">
-			{{ 'title.edit_traduction'|trans }}
-		</h1>
+<div class="edit-page">
+    <div class="edit-card">
+	<div class="edit-title">
+    <h1>{{ 'title.edit_traduction'|trans }}</h1>
+</div>
 
-		<div class="mb-3 mt-3 text-center" style="color:#d7acaa; font-size:15px;">
-			{{ 'post.champ_obligatoire'|trans }}
-		</div>
+<div class="required-text">
+    {{ 'post.champ_obligatoire'|trans }}
+</div>
 
 		{{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
 
 		{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MODERATOR') %}
-			<div class="user-box">
+			<div class="form-group-modern">
 				{{ form_row(form.wordFR) }}
 			</div>
-			<div class="user-box">
+			<div class="form-group-modern">
 				{{ form_row(form.grammarFR) }}
 			</div>
-			<div class="user-box">
+			<div class="form-group-modern">
 				{{ form_row(form.wordEN) }}
 			</div>
-			<div class="user-box">
+			<div class="form-group-modern">
 				{{ form_row(form.grammarEN) }}
 			</div>
-			<div class="user-box">
+			<div class="form-group-modern">
 				{{ form_row(form.singular) }}
 			</div>
-			<div class="mb-1 recordLang">
-				<div style="justify-content: space-between;" class="d-flex d-inline-flex w-100 text-white">
-					<div>Enregistrement Rifain singulier</div>
-					<div style="font-size: 24px;cursor: pointer;" class="text-right text-white">
-						<i id="deleteRiffianSingularBtn" class="bi bi-trash text-danger"></i>
-						<i id="startRiffianSingularBtn" class="bi bi-mic record-icon"></i>
-					</div>
-				</div>
+	<div class="record-section">
+    <div class="record-header">
+        <span>Enregistrement Rifain singulier</span>
+        <div class="record-icons">
+            <i class="bi bi-trash text-danger"></i>
+            <i class="bi bi-mic"></i>
+        </div>
+    </div>
 
-
-				<div class="audio-container {% if not hasRifainSingularRecord %}d-none{% endif %}">
-					<audio controls>
-						<source src="{{ path('audio_serve', { id: traduction.id, field: 'rifainSingularRecord' }) }}" type="audio/mp3">
-						Your browser does not support the audio element.
-					</audio>
-					{{ form_row(form.rifainSingularRecord) }}
-				</div>
-
-				<div class="no-record {% if hasRifainSingularRecord %}d-none{% endif %}">
-					<p class="text-white">Aucun enregistrement</p>
-					<input class="record-deleted" type="hidden" name="rifainSingularRecordDeleted" value="false">
-				</div>
-
-			</div>
-			<div class="user-box">
+ 
+</div>
+			<div class="form-group-modern">
 				{{ form_row(form.plural) }}
 			</div>
 			<div class="mb-1 recordLang">
@@ -175,77 +203,215 @@
 						<i id="startRiffianPluralBtn" class="bi bi-mic record-icon"></i>
 					</div>
 				</div>
-
-
-				<div class="audio-container {% if not hasRifainPluralRecord %}d-none{% endif %}">
-					<audio controls>
-						<source src="{{ path('audio_serve', { id: traduction.id, field: 'rifainPluralRecord' }) }}" type="audio/mp3">
-						Your browser does not support the audio element.
-					</audio>
-					{{ form_row(form.rifainPluralRecord) }}
-				</div>
-
-				<div class="no-record {% if hasRifainPluralRecord %}d-none{% endif %}">
-					<p class="text-white">Aucun enregistrement</p>
-					<input class="record-deleted" type="hidden" name="rifainPluralRecordDeleted" value="false">
-				</div>
 			</div>
-			<div class="user-box">
+			<div class="form-group-modern">
 				{{ form_row(form.phoneticSingular) }}
 			</div>
-			<div class="user-box">
+		<div class="form-group-modern">
 				{{ form_row(form.phoneticPlural) }}
 			</div>
-				<div class="user-box">
+			<div class="form-group-modern">
 				{{ form_row(form.origin) }}
 			</div>
-				<div class="user-box">
+	<div class="form-group-modern">
 				{{ form_row(form.racine) }}
 			</div>
-				<div class="user-box">
+	<div class="form-group-modern">
 				{{ form_row(form.example) }}
 			</div>
-				<div class="user-box">
+		<div class="form-group-modern">
 				{{ form_row(form.source) }}
 			</div>
 		{% else %}
 			{% if locale == 'fr' %}
-				<div class="user-box">
+	<div class="form-group-modern">
 					{{ form_row(form.wordFR) }}
 				</div>
-				<div class="user-box">
+	<div class="form-group-modern">
 					{{ form_row(form.grammarFR) }}
 				</div>
 			{% elseif locale == 'en' %}
-				<div class="user-box">
+			<div class="form-group-modern">
 					{{ form_row(form.wordEN) }}
 				</div>
-				<div class="user-box">
+	<div class="form-group-modern">
 					{{ form_row(form.grammarEN) }}
 				</div>
 			{% endif %}
-			<div class="user-box">
+	<div class="form-group-modern">
 				{{ form_row(form.singular) }}
 			</div>
-			<div class="user-box">
+<div class="form-group-modern">
 				{{ form_row(form.plural) }}
 			</div>
-			<div class="user-box">
+<div class="form-group-modern">
 				{{ form_row(form.phoneticSingular) }}
 			</div>
-			<div class="user-box">
+	<div class="form-group-modern">
 				{{ form_row(form.phoneticPlural) }}
 			</div>
 		{% endif %}
-		<div class="text-center mt-3">
-			{{ form_row(form.submit) }}
-		</div>
-		{{ form_end(form) }}
+	
+	{# ================= AUDIO SINGULIER ================= #}
+<div class="record-section">
+    <div class="record-header">
+        <span>Rifain Singulier (audio)</span>
+        <div class="record-icons">
+            <button type="button" id="startSingular">🎤</button>
+            <button type="button" id="stopSingular" disabled>⏹</button>
+            <input type="file" accept="audio/*" id="uploadSingular">
+        </div>
+    </div>
 
-		<a href="{{ path('documentation_index') }}">{{ 'button.back_list'|trans }}</a>
+    {{ form_widget(form.rifainSingularRecord, {
+        attr: { style: 'display:none;' }
+    }) }}
 
-		<div class="text-center mt-3">
-			{{ include('traduction/_delete_form.html.twig') }}
-		</div>
+    {% if hasRifainSingularRecord %}
+        <audio id="previewSingular" controls>
+            <source src="{{ path('audio_serve', { id: traduction.id, field: 'rifainSingularRecord' }) }}">
+        </audio>
+    {% else %}
+        <audio id="previewSingular" controls style="display:none;"></audio>
+        <p id="noSingular">Aucun enregistrement</p>
+    {% endif %}
+</div>
+
+
+{# ================= AUDIO PLURIEL ================= #}
+<div class="record-section">
+    <div class="record-header">
+        <span>Rifain Pluriel (audio)</span>
+        <div class="record-icons">
+            <button type="button" id="startPlural">🎤</button>
+            <button type="button" id="stopPlural" disabled>⏹</button>
+            <input type="file" accept="audio/*" id="uploadPlural">
+        </div>
+    </div>
+
+    {{ form_widget(form.rifainPluralRecord, {
+        attr: { style: 'display:none;' }
+    }) }}
+
+    {% if hasRifainPluralRecord %}
+        <audio id="previewPlural" controls>
+            <source src="{{ path('audio_serve', { id: traduction.id, field: 'rifainPluralRecord' }) }}">
+        </audio>
+    {% else %}
+        <audio id="previewPlural" controls style="display:none;"></audio>
+        <p id="noPlural">Aucun enregistrement</p>
+    {% endif %}
+</div>
+
+
+{{ form_end(form, { 'render_rest': false }) }}
+
+{{ form_end(form) }}
+
+		<div class="bottom-actions">
+    <a href="{{ path('app_traduction_index') }}">
+        ← {{ 'button.back_list'|trans }}
+    </a>
+</div>
+
+<div class="bottom-actions">
+    {{ include('traduction/_delete_form.html.twig') }}
+</div>
 	</div>
+
+	<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    async function setupRecorder(startId, stopId, previewId, uploadId, hiddenId) {
+
+        let mediaRecorder;
+        let chunks = [];
+
+        const startBtn = document.getElementById(startId);
+        const stopBtn = document.getElementById(stopId);
+        const preview = document.getElementById(previewId);
+        const upload = document.getElementById(uploadId);
+        const hiddenInput = document.getElementById(hiddenId);
+
+        if (!startBtn) return;
+
+        // 🎤 ENREGISTREMENT MICRO
+        startBtn.addEventListener('click', async () => {
+
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+                mediaRecorder = new MediaRecorder(stream);
+                mediaRecorder.start();
+
+                startBtn.disabled = true;
+                stopBtn.disabled = false;
+
+                chunks = [];
+
+                mediaRecorder.ondataavailable = e => chunks.push(e.data);
+
+                mediaRecorder.onstop = () => {
+
+                    const blob = new Blob(chunks, { type: 'audio/webm' });
+                    const url = URL.createObjectURL(blob);
+
+                    preview.src = url;
+                    preview.style.display = 'block';
+
+                    // Injecter dans le FileType Symfony
+                    const file = new File([blob], "record.webm", { type: 'audio/webm' });
+                    const dt = new DataTransfer();
+                    dt.items.add(file);
+                    hiddenInput.files = dt.files;
+                };
+
+            } catch (err) {
+                alert("Micro non autorisé ou non disponible.");
+            }
+        });
+
+        // ⏹ STOP
+        stopBtn.addEventListener('click', () => {
+            if (mediaRecorder && mediaRecorder.state !== "inactive") {
+                mediaRecorder.stop();
+                startBtn.disabled = false;
+                stopBtn.disabled = true;
+            }
+        });
+
+        // 📁 UPLOAD MANUEL
+        upload.addEventListener('change', function () {
+
+            const file = this.files[0];
+            if (!file) return;
+
+            const url = URL.createObjectURL(file);
+            preview.src = url;
+            preview.style.display = 'block';
+
+            const dt = new DataTransfer();
+            dt.items.add(file);
+            hiddenInput.files = dt.files;
+        });
+    }
+
+    setupRecorder(
+        "startSingular",
+        "stopSingular",
+        "previewSingular",
+        "uploadSingular",
+        "{{ form.rifainSingularRecord.vars.id }}"
+    );
+
+    setupRecorder(
+        "startPlural",
+        "stopPlural",
+        "previewPlural",
+        "uploadPlural",
+        "{{ form.rifainPluralRecord.vars.id }}"
+    );
+
+});
+</script>
 {% endblock %}

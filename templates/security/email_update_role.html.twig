@@ -1,68 +1,80 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8">
-		<title>{{ 'p.request_reset_password'|trans }}
-		</title>
-		<style>
-			body {
-				font-family: Arial, sans-serif;
-				margin: 0;
-				padding: 20px;
-				background-color: #f6f6f6;
-			}
-			.email-container {
-				max-width: 600px;
-				margin: 0 auto;
-				background-color: #ffffff;
-				padding: 20px;
-				border: 1px solid #e9e9e9;
-				border-radius: 10px;
-			}
-			.email-header {
-				text-align: center;
-				margin-bottom: 20px;
-			}
-			.email-header img {
-				max-width: 150px;
-			}
-			.email-body {
-				font-size: 16px;
-				line-height: 1.6;
-			}
-			.email-footer {
-				margin-top: 20px;
-				font-size: 14px;
-				color: #999999;
-				text-align: center;
-			}
-		</style>
-	</head>
-	
-	   {% set roleLabels = {
+<head>
+<meta charset="UTF-8">
+<title>{{ 'p.request_reset_password'|trans }}</title>
+</head>
+
+{% set roleLabels = {
     'ROLE_USER': 'Utilisateur',
     'ROLE_MODERATOR': 'Modérateur',
     'ROLE_ADMIN': 'Administrateur'
 } %}
 
-	<body>
-		<div class="email-container">
-			<div class="email-header">
-				<img src="cid:logo_amyaz" alt="Logo Amyaz" width="60" height="50">
-			</div>
-			<div class="email-body">
-				<p>{{ 'p.hello'|trans }}
-					{{ user.username }},</p>
-                <p>{{ 'p.update_role'|trans }} <strong>{{ roleLabels[newRole] ?? newRole }}</strong>.</p>
-				</p>
-				<p>{{ 'p.thanks'|trans }}.</p>
-			</div>
-			<div class="email-footer">
-				<p>&copy;
-					{{ "now"|date("Y") }}
-					{{ 'p.footer_droit'|trans }}
-				</p>
-			</div>
-		</div>
-	</body>
+<body style="margin:0;padding:0;background-color:#f4f6f9;font-family:Arial,sans-serif;">
+
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f6f9;padding:40px 0;">
+<tr>
+<td align="center">
+
+<table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.08);">
+
+    <!-- Top Gradient Bar -->
+    <tr>
+        <td style="height:4px;background:linear-gradient(90deg,#1a284d,#b3e2ec);"></td>
+    </tr>
+
+    <!-- Header -->
+    <tr>
+        <td align="center" style="padding:30px 30px 10px;">
+            <img src="cid:logo_amyaz" width="70" style="display:block;margin-bottom:15px;">
+            <h2 style="margin:0;color:#1a284d;font-size:22px;">
+                AMYAZ
+            </h2>
+        </td>
+    </tr>
+
+    <!-- Body -->
+    <tr>
+        <td style="padding:20px 40px;color:#555;font-size:15px;line-height:1.6;">
+
+            <p style="margin:0 0 15px 0;">
+                {{ 'p.hello'|trans }} {{ user.username }},
+            </p>
+
+            <p style="margin:0 0 15px 0;">
+                {{ 'p.update_role'|trans }}
+                <strong style="color:#1a284d;">
+                    {{ roleLabels[newRole] ?? newRole }}
+                </strong>.
+            </p>
+
+            <p style="margin-top:25px;">
+                {{ 'p.thanks'|trans }}
+            </p>
+
+        </td>
+    </tr>
+
+    <!-- Divider -->
+    <tr>
+        <td style="padding:0 40px;">
+            <hr style="border:none;height:1px;background:#eeeeee;">
+        </td>
+    </tr>
+
+    <!-- Footer -->
+    <tr>
+        <td align="center" style="padding:20px;color:#999;font-size:12px;">
+            &copy; {{ "now"|date("Y") }} AMYAZ — {{ 'p.footer_droit'|trans }}
+        </td>
+    </tr>
+
+</table>
+
+</td>
+</tr>
+</table>
+
+</body>
 </html>

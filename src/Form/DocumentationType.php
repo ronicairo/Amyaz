@@ -100,7 +100,7 @@ class DocumentationType extends AbstractType
                 'label' => $options['file'] === null ? 'Créer' : 'Modifier',
                 'validate' => false,
                 'attr' => [
-                    'class' => "d-block mt-4 mx-auto btn btn-outline-light col-5"
+                    'class' => "submit-doc-btn"
                 ]
             ]);
     }

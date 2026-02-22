@@ -3,101 +3,179 @@
 {% form_theme form 'form/_form_errors.html.twig' %}
 
 {% block title %}
-{{ 'title.edit_category'|trans }}
+    {{ 'title.edit_category'|trans }}
 {% endblock %}
-
 
 {% block body %}
 
-    <style>
-        .edit-profile-box {
-          	width: 100%;
-			max-width: 500px;
-			margin: 0 auto;
-			padding: 40px;
-			background: rgba(0, 0, 0, 0.5);
-			box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
-			border-radius: 10px;
-        }
+<style>
+/* ========================================
+   EDIT CATEGORY - MODERN
+   ======================================== */
 
-        @media(min-width: 768px) {
-            .edit-profile-box {
-                max-width: 60%;
-            }
-        }
+.edit-category-page {
+    min-height: 80vh;
+    padding: 60px 20px;
+    display: flex;
+    justify-content: center;
+    animation: fadeInPage 0.4s ease;
+}
 
-        .edit-profile-box h1 {
-            margin: 0 0 30px;
-            padding: 0;
-            color: #fff;
-            text-align: center;
-        }
+@keyframes fadeInPage {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 
-        .edit-profile-box .user-box {
-            position: relative;
-        }
+.edit-category-card {
+    width: 100%;
+    max-width: 600px;
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 15px 50px rgba(26,40,77,0.1);
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+}
 
-        .edit-profile-box .user-box input, 
-        .edit-profile-box .user-box select {
-            width: 100%;
-            padding: 2px 0;
-            font-size: 16px;
-            color: #fff;
-            margin-bottom: 30px;
-            border: none;
-            border-bottom: 1px solid #fff;
-            outline: none;
-            background: transparent;
-        }
+.edit-category-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, #1a284d, #b3e2ec);
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+}
 
-        .edit-profile-box .user-box label {
-            position: relative;
-            top: 0;
-            left: 0;
-            padding: 10px 0;
-            font-size: 16px;
-            color: #fff;
-            pointer-events: none;
-            transition: 0.5s;
-        }
+/* Title */
+.edit-category-title {
+    text-align: center;
+    margin-bottom: 35px;
+}
 
-        .edit-profile-box .user-box input:focus ~ label,
-        .edit-profile-box .user-box input:valid ~ label,
-        .edit-profile-box .user-box select:focus ~ label,
-        .edit-profile-box .user-box select:valid ~ label {
-            top: -20px;
-            left: 0;
-            color: #fff;
-            font-size: 12px;
-        }
+.edit-category-title h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.9rem;
+    color: #1a284d;
+}
 
-        .edit-profile-box a {
-            display: block;
-            margin-top: 20px;
-            text-align: center;
-            color: #fff;
-            text-decoration: none;
-        }
+/* Form styling */
+.form-modern {
+    margin-bottom: 20px;
+}
 
-        .edit-profile-box a:hover {
-            color: #fff;
-        }
-    </style>
+.form-modern input,
+.form-modern select {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1px solid #e0e0e0;
+    font-size: 15px;
+    transition: all 0.3s ease;
+}
 
-    <div class="row">
-        <div class="col-6 mx-auto">
-            {% include 'include/flashes.html.twig' %}
+.form-modern input:focus,
+.form-modern select:focus {
+    border-color: #1a284d;
+    box-shadow: 0 0 0 3px rgba(26,40,77,0.08);
+    outline: none;
+}
+
+/* Submit button */
+.submit-category-btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    background: linear-gradient(135deg, #1a284d, #2d4a7c);
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+}
+
+.submit-category-btn:hover {
+    transform: translateY(-2px);
+}
+
+/* Back link */
+.category-back {
+    text-align: center;
+    margin-top: 25px;
+}
+
+.category-back a {
+    color: #1a284d;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.category-back a:hover {
+    text-decoration: underline;
+}
+
+/* Delete section */
+.delete-section {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.delete-section button {
+    padding: 12px 20px;
+    border-radius: 10px;
+    border: none;
+    background: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.delete-section button:hover {
+    background: #dc3545;
+    color: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .edit-category-card {
+        padding: 25px;
+    }
+}
+</style>
+
+<div class="col-11 col-md-8 col-lg-6 mx-auto mb-4">
+    {% include 'include/flashes.html.twig' %}
+</div>
+
+<div class="edit-category-page">
+    <div class="edit-category-card">
+
+        <div class="edit-category-title">
+            <h1>{{ 'title.edit_category'|trans }}</h1>
         </div>
-    </div>
 
-    <div class="edit-profile-box">
-   <h1 class="h3 mb-3 font-weight-normal">{{ 'title.edit_category'|trans }}</h1>
-        <div class="user-box">
-        	{{ form_start(form) }}
-			{{ form_row(form.name) }}
-			{{ form_end(form) }}
+        {{ form_start(form) }}
+
+        <div class="form-modern">
+            {{ form_row(form.name) }}
         </div>
 
-        <a href="{{ path('category_doc_index') }}">{{ 'button.back_list'|trans }}</a>
+        {{ form_end(form) }}
+
+        <div class="category-back">
+            <a href="{{ path('category_doc_index') }}">
+                ← {{ 'button.back_list'|trans }}
+            </a>
+        </div>
+
+        <div class="delete-section">
+            {{ include('category_doc/_delete_form.html.twig') }}
+        </div>
+
     </div>
+</div>
+
 {% endblock %}

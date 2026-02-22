@@ -1,92 +1,347 @@
 {% extends 'base.html.twig' %}
-
 {% form_theme confirmationForm 'form/_form_errors.html.twig' %}
 
-{% block title %}
-	{{ 'title.delete_my_account'|trans }}
-{% endblock %}
+{% block title %}{{ 'title.delete_my_account'|trans }}{% endblock %}
 
 {% block body %}
+<style>
+/* ========================================
+   PAGE SUPPRESSION DE COMPTE
+   ======================================== */
+.delete-account-page {
+    min-height: 80vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 40px 20px;
+}
 
-	<style>
+.delete-account-page::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 20% 30%, rgba(220, 53, 69, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(220, 53, 69, 0.03) 0%, transparent 40%);
+    pointer-events: none;
+}
 
-		.delete-box .user-box .show-password {
-			position: relative;
-			font-size: 16px;
-			color: #03e9f4;
-			cursor: pointer;
-		}
+.delete-account-container {
+    width: 100%;
+    max-width: 500px;
+    position: relative;
+    z-index: 1;
+}
 
-		.delete-box {
-	   	width: 100%;
-			max-width: 500px;
-			margin: 0 auto;
-			padding: 40px;
-			background: rgba(0, 0, 0, 0.5);
-			box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
-			border-radius: 10px;
-		}
+.delete-account-card {
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 15px 50px rgba(220, 53, 69, 0.15);
+    padding: 40px 50px;
+    position: relative;
+    overflow: hidden;
+}
 
-		/* Media query for larger screens */
-		@media(min-width: 768px) {
-			.delete-box {
-				max-width: 60%;
-			}
-		}
-		.delete-box h1 {
-			margin: 0 0 30px;
-			padding: 0;
-			color: #fff;
-			text-align: center;
-		}
+.delete-account-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #dc3545, #ff6b6b);
+}
 
-		.delete-box .mdp-box input {
-			width: 100%;
-			padding: 2px 0;
-			font-size: 16px;
-			color: #fff;
-			margin-bottom: 30px;
-			border: none;
-			border-bottom: 1px solid #fff;
-			outline: none;
-			background: transparent;
-		}
-		.delete-box .mdp-box label {
-			position: relative;
-			top: 0;
-			left: 0;
-			padding: 10px 0;
-			font-size: 16px;
-			color: #fff;
-			pointer-events: none;
-			transition: 0.5s;
-		}
+/* Icône danger */
+.delete-account-icon {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, rgba(220, 53, 69, 0.1), rgba(255, 107, 107, 0.15));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+}
 
-		.delete-box .mdp-box input:focus ~ label,
-		.delete-box .mdp-box input:valid ~ label {
-			top: -20px;
-			left: 0;
-			color: #fff;
-			font-size: 12px;
-		}
-	</style>
+.delete-account-icon i {
+    font-size: 1.8rem;
+    color: #dc3545;
+}
 
+/* Titre */
+.delete-account-card h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.7rem;
+    color: #dc3545;
+    text-align: center;
+    margin-bottom: 15px;
+}
 
-	<div class="row">
-		<div class="col-6 mx-auto">
-			{% include 'include/flashes.html.twig' %}
-		</div>
-	</div>
-	<div class="delete-box">
-		<h2 class="text-center my-3 text-white">{{ 'title.delete_my_account'|trans }}</h2>
-		
-		
-		{{ form_start(confirmationForm) }}
+/* Avertissement */
+.warning-box {
+    background: rgba(220, 53, 69, 0.08);
+    border: 1px solid rgba(220, 53, 69, 0.2);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
 
-		<div class="mdp-box">
-			{{ form_row(confirmationForm.password) }}
-		</div>
-		{{ form_end(confirmationForm) }}
-	</div>
+.warning-box p {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0 0 10px;
+    line-height: 1.6;
+}
 
+.warning-box p:last-child {
+    margin-bottom: 0;
+}
+
+.warning-box strong {
+    color: #dc3545;
+}
+
+.warning-box ul {
+    margin: 10px 0;
+    padding-left: 20px;
+}
+
+.warning-box ul li {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+/* ========================================
+   FORMULAIRE STYLISÉ
+   ======================================== */
+.delete-account-card form {
+    width: 100%;
+}
+
+.delete-account-card form > div,
+.delete-account-card form .mb-3,
+.delete-account-card form .form-group {
+    margin-bottom: 20px !important;
+}
+
+.delete-account-card form label,
+.delete-account-card form .form-label {
+    display: block !important;
+    font-family: 'Outfit', sans-serif !important;
+    font-size: 0.9rem !important;
+    font-weight: 600 !important;
+    color: #1a1a2e !important;
+    margin-bottom: 10px !important;
+}
+
+.delete-account-card form input[type="text"],
+.delete-account-card form input[type="email"],
+.delete-account-card form input[type="password"],
+.delete-account-card form .form-control {
+    width: 100% !important;
+    padding: 14px 18px !important;
+    font-size: 0.95rem !important;
+    font-family: 'Outfit', sans-serif !important;
+    color: #333 !important;
+    background: #f8f8f8 !important;
+    border: 2px solid #eee !important;
+    border-radius: 12px !important;
+    transition: all 0.3s ease !important;
+    box-sizing: border-box !important;
+}
+
+.delete-account-card form input:focus,
+.delete-account-card form .form-control:focus {
+    outline: none !important;
+    border-color: #dc3545 !important;
+    background: white !important;
+    box-shadow: 0 0 0 4px rgba(220, 53, 69, 0.1) !important;
+}
+
+.delete-account-card form input::placeholder {
+    color: #aaa !important;
+}
+
+/* Erreurs */
+.delete-account-card form .invalid-feedback,
+.delete-account-card form .form-error-message,
+.delete-account-card form .help-block {
+    color: #dc3545 !important;
+    font-family: 'Outfit', sans-serif !important;
+    font-size: 0.8rem !important;
+    margin-top: 8px !important;
+}
+
+.delete-account-card form .is-invalid,
+.delete-account-card form input.is-invalid {
+    border-color: #dc3545 !important;
+    background: rgba(220, 53, 69, 0.05) !important;
+}
+
+/* ========================================
+   BOUTON SUPPRIMER (DANGER)
+   ======================================== */
+.btn-delete-account {
+    width: 100%;
+    padding: 14px 25px;
+    background: linear-gradient(135deg, #dc3545, #c82333);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.btn-delete-account:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(220, 53, 69, 0.4);
+    background: linear-gradient(135deg, #c82333, #bd2130);
+}
+
+.btn-delete-account:active {
+    transform: translateY(0);
+}
+
+/* Lien annuler */
+.cancel-link {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.cancel-link a {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem;
+    color: #666;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.cancel-link a:hover {
+    color: #1a284d;
+    text-decoration: underline;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (max-width: 600px) {
+    .delete-account-page {
+        padding: 20px 15px;
+    }
+    
+    .delete-account-container {
+        max-width: 100%;
+    }
+    
+    .delete-account-card {
+        padding: 35px 30px;
+        border-radius: 20px;
+    }
+    
+    .delete-account-card h1 {
+        font-size: 1.5rem;
+    }
+    
+    .delete-account-icon {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .delete-account-icon i {
+        font-size: 1.5rem;
+    }
+    
+    .delete-account-card form input[type="password"],
+    .delete-account-card form .form-control {
+        padding: 12px 15px !important;
+        font-size: 0.9rem !important;
+    }
+    
+    .btn-delete-account {
+        padding: 12px 20px;
+        font-size: 0.9rem;
+    }
+    
+    .warning-box {
+        padding: 15px;
+    }
+    
+    .warning-box p {
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .delete-account-card {
+        padding: 30px 22px;
+    }
+    
+    .delete-account-card h1 {
+        font-size: 1.4rem;
+    }
+    
+    .delete-account-icon {
+        width: 55px;
+        height: 55px;
+    }
+    
+    .delete-account-icon i {
+        font-size: 1.3rem;
+    }
+}
+</style>
+
+<div class="delete-account-page">
+    <div class="delete-account-container">
+        <div class="col-11 mx-auto mb-3">
+            {% include 'include/flashes.html.twig' %}
+        </div>
+        
+        <div class="delete-account-card">
+            {# Icône danger #}
+            <div class="delete-account-icon">
+                <i class="bi bi-exclamation-triangle"></i>
+            </div>
+            
+            {# Titre #}
+            <h1>{{ 'title.delete_my_account'|trans }}</h1>
+            
+
+            {# Formulaire #}
+            {{ form_start(confirmationForm) }}
+                {{ form_widget(confirmationForm) }}
+                
+              
+            {{ form_end(confirmationForm) }}
+            
+            {# Lien annuler #}
+            <div class="cancel-link">
+                <a href="javascript:history.back()">
+                    <i class="bi bi-arrow-left"></i>
+                    {{ 'title.cancel'|trans|default('Annuler') }}
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

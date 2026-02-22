@@ -105,13 +105,6 @@ class RegistrationFormType extends AbstractType
     
                 ],
                 'invalid_message' => $this->translator->trans('form.password_not_same'),
-            ])
-            ->add('submit', SubmitType::class, [
-                'label' => "button.register",
-                'validate' => false,
-                'attr' => [
-                    'class' => "d-block mt-4 mx-auto btn btn-outline-light col-"
-                ]
             ]);
     }
 

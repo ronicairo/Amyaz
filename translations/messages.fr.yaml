@@ -4,13 +4,14 @@ meta:
 
 home:
     back_to_home: "Retour à l'accueil"
+    results_for_letter : "Résultats pour la lettre %letter%"
     browse_dictionary: "Parcourir le dictionnaire par ordre alphabétique"
-    welcome_message: 'Bienvenue sur <span style="  color: #F26766;">Amyaz</span> !<br> Ton dictionnaire Français-Rifain.'
+    welcome_message: '<span style="  color: #F26766;">Amyaz</span><br> Ton dictionnaire Français-Rifain.'
     welcome_message_conjugaison: 'Bienvenue sur <span style="  color: #F26766;">Amyaz</span> !<br> Ton conjugueur rifain.'
     search_results: "Résultats de la recherche :"
     search_bar: "Rechercher"
-    no_results_logged_in: "Aucun résultat trouvé.<br><a style=\"text-decoration:none; color:#F26766\" href=\"%path_traduction_new%\">Demander une traduction.</a>"
-    no_results_guest: "Aucun résultat trouvé.<br><a style=\"text-decoration:none; color: #F26766\" href=\"%path_app_login%\">Se connecter pour demander une traduction.</a>"
+    no_results_logged_in: "Aucun résultat trouvé.<br><a style=\"text-decoration:none; color:#F26766\" href=\"%path_traduction_new%\">Demander à traduire un mot</a>"
+    no_results_guest: "Aucun résultat trouvé.<br><a style=\"text-decoration:none; color: #F26766\" href=\"%path_app_login%\">Se connecter pour demander la traduction d'un mot</a>"
     learn_alphabet: "Apprendre l'alphabet"
     alphabet_description: "La langue rifaine peut s'écrire avec l'alphabet latin berbère mais aussi en tifinagh qui est l'alphabet traditionel du berbère."
     latin_berber: "Berbère Latin"
@@ -32,6 +33,7 @@ home:
     favorite_remove_login_required: "Vous devez être connecté pour supprimer des favoris."
     favorite_remove_not_found: "Favori non trouvé."
     noverbfound: "Aucun résultat trouvé."
+    no_words_for_letter : "Aucun mot trouvé pour la lettre %letter%."
 
 navigation:
     home: 'Dictionnaire'
@@ -94,7 +96,7 @@ category:
 pending_request:
     title: "Demande de traduction en attente"
     no_request_pending: "Aucune demande de traduction en attente"
-    no_request_logged_in: "Aucune demande de traduction trouvée.<br><a style=\"text-decoration:none; color: #03e9f4\" href=\"%path_traduction_new%\">Demander une traduction.</a>"
+    no_request_logged_in: "Aucune demande de traduction trouvée.<br><a style=\"text-decoration:none; color: #03e9f4\" href=\"%path_traduction_new%\">Demander la traduction d'un mot</a>"
 
 documentation:
     add: "Ajouter un document"
@@ -133,6 +135,7 @@ account-user:
     no_comments: "Aucun commentaire."
     no_translation: "Aucune traduction."
     delete_user: "Supprimer l'utilisateur"
+    info: "Informations"
 
 article:
     particule_d: "Particule D"
@@ -186,6 +189,8 @@ form:
     regex_commentaire: "Vous ne pouvez insérer du code HTML dans votre commentaire."
     edit_grammar: "Modifier une fiche de grammaire"
     create_grammar: "Créer une fiche de grammaire"
+    email_placeholder: "Entrez votre email"
+    password_placeholder: "Entrez votre mot de passe"
 
 title:
     edit_traduction: "Modifier la traduction"
@@ -207,6 +212,8 @@ title:
     verifier_code: "Vérification de votre compte"
     verification_code: "Code de vérification reçu par mail"
     rappel_verification: "Activez votre compte Amyaz"
+    back: "Retour"
+    cancel: "Annuler"
 
 addflash:
     obligation_connexion: "Vous devez être connecté pour accéder à cette fonctionnalité."
@@ -272,7 +279,7 @@ p:
     
 account:
     add: "Ajouter une traduction"
-    ask: "Demander une traduction"
+    ask: "Demander la traduction d'un mot"
     my_request_translation: "Mes demandes de traduction"
     grammar_learn: "Fiches de grammaire"
     show_user: "Voir les utilisateurs"
@@ -310,4 +317,5 @@ table_headers:
     participes: "Les participes"
     conjug: "conjugaison"
 
-
+grammaire:
+    description: "Découvrez les règles de grammaire essentielles pour maîtriser le rifain. Nos fiches de grammaire détaillées couvrent les aspects fondamentaux de la langue, accompagnées d'exemples concrets pour faciliter votre apprentissage."

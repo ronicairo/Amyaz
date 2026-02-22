@@ -34,7 +34,7 @@ class CategoryDocType extends AbstractType
             ->add('submit', SubmitType::class, [
                 'label' => "form.validate",
                 'attr' => [
-                    'class' => 'd-block mt-4 mx-auto btn btn-outline-light col-5'
+                    'class' => 'submit-category-btn'
                 ]
             ]);
     }
