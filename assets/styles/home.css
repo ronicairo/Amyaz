@@ -2435,3 +2435,356 @@ h1.dynamic-font-size b {
     background: #1a284d;
     color: white;
 }
+
+/* ========================================
+   COMPTEUR DE MOTS - ENJOLIVÉ
+   ======================================== */
+.word-counter-wrapper {
+    margin-bottom: 30px;
+}
+
+.word-counter-card {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: linear-gradient(135deg, #1a284d 0%, #2d4a7c 100%);
+    padding: 20px 25px;
+    border-radius: 16px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(26, 40, 77, 0.25);
+    transition: all 0.3s ease;
+}
+
+.word-counter-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(26, 40, 77, 0.35);
+}
+
+/* Icône */
+.word-counter-card .counter-icon {
+    width: 55px;
+    height: 55px;
+    background: rgba(179, 226, 236, 0.15);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.3s ease;
+}
+
+.word-counter-card:hover .counter-icon {
+    background: rgba(179, 226, 236, 0.25);
+}
+
+.word-counter-card .counter-icon i {
+    font-size: 1.5rem;
+    color: #b3e2ec;
+}
+
+/* Contenu */
+.word-counter-card .counter-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    z-index: 1;
+}
+
+.word-counter-card .counter-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: white;
+    line-height: 1;
+    background: linear-gradient(135deg, #ffffff, #b3e2ec);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.word-counter-card .counter-label {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Décoration */
+.word-counter-card .counter-decoration {
+    position: absolute;
+    top: -30%;
+    right: -10%;
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle, rgba(179, 226, 236, 0.15) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.word-counter-card::after {
+    content: '';
+    position: absolute;
+    bottom: -40%;
+    right: 20%;
+    width: 80px;
+    height: 80px;
+    background: radial-gradient(circle, rgba(179, 226, 236, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (max-width: 768px) {
+    .word-counter-card {
+        padding: 18px 20px;
+        gap: 15px;
+    }
+    
+    .word-counter-card .counter-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+    }
+    
+    .word-counter-card .counter-icon i {
+        font-size: 1.3rem;
+    }
+    
+    .word-counter-card .counter-number {
+        font-size: 2rem;
+    }
+    
+    .word-counter-card .counter-label {
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .word-counter-card {
+        padding: 15px 18px;
+        gap: 12px;
+        border-radius: 14px;
+    }
+    
+    .word-counter-card .counter-icon {
+        width: 42px;
+        height: 42px;
+    }
+    
+    .word-counter-card .counter-icon i {
+        font-size: 1.1rem;
+    }
+    
+    .word-counter-card .counter-number {
+        font-size: 1.6rem;
+    }
+    
+    .word-counter-card .counter-label {
+        font-size: 0.8rem;
+    }
+}
+
+/* ========================================
+   CARD TEXT (GRAMMAIRE) AVEC ACTIONS
+   ======================================== */
+.custom-card .card-body .card-text {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 10px 8px 16px;
+    border-radius: 20px;
+    margin-bottom: 15px;
+    gap: 10px;
+}
+
+.custom-card .card-body .card-text .grammar-label {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #060056;
+}
+
+/* ========================================
+   ACTIONS (DELETE, EDIT, FAVORI) À DROITE
+   ======================================== */
+.custom-card .card-body .card-text .card-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+}
+
+.custom-card .card-body .card-text .action-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    border: none;
+    text-decoration: none;
+}
+
+.custom-card .card-body .card-text .action-icon i {
+    font-size: 13px;
+    transition: all 0.3s ease;
+}
+
+/* Bouton Supprimer */
+.custom-card .card-body .card-text .action-delete {
+    background: rgba(220, 53, 69, 0.15);
+}
+
+.custom-card .card-body .card-text .action-delete i {
+    color: #dc3545;
+}
+
+.custom-card .card-body .card-text .action-delete:hover {
+    background: #dc3545;
+    transform: scale(1.15);
+}
+
+.custom-card .card-body .card-text .action-delete:hover i {
+    color: white;
+}
+
+/* Bouton Edit */
+.custom-card .card-body .card-text .action-edit {
+    background: rgba(26, 40, 77, 0.1);
+}
+
+.custom-card .card-body .card-text .action-edit i {
+    color: #1a284d;
+}
+
+.custom-card .card-body .card-text .action-edit:hover {
+    background: #1a284d;
+    transform: scale(1.15);
+}
+
+.custom-card .card-body .card-text .action-edit:hover i {
+    color: white;
+}
+
+/* Bouton Favori */
+.custom-card .card-body .card-text .action-favorite {
+    background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.custom-card .card-body .card-text .action-favorite i {
+    color: #cccccc;
+}
+
+.custom-card .card-body .card-text .action-favorite:hover {
+    transform: scale(1.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.custom-card .card-body .card-text .action-favorite:hover i,
+.custom-card .card-body .card-text .action-favorite i.text-warning {
+    color: #f8b500 !important;
+}
+
+/* ========================================
+   BADGE UTILISATEUR
+   ======================================== */
+.custom-card .added-by-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 6px 12px 6px 6px;
+    border-radius: 30px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+.custom-card .added-by-badge img {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.custom-card .added-by-badge span {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (max-width: 768px) {
+    .custom-card .card-body .card-text {
+        padding: 6px 8px 6px 12px;
+    }
+    
+    .custom-card .card-body .card-text .grammar-label {
+        font-size: 0.7rem;
+        letter-spacing: 0.5px;
+    }
+    
+    .custom-card .card-body .card-text .card-actions {
+        gap: 6px;
+    }
+    
+    .custom-card .card-body .card-text .action-icon {
+        width: 26px;
+        height: 26px;
+    }
+    
+    .custom-card .card-body .card-text .action-icon i {
+        font-size: 11px;
+    }
+    
+    .custom-card .added-by-badge {
+        top: 10px;
+        right: 10px;
+        padding: 5px 10px 5px 5px;
+    }
+    
+    .custom-card .added-by-badge img {
+        width: 22px;
+        height: 22px;
+    }
+    
+    .custom-card .added-by-badge span {
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .custom-card .card-body .card-text {
+        padding: 5px 6px 5px 10px;
+        gap: 6px;
+    }
+    
+    .custom-card .card-body .card-text .grammar-label {
+        font-size: 0.65rem;
+    }
+    
+    .custom-card .card-body .card-text .card-actions {
+        gap: 5px;
+    }
+    
+    .custom-card .card-body .card-text .action-icon {
+        width: 24px;
+        height: 24px;
+    }
+    
+    .custom-card .card-body .card-text .action-icon i {
+        font-size: 10px;
+    }
+}

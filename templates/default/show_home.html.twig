@@ -100,32 +100,14 @@
     <div class="card-container">
         {% for traduction in pagination %}
                 <div class="custom-card">
-                {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MODERATOR') %}
-                    <button style="color: #fff" type="button" class="btn btn-sm position-absolute top-0 mt-2 me-2" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal{{ traduction.id }}">
-                        &times;
-                    </button>
-                    <button style="color: #fff; right: 0; margin-right: 1rem;" type="button" class="btn btn-sm position-absolute top-0 mt-2 me-2">
-                        <a href="{{ path('app_traduction_edit', {'id': traduction.id}) }}">
-                            <i class="bi bi-pencil" style="color: white;"></i>
-                        </a>
-                    </button>
-                {% endif %}
-        
-                
-                {# Vérifier si la traduction appartient à un utilisateur qui n'est pas admin ou modérateur #}
-                {% if traduction.requestedBy is not null and not (traduction.requestedBy.roles is same as([]) or 'ROLE_ADMIN' in traduction.requestedBy.roles or 'ROLE_MODERATOR' in traduction.requestedBy.roles) %}
-                    <div class="added-by-info mt-3">
-                        <p>{{ 'post.added_by'|trans }}
-                            <strong style="color:#F26766;">{{ traduction.requestedBy.username }}</strong>
-                            {{ 'post.verified'|trans }}
-                        </p>
-                        <div class="profile-picture mt-2" style="position: absolute; {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MODERATOR') %}top: 4.5rem;{% else %}top: 2.5rem;{% endif %} right: 1rem;">
-                            {% if traduction.requestedBy.picture %}
-                                <img src="{{ asset('uploads/profile/' ~ traduction.requestedBy.picture) }}" alt="Photo de profil" style="width: 30px; height: 30px; border-radius: 50%;">
-                            {% else %}
-                                <img src="{{ asset('uploads/profile/default_profile_picture.jpg') }}" alt="Photo de profil" style="width: 30px; height: 30px; border-radius: 50%;">
-                            {% endif %}
-                        </div>
+           {% if traduction.requestedBy is not null and not (traduction.requestedBy.roles is same as([]) or 'ROLE_ADMIN' in traduction.requestedBy.roles or 'ROLE_MODERATOR' in traduction.requestedBy.roles) %}
+                    <div class="added-by-badge">
+                        {% if traduction.requestedBy.picture %}
+                            <img src="{{ asset('uploads/profile/' ~ traduction.requestedBy.picture) }}" alt="Photo de profil">
+                        {% else %}
+                            <img src="{{ asset('uploads/profile/default_profile_picture.jpg') }}" alt="Photo de profil">
+                        {% endif %}
+                        <span>{{ traduction.requestedBy.username }}</span>
                     </div>
                 {% endif %}
                 
@@ -133,20 +115,38 @@
                     {# Déterminer la langue d'affichage #}
                     {% set currentLang = app.request.query.get('lang')|default(langOption) %}
                     {% set grammar = currentLang in ['fr-rif', 'rif-fr'] ? traduction.grammarFR : traduction.grammarEN %}
-                      <p class="card-text">
-                      <span class="grammar-label">{{ grammar }}</span>
                     
-                    {# Icône favori dans le tag #}
-                    {% set isFavorite = false %}
-                    {% for favorite in favorites %}
-                        {% if favorite.getTraduction() is not null and favorite.getTraduction().id == traduction.id %}
-                            {% set isFavorite = true %}
-                        {% endif %}
-                    {% endfor %}
-                    <span class="favorite-icon" data-id="{{ traduction.id }}">
-                        <i class="bi bi-star-fill {% if isFavorite %}text-warning{% endif %}"></i>
-                    </span>
-                </p>
+                    {# GRAMMAIRE + ACTIONS (DELETE, EDIT, FAVORI) #}
+                    <p class="card-text">
+                        <span class="grammar-label">{{ grammar }}</span>
+                        
+                        <span class="card-actions">
+                            {# Bouton Supprimer #}
+                            {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MODERATOR') %}
+                                <button type="button" class="action-icon action-delete" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal{{ traduction.id }}" title="{{ 'button.delete'|trans|default('Supprimer') }}">
+                                    <i class="bi bi-trash3"></i>
+                                </button>
+                            {% endif %}
+                            
+                            {# Bouton Edit #}
+                            {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MODERATOR') %}
+                                <a href="{{ path('app_traduction_edit', {'id': traduction.id}) }}" class="action-icon action-edit" title="{{ 'button.edit'|trans|default('Modifier') }}">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                            {% endif %}
+                            
+                            {# Icône favori #}
+                            {% set isFavorite = false %}
+                            {% for favorite in favorites %}
+                                {% if favorite.getTraduction() is not null and favorite.getTraduction().id == traduction.id %}
+                                    {% set isFavorite = true %}
+                                {% endif %}
+                            {% endfor %}
+                            <span class="action-icon action-favorite" data-id="{{ traduction.id }}" title="{{ 'button.favorite'|trans|default('Favori') }}">
+                                <i class="bi bi-star-fill {% if isFavorite %}text-warning{% endif %}"></i>
+                            </span>
+                        </span>
+                    </p>
                     
                     <h5 class="card-title">
                         {% if currentLang == 'fr-rif' %}
@@ -453,43 +453,47 @@
 <div class="word-grammar-section reveal reveal-right">
 
     {#--------------- MOT DU JOUR -----------------------#}
-    <div class="worday-section">
-        <div class="worday">
-            <div class="worday-content">
-                {# Compteur de mots #}
-                <div class="word-counter">
-                    {{ 'post.countword'|trans }}
-                    <span class="count">{{ translatedMessage }}</span>
-                    {{ 'post.countword2'|trans }}
+<div class="worday-section">
+    <div class="worday">
+        <div class="worday-content">
+            {# Compteur de mots - ENJOLIVÉ avec CountUp #}
+            <div class="word-counter-wrapper">
+                <div class="word-counter-card">
+                    <div class="counter-icon">
+                        <i class="bi bi-book"></i>
+                    </div>
+                    <div class="counter-content">
+                        <span class="counter-number" id="wordCount">0</span>
+                        <span class="counter-label">{{ 'post.countword'|trans }} {{ 'post.countword2'|trans }}</span>
+                    </div>
+                    <div class="counter-decoration"></div>
                 </div>
-
-                {# Titre #}
-                <h3 class="worday-title">{{ 'post.worday'|trans }}</h3>
-
-                {# Contenu du mot du jour #}
-                <div class="worday-word-content">
-                    {% if wordOfTheDay %}
-                        {% if app.request.locale == 'fr' %}
-                            <p class="grammar-tag">{{ wordOfTheDay.grammarFR }}</p>
-                            <p class="word-translation">{{ wordOfTheDay.wordFR }}</p>
-                        {% else %}
-                            <p class="grammar-tag">{{ wordOfTheDay.grammarEN }}</p>
-                            <p class="word-translation">{{ wordOfTheDay.wordEN }}</p>
-                        {% endif %}
-
-                        <h2 class="word-main">{{ wordOfTheDay.singular }}</h2>
-
-                        {% if wordOfTheDay.phoneticSingular %}
-                            <p class="word-tifinagh">{{ wordOfTheDay.phoneticSingular }}</p>
-                        {% endif %}
+            </div>
+            
+            {# Titre #}
+            <h3 class="worday-title">{{ 'post.worday'|trans }}</h3>
+            
+            {# Contenu du mot du jour #}
+            <div class="worday-word-content">
+                {% if wordOfTheDay %}
+                    {% if app.request.locale == 'fr' %}
+                        <p class="grammar-tag">{{ wordOfTheDay.grammarFR }}</p>
+                        <p class="word-translation">{{ wordOfTheDay.wordFR }}</p>
                     {% else %}
-                        <p class="no-word">{{ 'post.no_worday'|trans }}</p>
+                        <p class="grammar-tag">{{ wordOfTheDay.grammarEN }}</p>
+                        <p class="word-translation">{{ wordOfTheDay.wordEN }}</p>
                     {% endif %}
-                </div>
+                    <h2 class="word-main">{{ wordOfTheDay.singular }}</h2>
+                    {% if wordOfTheDay.phoneticSingular %}
+                        <p class="word-tifinagh">{{ wordOfTheDay.phoneticSingular }}</p>
+                    {% endif %}
+                {% else %}
+                    <p class="no-word">{{ 'post.no_worday'|trans }}</p>
+                {% endif %}
             </div>
         </div>
     </div>
-
+</div>
     {#--------------- GRAMMAIRE -----------------------#}
 <section class="grammar-section">
     <div class="grammar-card">

@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function () {
  * Permet d'ajouter/retirer des traductions des favoris
  */
 document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.favorite-icon').forEach(function (star) {
+    document.querySelectorAll('.action-favorite').forEach(function (star) {
         star.addEventListener('click', function () {
             const traductionId = this.getAttribute('data-id');
             const isFavorite = this.querySelector('i').classList.contains('text-warning');
