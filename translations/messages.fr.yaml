@@ -7,7 +7,7 @@ home:
     results_for_letter : "Résultats pour la lettre %letter%"
     browse_dictionary: "Parcourir le dictionnaire par ordre alphabétique"
     welcome_message: '<span style="  color: #F26766;">Amyaz</span><br> Ton dictionnaire Français-Rifain.'
-    welcome_message_conjugaison: 'Bienvenue sur <span style="  color: #F26766;">Amyaz</span> !<br> Ton conjugueur rifain.'
+    welcome_message_conjugaison: '<span style="  color: #F26766;">Amyaz</span><br> Ton conjugueur Français-Rifain.'
     search_results: "Résultats de la recherche :"
     search_bar: "Rechercher"
     no_results_logged_in: "Aucun résultat trouvé.<br><a style=\"text-decoration:none; color:#F26766\" href=\"%path_traduction_new%\">Demander à traduire un mot</a>"

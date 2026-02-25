@@ -46,6 +46,14 @@ class ConjugationController extends AbstractController
         $terme = $request->query->get('terme');
         $lang = $request->query->get('lang');
     
+         if (!$terme || !$lang) {
+        return $this->render('conjugation/verbes.html.twig', [
+            'verbe' => null,
+            'verbExists' => false,
+            'lang' => $lang ?? 'fr-rif',
+            'englishVerbs' => false,
+        ]);
+    }
         // Mappage des langues vers les champs de la base de données
         $mapping = [
             'rif-fr'  => 'verbeRifain',  // Corrigé pour correspondre aux noms de propriétés

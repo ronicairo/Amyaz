@@ -206,10 +206,7 @@
 			flex: 1;
 			margin-bottom: 0;
 		}
-
-		span {
-			font-family: 'Arial', sans-serif;
-		}
+	
 		.profile-img {
 			width: 50px;
 			/* Augmenté pour plus de visibilité */
@@ -220,14 +217,6 @@
 			border: 1px solid #ddd;
 		}
 
-		h1.dynamic-font-size {
-			font-family: 'DM Serif Display', serif;
-			text-align: center;
-			max-width: 650px;
-			margin: 0 auto;
-			font-size: 5.5vw; /* Taille de police proportionnelle à la largeur de l'écran */
-		}
-
 		.autoComplete_wrapper > input::placeholder {
 			color: black !important;
 		}
@@ -236,11 +225,6 @@
 			height: 100% !important;
 		}
 		/* Limite maximale de la taille de la police */
-		@media(min-width: 700px) {
-			h1.dynamic-font-size {
-				font-size: 2.3rem; /* Taille maximale définie pour les grands écrans */
-			}
-		}
 
 		.ui-widget-content {
 			text-align: left;
@@ -342,13 +326,13 @@
 			{% include 'include/flashes.html.twig' %}
 		</div>
 
-		{# MESSAGE ACCUEIL #}
-		<h1 class="dynamic-font-size" style="font-family: 'DM Serif Display' , serif;text-align: center; max-width: 650px; margin: 0 auto;">
-			{{ 'home.welcome_message_conjugaison'|trans|raw }}
-		</h1>
-
-		<h3 style="text-align: center; margin-top: 50px; margin-bottom: 50px; font-size: 3rem;font-family: 'MaPolice', sans-serif;">ⴰⵙⴼⵜⵉ ⵙ ⵜⵎⴰⵣⵉⵖⵜ</h3>
-
+	{#--------------- MESSAGE ACCUEIL -----------------------#}
+<div class="welcome-section">
+    <h1 class="dynamic-font-size">
+        {{ 'home.welcome_message_conjugaison'|trans|raw }}
+    </h1>
+    <h3 class="tifinagh-title">ⴰⵙⴼⵜⵉ ⵙ ⵜⵎⴰⵣⵉⵖⵜ</h3>
+</div>
 
 		<section class="wow fadeIn animated" style="visibility: visible; animation-name: fadeIn;">
 			<div class="container">
