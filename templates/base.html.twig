@@ -151,76 +151,222 @@
     });
 </script>
 <script defer>
-
     document.addEventListener("DOMContentLoaded", function (event) {
 
-		const searchType = $("#searchType").val();
+        const baseUrl = "http://127.0.0.1:8000";
 
-        $("#lang").on('change', function () {
-            suggestions();
-        });
-
-        function suggestions() {
-            const lang = $("#lang").val();
-
-            const q = $(".autocomplete-input").val();
-            $.ajax({
-                url: "http://127.0.0.1:8000/traduction/autocomplete?lang=" + lang + "&q=" + q +"&searchType=" + searchType,
-                dataType: "json",
-                success: function (data) {
-                    initAutoComplete(data)
-                }
+        // ========================================
+        // DICTIONNAIRE
+        // ========================================
+        const searchTypeDictionary = $("#searchType").val();
+        
+        if (searchTypeDictionary === "dictionary") {
+            $("#lang").on('change', function () {
+                suggestionsDictionary();
             });
-        }
 
-
-        function initAutoComplete(suggestionsData) { // Initialize the autoComplete.js
-            new autoComplete({
-                selector: ".autocomplete-input",
-                data: {
-                    src: async (query) => {
-                        try {
-                            const lang = $("#lang").val();
-                            const q = $(".autocomplete-input").val();
-// Make an AJAX call using fetch to get suggestions from an API
-                            const source = await fetch("http://127.0.0.1:8000/traduction/autocomplete?lang=" +
-									lang + "&q=" + q +"&searchType=" + searchType);
-                            const data = await source.json();
-                            return data
-                        } catch (error) {
-                            console.error(error);
-                            return [];
-                        }
+            function suggestionsDictionary() {
+                const lang = $("#lang").val();
+                const q = $(".autocomplete-input").val();
+                $.ajax({
+                    url: baseUrl + "/traduction/autocomplete?lang=" + lang + "&q=" + q + "&searchType=dictionary",
+                    dataType: "json",
+                    success: function (data) {
+                        initAutoCompleteDictionary(data);
                     }
-                },
-                resultsList: {
-                    maxResults: 20, // Limit the number of results displayed to 3
-                },
-                resultItem: {
-                    highlight: true, // Highlight the matching part of the suggestion
-                    noResults: true
-                },
-                events: {
-                    input: {
-                        selection: (event) => {
-                            const feedback = event.detail;
-                            const selection = feedback.selection.value;
-                            const lang = $("#lang").val();
-                            document.querySelector(".autocomplete-input").value = selection;
-                            if(searchType==="dictionary"){
-                                window.location.replace("http://127.0.0.1:8000/?lang=" + lang + "&q=" + selection);
-                            }else if(searchType==="verb"){
-                                window.location.replace("http://127.0.0.1:8000/verbe?lang="+lang+"&terme=" + selection);
+                });
+            }
+
+            function initAutoCompleteDictionary(suggestionsData) {
+                new autoComplete({
+                    selector: ".autocomplete-input",
+                    data: {
+                        src: async (query) => {
+                            try {
+                                const lang = $("#lang").val();
+                                const q = $(".autocomplete-input").val();
+                                const source = await fetch(baseUrl + "/traduction/autocomplete?lang=" + lang + "&q=" + q + "&searchType=dictionary");
+                                const data = await source.json();
+                                return data;
+                            } catch (error) {
+                                console.error(error);
+                                return [];
                             }
-
+                        }
+                    },
+                    resultsList: {
+                        maxResults: 20,
+                    },
+                    resultItem: {
+                        highlight: true,
+                        noResults: true
+                    },
+                    events: {
+                        input: {
+                            selection: (event) => {
+                                const feedback = event.detail;
+                                const selection = feedback.selection.value;
+                                const lang = $("#lang").val();
+                                document.querySelector(".autocomplete-input").value = selection;
+                                window.location.replace(baseUrl + "/?lang=" + lang + "&q=" + selection);
+                            }
                         }
                     }
+                });
+            }
+
+            suggestionsDictionary();
+        }
+
+        // ========================================
+        // VERBE
+        // ========================================
+        const searchTypeVerb = $("#searchTypeVerb").val();
+
+        if (searchTypeVerb === "verb") {
+            $("#langVerb").on('change', function () {
+                suggestionsVerb();
+            });
+
+            function suggestionsVerb() {
+                const lang = $("#langVerb").val();
+                const q = $(".autocomplete-input-verb").val();
+                $.ajax({
+                    url: baseUrl + "/traduction/autocomplete?lang=" + lang + "&q=" + q + "&searchType=verb",
+                    dataType: "json",
+                    success: function (data) {
+                        initAutoCompleteVerb(data);
+                    }
+                });
+            }
+
+            function initAutoCompleteVerb(suggestionsData) {
+                new autoComplete({
+                    selector: ".autocomplete-input-verb",
+                    data: {
+                        src: async (query) => {
+                            try {
+                                const lang = $("#langVerb").val();
+                                const q = $(".autocomplete-input-verb").val();
+                                const source = await fetch(baseUrl + "/traduction/autocomplete?lang=" + lang + "&q=" + q + "&searchType=verb");
+                                const data = await source.json();
+                                return data;
+                            } catch (error) {
+                                console.error(error);
+                                return [];
+                            }
+                        }
+                    },
+                    resultsList: {
+                        maxResults: 20,
+                    },
+                    resultItem: {
+                        highlight: true,
+                        noResults: true
+                    },
+                    events: {
+                        input: {
+                            selection: (event) => {
+                                const feedback = event.detail;
+                                const selection = feedback.selection.value;
+                                const lang = $("#langVerb").val();
+                                document.querySelector(".autocomplete-input-verb").value = selection;
+                                window.location.replace(baseUrl + "/verbe?lang=" + lang + "&terme=" + selection);
+                            }
+                        }
+                    }
+                });
+            }
+
+            suggestionsVerb();
+
+            // BLOQUER ENTRÉE SUR VERBE
+            $(".autocomplete-input-verb").on("keydown", function(e) {
+                if (e.key === "Enter" || e.keyCode === 13) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
                 }
+            });
+
+            $("#searchFormVerb").on("submit", function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
             });
         }
 
+        // ========================================
+        // CLAVIER RIFAIN - DICTIONNAIRE
+        // ========================================
+        const toggleKeyboard = document.getElementById("toggle-keyboard");
+        const rifainChars = document.getElementById("rifain-characters");
+        const searchInput = document.getElementById("search-input");
+        const langSelect = document.getElementById("lang");
 
-        suggestions();
+        if (toggleKeyboard && rifainChars && searchInput) {
+            toggleKeyboard.addEventListener("click", function () {
+                rifainChars.style.display = (rifainChars.style.display === "none" || rifainChars.style.display === "") ? "flex" : "none";
+            });
+
+            rifainChars.addEventListener("click", function (e) {
+                if (e.target.tagName === "SPAN") {
+                    const char = e.target.textContent;
+                    const startPos = searchInput.selectionStart;
+                    const endPos = searchInput.selectionEnd;
+                    searchInput.value = searchInput.value.substring(0, startPos) + char + searchInput.value.substring(endPos);
+                    searchInput.setSelectionRange(startPos + 1, startPos + 1);
+                    searchInput.focus();
+                    searchInput.dispatchEvent(new Event('input', { bubbles: true }));
+                    rifainChars.style.display = "none";
+                }
+            });
+
+            if (langSelect) {
+                langSelect.addEventListener("change", function () {
+                    const lang = langSelect.value;
+                    toggleKeyboard.style.display = (lang === "rif-en" || lang === "rif-fr") ? "flex" : "none";
+                    if (lang !== "rif-en" && lang !== "rif-fr") rifainChars.style.display = "none";
+                });
+                toggleKeyboard.style.display = (langSelect.value === "rif-en" || langSelect.value === "rif-fr") ? "flex" : "none";
+            }
+        }
+
+        // ========================================
+        // CLAVIER RIFAIN - VERBE
+        // ========================================
+        const toggleKeyboardVerb = document.getElementById("toggle-keyboard-verb");
+        const rifainCharsVerb = document.getElementById("rifain-characters-verb");
+        const searchInputVerb = document.getElementById("search-input-verb");
+        const langSelectVerb = document.getElementById("langVerb");
+
+        if (toggleKeyboardVerb && rifainCharsVerb && searchInputVerb) {
+            toggleKeyboardVerb.addEventListener("click", function () {
+                rifainCharsVerb.style.display = (rifainCharsVerb.style.display === "none" || rifainCharsVerb.style.display === "") ? "flex" : "none";
+            });
+
+            rifainCharsVerb.addEventListener("click", function (e) {
+                if (e.target.tagName === "SPAN") {
+                    const char = e.target.textContent;
+                    const startPos = searchInputVerb.selectionStart;
+                    const endPos = searchInputVerb.selectionEnd;
+                    searchInputVerb.value = searchInputVerb.value.substring(0, startPos) + char + searchInputVerb.value.substring(endPos);
+                    searchInputVerb.setSelectionRange(startPos + 1, startPos + 1);
+                    searchInputVerb.focus();
+                    searchInputVerb.dispatchEvent(new Event('input', { bubbles: true }));
+                    rifainCharsVerb.style.display = "none";
+                }
+            });
+
+            if (langSelectVerb) {
+                langSelectVerb.addEventListener("change", function () {
+                    const lang = langSelectVerb.value;
+                    toggleKeyboardVerb.style.display = (lang === "rif-en" || lang === "rif-fr") ? "flex" : "none";
+                    if (lang !== "rif-en" && lang !== "rif-fr") rifainCharsVerb.style.display = "none";
+                });
+                toggleKeyboardVerb.style.display = (langSelectVerb.value === "rif-en" || langSelectVerb.value === "rif-fr") ? "flex" : "none";
+            }
+        }
 
     });
 </script>

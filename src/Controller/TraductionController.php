@@ -486,4 +486,30 @@ class TraductionController extends AbstractController
             'Content-Disposition' => 'inline; filename="audio.mp3"',
         ]);
     }
+
+#[Route('/dictionnaire/{mot}', name: 'traduction_show')]
+public function showTraduction(
+    string $mot,
+    TraductionRepository $traductionRepository,
+    Request $request
+): Response {
+    $traduction = $traductionRepository->findOneBy(['singular' => $mot]);
+    
+    if (!$traduction) {
+        throw $this->createNotFoundException('Traduction non trouvée');
+    }
+    
+    $locale = $request->getLocale();
+    
+    // Récupérer le mot précédent et suivant (par ordre alphabétique)
+    $previousTraduction = $traductionRepository->findPreviousTraduction($traduction);
+    $nextTraduction = $traductionRepository->findNextTraduction($traduction);
+    
+    return $this->render('traduction/for_referencement.html.twig', [
+        'traduction' => $traduction,
+        'locale' => $locale,
+        'previousTraduction' => $previousTraduction,
+        'nextTraduction' => $nextTraduction,
+    ]);
+}
 }

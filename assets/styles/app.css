@@ -69,9 +69,10 @@
 }
 
 html {
-    overflow-y: auto;
+    overflow-x: hidden;
+    max-width: 100%;
     scrollbar-width: thin;
-   background: var(--bg-light);
+    background: var(--bg-light);
     scroll-behavior: smooth;
 }
 
@@ -93,10 +94,12 @@ body {
     background: var(--bg-light);
     color: var(--text-dark);
     line-height: 1.6;
-
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    overflow-x: hidden;
+    max-width: 100%;
+    position: relative;
 }
 
 /* Background animé */
@@ -747,4 +750,26 @@ h1.dynamic-font-size b {
         margin-bottom: 40px;
         font-size: clamp(1.5rem, 5vw, 2rem);
     }
+}
+
+/* ========================================
+   LIEN MOT - SEO
+   ======================================== */
+.word-link {
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s ease;
+}
+
+.word-link:hover {
+    color: #2d4a7c;
+    text-decoration: underline;
+}
+
+.custom-card .card-title .word-link {
+    color: inherit;
+}
+
+.custom-card .card-title .word-link:hover {
+    color: #b3e2ec;
 }

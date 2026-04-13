@@ -1,0 +1,761 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ traduction.singular }} - {{ traduction.wordFR }} | {{ 'meta.title'|trans }}{% endblock %}
+
+{% block meta_description %}
+    <meta name="description" content="Traduction du mot rifain « {{ traduction.singular }} » en français : {{ traduction.wordFR }}. Dictionnaire Rifain-Français.">
+{% endblock %}
+
+{% block body %}
+<style>
+/* ========================================
+   PAGE DICTIONNAIRE
+   ======================================== */
+.dictionary-page {
+    min-height: 80vh;
+    padding: 20px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dictionary-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    width: 100%;
+    max-width: 95%vw;
+}
+
+/* ========================================
+   BOUTONS NAVIGATION
+   ======================================== */
+.nav-arrow {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1a284d, #2d4a7c);
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    box-shadow: 0 4px 15px rgba(26, 40, 77, 0.25);
+    flex-shrink: 0;
+}
+
+.nav-arrow:hover {
+    transform: scale(1.1);
+    color: #b3e2ec;
+    box-shadow: 0 6px 25px rgba(26, 40, 77, 0.35);
+}
+
+.nav-arrow.disabled {
+    background: #d0d8e0;
+    cursor: not-allowed;
+    pointer-events: none;
+    box-shadow: none;
+}
+
+.nav-arrow-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.nav-arrow-label {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.7rem;
+    color: #1a284d;
+    max-width: 80px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ========================================
+   CARD PRINCIPALE
+   ======================================== */
+.word-card {
+    flex: 1;
+    max-width: 750px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(26, 40, 77, 0.12);
+    overflow: hidden;
+}
+
+.word-card::before {
+    content: '';
+    display: block;
+    height: 5px;
+    background: linear-gradient(90deg, #b3e2ec, #7fd4e4);
+}
+
+/* ========================================
+   HEADER
+   ======================================== */
+.word-header {
+    background: linear-gradient(135deg, #1a284d 0%, #2d4a7c 100%);
+    padding: 30px 35px;
+    position: relative;
+}
+
+.word-header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 60px;
+}
+
+.word-main {
+    flex: 1;
+    min-width: 0;
+    padding-right: 100px;
+}
+
+.word-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    color: white;
+    margin: 0 0 8px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    word-break: break-word;
+}
+
+.word-tifinagh {
+    font-family: 'MaPolice', sans-serif;
+    font-size: 1.6rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0 0 12px;
+}
+
+.word-grammar {
+    display: inline-block;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.8rem;
+    color: #1a284d;
+    background: rgba(179, 226, 236, 0.9);
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-weight: 500;
+}
+
+/* Admin actions */
+.admin-actions {
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+    position: absolute;
+    top: 25px;
+    right: 30px;
+}
+
+.admin-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.admin-btn.edit {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.admin-btn.edit:hover {
+    background: white;
+    color: #1a284d;
+}
+
+.admin-btn.delete {
+    background: rgba(220, 53, 69, 0.3);
+    color: white;
+}
+
+.admin-btn.delete:hover {
+    background: #dc3545;
+    color: white;
+}
+
+/* Audio button */
+.audio-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.audio-btn:hover {
+    background: white;
+    color: #1a284d;
+    border-color: white;
+    transform: scale(1.1);
+}
+
+.audio-btn-small {
+    width: 30px;
+    height: 30px;
+    font-size: 0.9rem;
+    background: linear-gradient(135deg, #b3e2ec, #7fd4e4);
+    color: #1a284d;
+    border: none;
+}
+
+.audio-btn-small:hover {
+    background: linear-gradient(135deg, #1a284d, #2d4a7c);
+    color: white;
+}
+
+/* ========================================
+   BODY
+   ======================================== */
+.word-body {
+    padding: 30px 35px;
+}
+
+/* Traductions row */
+.translations-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.translation-item {
+    background: #f8fbfc;
+    border-radius: 12px;
+    padding: 20px;
+    border-left: 4px solid #b3e2ec;
+}
+
+.translation-flag {
+    font-size: 1.2rem;
+    margin-right: 8px;
+}
+
+.translation-label {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #2d4a7c;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.translation-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    color: #1a284d;
+    font-style: italic;
+}
+
+/* Forms row (singulier/pluriel) */
+.forms-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.form-item {
+    background: linear-gradient(135deg, rgba(179, 226, 236, 0.2), rgba(127, 212, 228, 0.1));
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    border: 1px solid rgba(179, 226, 236, 0.3);
+}
+
+.form-label {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #2d4a7c;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+}
+
+.form-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: #1a284d;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+.form-tifinagh {
+    font-family: 'MaPolice', sans-serif;
+    font-size: 1rem;
+    color: #2d4a7c;
+}
+
+/* Details grid */
+.details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 25px;
+    padding-top: 25px;
+    border-top: 1px solid #e8f4f8;
+}
+
+.detail-item {
+    background: #f8fbfc;
+    border-radius: 10px;
+    padding: 15px 18px;
+    border-left: 3px solid #7fd4e4;
+}
+
+.detail-label {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #1a284d;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.detail-label i {
+    color: #7fd4e4;
+}
+
+.detail-value {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem;
+    color: #333;
+    line-height: 1.5;
+}
+
+/* ========================================
+   FOOTER
+   ======================================== */
+.word-footer {
+    padding: 20px 35px;
+    background: #f8fbfc;
+    display: flex;
+    justify-content: center;
+}
+
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 25px;
+    background: linear-gradient(135deg, #1a284d, #2d4a7c);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-back:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(26, 40, 77, 0.25);
+    color: white;
+}
+
+/* ========================================
+   MOBILE NAV
+   ======================================== */
+.mobile-nav {
+    display: none;
+    gap: 15px;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #e8f4f8;
+}
+
+.mobile-nav .nav-arrow {
+    flex: 1;
+    border-radius: 10px;
+    height: 45px;
+    font-size: 0.85rem;
+    gap: 8px;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (max-width: 900px) {
+    .nav-arrow-container {
+        display: none;
+    }
+    
+    .mobile-nav {
+        display: flex;
+    }
+    
+    .dictionary-wrapper {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 650px) {
+    .dictionary-page {
+        padding: 20px 15px;
+    }
+    
+    .translations-row,
+    .forms-row,
+    .details-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .word-header {
+        padding: 25px 20px;
+        padding-top: 60px;
+    }
+    
+    .word-main {
+        padding-right: 0;
+    }
+    
+    .word-body {
+        padding: 25px 20px;
+    }
+    
+    .word-title {
+        font-size: 1.8rem;
+    }
+    
+    .word-tifinagh {
+        font-size: 1.3rem;
+    }
+    
+    .translation-value {
+        font-size: 1.2rem;
+    }
+    
+    .admin-actions {
+        top: 15px;
+        right: 15px;
+    }
+}
+
+@media (max-width: 400px) {
+    .word-title {
+        font-size: 1.5rem;
+    }
+    
+    .admin-btn {
+        width: 34px;
+        height: 34px;
+        font-size: 0.85rem;
+    }
+}
+</style>
+
+{# Schema.org pour Google #}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "DefinedTerm",
+    "name": "{{ traduction.singular }}",
+    "description": "{{ traduction.wordFR }}",
+    "inDefinedTermSet": {
+        "@type": "DefinedTermSet",
+        "name": "Dictionnaire Rifain-Français"
+    }
+}
+</script>
+
+<div class="dictionary-page">
+    <div class="dictionary-wrapper">
+        
+        {# Flèche gauche #}
+        <div class="nav-arrow-container">
+            {% if previousTraduction %}
+                <a href="{{ path('traduction_show', {mot: previousTraduction.singular}) }}" class="nav-arrow" title="{{ previousTraduction.singular }}">
+                    <i class="bi bi-chevron-left"></i>
+                </a>
+                <span class="nav-arrow-label">{{ previousTraduction.singular }}</span>
+            {% else %}
+                <span class="nav-arrow disabled">
+                    <i class="bi bi-chevron-left"></i>
+                </span>
+            {% endif %}
+        </div>
+        
+        {# Card principale #}
+        <div class="word-card">
+            
+            {# Header #}
+            <div class="word-header">
+                <div class="word-header-top">
+                    <div class="word-main">
+                        <h1 class="word-title">
+                            {{ traduction.singular }}
+                            {% if traduction.hasRifainSingularRecord %}
+                                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                      <a href="{{ path('audio_serve', { id: traduction.id, field: 'rifainSingularRecord' }) }}" 
+               class="audio-btn audio-trigger" 
+               data-audio-url="{{ path('audio_serve', { id: traduction.id, field: 'rifainSingularRecord' }) }}"
+               title="Écouter la prononciation">
+                <i class="bi bi-volume-up-fill"></i>
+            </a>
+                                {% else %}
+                                  <a href="#" class="audio-btn" onclick="alert('Veuillez vous connecter pour accéder à cette fonctionnalité.'); return false;" title="Connectez-vous pour écouter">
+                <i class="bi bi-volume-up-fill"></i>
+            </a>
+                                {% endif %}
+                            {% endif %}
+                        </h1>
+                        
+                        {% if traduction.phoneticSingular %}
+                            <p class="word-tifinagh">{{ traduction.phoneticSingular }}</p>
+                        {% endif %}
+                        
+                        {% if traduction.grammarFr %}
+                            <span class="word-grammar">{{ traduction.grammarFr }}</span>
+                        {% endif %}
+                    </div>
+                    
+                    {# Admin actions #}
+                    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MODERATOR') %}
+                    <div class="admin-actions">
+                        <a href="{{ path('app_traduction_edit', {id: traduction.id}) }}" class="admin-btn edit" title="Modifier">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                        {% if is_granted('ROLE_ADMIN') %}
+                        <button type="button" class="admin-btn delete" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal{{ traduction.id }}" title="Supprimer">
+                            <i class="bi bi-trash3"></i>
+                        </button>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            {# Body #}
+            <div class="word-body">
+                
+                {# Traductions FR + EN #}
+                <div class="translations-row">
+                    {% if traduction.wordFR %}
+                    <div class="translation-item">
+                        <p class="translation-label"><span class="translation-flag">🇫🇷</span> Français</p>
+                        <p class="translation-value">{{ traduction.wordFR }}</p>
+                    </div>
+                    {% endif %}
+                    
+                    {% if traduction.wordEN %}
+                    <div class="translation-item">
+                        <p class="translation-label"><span class="translation-flag">🇬🇧</span> English</p>
+                        <p class="translation-value">{{ traduction.wordEN }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                {# Singulier / Pluriel #}
+                <div class="forms-row">
+                    <div class="form-item">
+                        <p class="form-label">Singulier</p>
+                        <p class="form-value">
+                            {{ traduction.singular }}
+                            {% if traduction.hasRifainSingularRecord %}
+                                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                    <a href="{{ path('audio_serve', { id: traduction.id, field: 'rifainSingularRecord' }) }}" 
+                                       class="audio-btn audio-btn-small audio-trigger" 
+                                       data-audio-url="{{ path('audio_serve', { id: traduction.id, field: 'rifainSingularRecord' }) }}">
+                                        <i class="bi bi-volume-up-fill"></i>
+                                    </a>
+                                {% endif %}
+                            {% endif %}
+                        </p>
+                        {% if traduction.phoneticSingular %}
+                            <p class="form-tifinagh">{{ traduction.phoneticSingular }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    {% if traduction.plural %}
+                    <div class="form-item">
+                        <p class="form-label">Pluriel</p>
+                        <p class="form-value">
+                            {{ traduction.plural }}
+                            {% if traduction.hasRifainPluralRecord %}
+                                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                 <a href="{{ path('audio_serve', { id: traduction.id, field: 'rifainPluralRecord' }) }}" 
+                   class="audio-btn audio-btn-small audio-trigger" 
+                   data-audio-url="{{ path('audio_serve', { id: traduction.id, field: 'rifainPluralRecord' }) }}">
+                    <i class="bi bi-volume-up-fill"></i>
+                </a>
+                {% else %}
+                <a href="#" class="audio-btn audio-btn-small" onclick="alert('Veuillez vous connecter pour accéder à cette fonctionnalité.'); return false;">
+                    <i class="bi bi-volume-up-fill"></i>
+                </a>
+                                {% endif %}
+                            {% endif %}
+                        </p>
+                        {% if traduction.phoneticPlural %}
+                            <p class="form-tifinagh">{{ traduction.phoneticPlural }}</p>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+                
+                {# Détails #}
+                {% if traduction.racine or traduction.example or traduction.origin or traduction.source %}
+                <div class="details-grid">
+                    {% if traduction.racine %}
+                    <div class="detail-item">
+                        <p class="detail-label"><i class="bi bi-diagram-3"></i> Racine</p>
+                        <p class="detail-value">{{ traduction.racine }}</p>
+                    </div>
+                    {% endif %}
+                    
+                    {% if traduction.example %}
+                    <div class="detail-item">
+                        <p class="detail-label"><i class="bi bi-chat-quote"></i> Exemple</p>
+                        <p class="detail-value">« {{ traduction.example }} »</p>
+                    </div>
+                    {% endif %}
+                    
+                    {% if traduction.origin %}
+                    <div class="detail-item">
+                        <p class="detail-label"><i class="bi bi-globe"></i> Origine</p>
+                        <p class="detail-value">{{ traduction.origin }}</p>
+                    </div>
+                    {% endif %}
+                    
+                    {% if traduction.source %}
+                    <div class="detail-item">
+                        <p class="detail-label"><i class="bi bi-book"></i> Source</p>
+                        <p class="detail-value">{{ traduction.source }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+                
+                {# Navigation mobile #}
+                <div class="mobile-nav">
+                    {% if previousTraduction %}
+                        <a href="{{ path('traduction_show', {mot: previousTraduction.singular}) }}" class="nav-arrow">
+                            <i class="bi bi-chevron-left"></i> {{ previousTraduction.singular }}
+                        </a>
+                    {% else %}
+                        <span class="nav-arrow disabled"><i class="bi bi-chevron-left"></i> Précédent</span>
+                    {% endif %}
+                    
+                    {% if nextTraduction %}
+                        <a href="{{ path('traduction_show', {mot: nextTraduction.singular}) }}" class="nav-arrow">
+                            {{ nextTraduction.singular }} <i class="bi bi-chevron-right"></i>
+                        </a>
+                    {% else %}
+                        <span class="nav-arrow disabled">Suivant <i class="bi bi-chevron-right"></i></span>
+                    {% endif %}
+                </div>
+            </div>
+            
+            {# Footer #}
+            <div class="word-footer">
+                <a href="{{ path('show_home') }}" class="btn-back">
+                    <i class="bi bi-arrow-left"></i>
+                    Retour au dictionnaire
+                </a>
+            </div>
+        </div>
+        
+        {# Flèche droite #}
+        <div class="nav-arrow-container">
+            {% if nextTraduction %}
+                <a href="{{ path('traduction_show', {mot: nextTraduction.singular}) }}" class="nav-arrow" title="{{ nextTraduction.singular }}">
+                    <i class="bi bi-chevron-right"></i>
+                </a>
+                <span class="nav-arrow-label">{{ nextTraduction.singular }}</span>
+            {% else %}
+                <span class="nav-arrow disabled">
+                    <i class="bi bi-chevron-right"></i>
+                </span>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{# Modal Suppression #}
+{% if is_granted('ROLE_ADMIN') %}
+<div class="modal fade" id="confirmDeleteModal{{ traduction.id }}" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 16px; border: none; overflow: hidden;">
+            <div class="modal-header" style="background: linear-gradient(135deg, #dc3545, #c82333); border: none; padding: 20px 25px;">
+                <h5 class="modal-title" style="color: white; font-family: 'Playfair Display', serif;">
+                    <i class="bi bi-exclamation-triangle me-2"></i> Confirmer la suppression
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" style="padding: 30px; text-align: center;">
+                <p style="color: #666; margin-bottom: 15px;">Supprimer ce mot ?</p>
+                <p style="font-family: 'Playfair Display', serif; font-size: 1.5rem; color: #1a284d; font-weight: 700;">« {{ traduction.singular }} »</p>
+            </div>
+            <div class="modal-footer" style="border: none; padding: 15px 25px 25px; justify-content: center; gap: 15px;">
+                <button type="button" class="btn" data-bs-dismiss="modal" style="padding: 10px 25px; background: #f0f0f0; color: #666; border: none; border-radius: 8px; font-weight: 600;">
+                    Annuler
+                </button>
+                <form action="{{ path('app_traduction_delete', {id: traduction.id}) }}" method="POST" style="display: inline;">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ traduction.id) }}">
+                    <button type="submit" class="btn" style="padding: 10px 25px; background: #dc3545; color: white; border: none; border-radius: 8px; font-weight: 600;">
+                        <i class="bi bi-trash3 me-1"></i> Supprimer
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{# Navigation clavier #}
+<script>
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowLeft') {
+        {% if previousTraduction %}
+        window.location.href = "{{ path('traduction_show', {mot: previousTraduction.singular}) }}";
+        {% endif %}
+    }
+    if (e.key === 'ArrowRight') {
+        {% if nextTraduction %}
+        window.location.href = "{{ path('traduction_show', {mot: nextTraduction.singular}) }}";
+        {% endif %}
+    }
+});
+</script>
+
+{% endblock %}

@@ -18,56 +18,55 @@ const toggleKeyboard = document.getElementById('toggle-keyboard');
 const searchInput = document.getElementById('search-input');
 
 // Visibilité du clavier Rifain
-function toggleRifainKeyboard() {
-    if (rifainCharacters.style.display === 'none' || rifainCharacters.style.display === '') {
-        rifainCharacters.style.display = 'flex';
-    } else {
-        rifainCharacters.style.display = 'none';
+ function toggleRifainKeyboard() {
+        if (!rifainCharacters) return;
+        rifainCharacters.classList.toggle('show');
     }
-}
 
-// Insérer un caractère dans le clavier
-function insertCharacter(character) {
-  const startPos = searchInput.selectionStart;
-  const endPos = searchInput.selectionEnd;
-  searchInput.value = searchInput.value.substring(0, startPos) + character + searchInput.value.substring(endPos);
-  searchInput.setSelectionRange(startPos + 1, startPos + 1);
-  searchInput.focus();
+  // Insérer un caractère dans le clavier
+    function insertCharacter(character) {
+        if (!searchInput) return;
+        
+        const startPos = searchInput.selectionStart;
+        const endPos = searchInput.selectionEnd;
+        searchInput.value = searchInput.value.substring(0, startPos) + character + searchInput.value.substring(endPos);
+        searchInput.setSelectionRange(startPos + 1, startPos + 1);
+        searchInput.focus();
+        
+        // Déclencher l'événement input pour l'autocomplétion
+        const event = new Event('input', { bubbles: true });
+        searchInput.dispatchEvent(event);
+        
+        // Masquer la boîte des caractères après l'insertion
+        rifainCharacters.classList.remove('show');
+    }
 
-  // Déclencher l'événement input pour l'autocomplétion
-  const event = new Event('input', { bubbles: true });
-  searchInput.dispatchEvent(event);
+    // Ecouteur d'évenements clavier
+    if (toggleKeyboard) {
+        toggleKeyboard.addEventListener('click', toggleRifainKeyboard);
+    }
 
-  // Masquer la boîte des caractères après l'insertion
-  rifainCharacters.style.display = 'none';
-}
+    // Ecouteur d'évenements caractères rifain
+    if (rifainCharacters) {
+        rifainCharacters.addEventListener('click', function (event) {
+            if (event.target.tagName === 'SPAN') {
+                insertCharacter(event.target.textContent);
+            }
+        });
+    }
 
-// Ecouteur d'évenements clavier
-if (toggleKeyboard) {
-toggleKeyboard.addEventListener('click', toggleRifainKeyboard);
-}
-
-// Ecouteur d'évenements caractères rifain
-if (rifainCharacters) {
-rifainCharacters.addEventListener('click', function (event) {
-if (event.target.tagName === 'SPAN') {
-insertCharacter(event.target.textContent);
-}
-})
-};
-
-// Afficher/masquer le bouton du clavier en fonction de l'option
-if (langSelect) {
-langSelect.addEventListener('change', function () {
-const lang = langSelect.value;
-if (lang === 'rif-en' || lang === 'rif-fr') {
-toggleKeyboard.style.display = 'flex';
-} else {
-toggleKeyboard.style.display = 'none';
-rifainCharacters.style.display = 'none';
-}
-})
-};
+    // Afficher/masquer le bouton du clavier en fonction de l'option
+    if (langSelect) {
+        langSelect.addEventListener('change', function () {
+            const lang = langSelect.value;
+            if (lang === 'rif-en' || lang === 'rif-fr') {
+                toggleKeyboard.style.display = 'flex';
+            } else {
+                toggleKeyboard.style.display = 'none';
+                rifainCharacters.classList.remove('show');
+            }
+        });
+    }
 
 // Vérification initiale pour afficher/masquer le bouton du clavier
 if (langSelect) {

@@ -6,6 +6,7 @@ use DateTime;
 use App\Entity\Comment;
 use App\Entity\Favorite;
 use App\Form\CommentType;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use App\Entity\Traduction;
 use App\Entity\GrammarSheet;
 use App\Form\NewsletterType;
@@ -370,4 +371,61 @@ public function browseByLetter(string $letter): Response
 
 }
 
+
+#[Route('/sitemap.xml', name: 'sitemap', defaults: ['_format' => 'xml'])]
+public function sitemap(TraductionRepository $repo): Response
+{
+    $traductions = $repo->createQueryBuilder('t')
+        ->where('t.singular IS NOT NULL')
+        ->andWhere('t.singular != :empty')
+        ->andWhere('t.request = :request')
+        ->setParameter('empty', '')
+        ->setParameter('request', false)
+        ->orderBy('t.singular', 'ASC')
+        ->getQuery()
+        ->getResult();
+
+    $urls = [];
+    $today = date('Y-m-d');
+
+    foreach ($traductions as $traduction) {
+        $mot = $traduction->getSingular();
+        
+        if (empty($mot)) {
+            continue;
+        }
+
+        // Vérifier que la date est valide
+        $lastmod = $today;
+        if ($traduction->getUpdatedAt() !== null) {
+            $year = (int) $traduction->getUpdatedAt()->format('Y');
+            if ($year > 2000) {
+                $lastmod = $traduction->getUpdatedAt()->format('Y-m-d');
+            }
+        }
+
+        try {
+            $urls[] = [
+                'loc' => $this->generateUrl(
+                    'traduction_show',
+                    ['mot' => $mot],
+                    UrlGeneratorInterface::ABSOLUTE_URL
+                ),
+                'lastmod' => $lastmod
+            ];
+        } catch (\Exception $e) {
+            continue;
+        }
+    }
+
+    $response = new Response(
+        $this->renderView('sitemap.xml.twig', ['urls' => $urls]),
+        200,
+        ['Content-Type' => 'application/xml; charset=utf-8']
+    );
+
+    $response->setSharedMaxAge(3600);
+
+    return $response;
+}
 }

@@ -380,8 +380,9 @@ h1.dynamic-font-size b {
 }
 
 .card-container .custom-card .recorder-player:hover {
-    color: #e94560;
+    color: #ffffff;
     transform: scale(1.1);
+    background-color: #050139;
 }
 
 /* Bouton info modal */
@@ -1864,7 +1865,7 @@ h1.dynamic-font-size b {
 .comment-box .comment-icon {
     width: 70px;
     height: 70px;
-    background: linear-gradient(135deg, rgba(160, 93, 5, 0.1), rgba(233, 69, 96, 0.1));
+    background: linear-gradient(135deg, rgba(5, 39, 160, 0.1), rgba(69, 211, 233, 0.1));
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -2182,7 +2183,7 @@ h1.dynamic-font-size b {
 .newsletter-box .newsletter-icon {
     width: 70px;
     height: 70px;
-    background: linear-gradient(135deg, rgba(160, 93, 5, 0.1), rgba(233, 69, 96, 0.1));
+    background: linear-gradient(135deg, rgba(5, 39, 160, 0.1), rgba(69, 211, 233, 0.1));
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -2787,4 +2788,74 @@ h1.dynamic-font-size b {
     .custom-card .card-body .card-text .action-icon i {
         font-size: 10px;
     }
+}
+
+/* Audio button */
+.audio-trigger{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.audio-trigger:hover {
+    background: white;
+    color: #1a284d;
+    border-color: white;
+    transform: scale(1.1);
+}
+
+.audio-trigger-small {
+    width: 30px;
+    height: 30px;
+    font-size: 0.9rem;
+    background: linear-gradient(135deg, #b3e2ec, #7fd4e4);
+    color: #1a284d;
+    border: none;
+}
+
+.audio-trigger-small:hover {
+    background: linear-gradient(135deg, #1a284d, #2d4a7c);
+    color: white;
+}
+
+/* ========================================
+   BOUTON VOIR LA FICHE
+   ======================================== */
+.btn-voir-fiche {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    background: transparent;
+    color: #1a284d;
+    border: 2px solid #b3e2ec;
+    border-radius: 8px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.btn-voir-fiche:hover {
+    background: linear-gradient(135deg, #1a284d, #2d4a7c);
+    border-color: #1a284d;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(26, 40, 77, 0.2);
+}
+
+.btn-voir-fiche i {
+    font-size: 0.85rem;
 }

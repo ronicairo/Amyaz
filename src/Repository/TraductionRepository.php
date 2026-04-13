@@ -256,4 +256,28 @@ $results = $qb->getQuery()->getResult();
         ];
         return $map[strtolower($char)] ?? [strtolower($char)];
     }
+
+    public function findPreviousTraduction(Traduction $traduction): ?Traduction
+{
+    return $this->createQueryBuilder('t')
+        ->where('t.singular < :singular')
+        ->andWhere('t.request = false')
+        ->setParameter('singular', $traduction->getSingular())
+        ->orderBy('t.singular', 'DESC')
+        ->setMaxResults(1)
+        ->getQuery()
+        ->getOneOrNullResult();
+}
+
+public function findNextTraduction(Traduction $traduction): ?Traduction
+{
+    return $this->createQueryBuilder('t')
+        ->where('t.singular > :singular')
+        ->andWhere('t.request = false')
+        ->setParameter('singular', $traduction->getSingular())
+        ->orderBy('t.singular', 'ASC')
+        ->setMaxResults(1)
+        ->getQuery()
+        ->getOneOrNullResult();
+}
 }

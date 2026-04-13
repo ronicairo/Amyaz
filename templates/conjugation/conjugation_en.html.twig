@@ -382,42 +382,41 @@
 		<div
 			class="container">
 			{# SEARCH BAR #}
-			<div class="barrederecherche">
-				<form id="searchForm" method="GET" action="{{ path('app_verbe') }}" class="search-form">
-					<div style="position: relative;">
-						<select name="lang" id="lang">
-							{% if app.request.locale == 'en' %}
-								<option value="rif-en" {% if app.request.query.get('lang') == 'rif-en' %} selected {% endif %}>Riffian</option>
-								<option value="en-rif" {% if app.request.query.get('lang') == 'en-rif' %} selected {% endif %}>English</option>
-							{% else %}
-								<option value="rif-fr" {% if app.request.query.get('lang') == 'rif-fr' %} selected {% endif %}>Rifain</option>
-								<option value="fr-rif" {% if app.request.query.get('lang') == 'fr-rif' %} selected {% endif %}>Français</option>
-							{% endif %}
-						</select>
-
-						<input type="hidden" id="searchType" value="verb">
-						<input type="text" name="terme" id="search-input" class="autocomplete-input" autocomplete="off" placeholder="{{ 'home.search_bar'|trans }}..." maxlength="60" value="" required>
-						<button type="button" class="keyboard-icon" id="toggle-keyboard">
-							<i class="bi bi-keyboard"></i>
-						</button>
-						<div class="rifain-characters" id="rifain-characters">
-							<span>ɛ</span>
-							<span>ḍ</span>
-							<span>ṣ</span>
-							<span>ḥ</span>
-							<span>ɣ</span>
-							<span>ǧ</span>
-							<span>ẓ</span>
-							<span>ṭ</span>
-							<span>ř</span>
-							<span>č</span>
-						</div>
-						<button type="submit" class="search-button">
-							<i class="bi bi-search"></i>
-						</button>
-					</div>
-				</form>
-			</div>
+	<div class="barrederecherche mb-3">
+    <form id="searchFormVerb" method="GET" action="{{ path('app_verbe') }}" class="search-form">
+        <div style="position: relative;">
+            <select name="lang" id="langVerb">
+                {% if app.request.locale == 'en' %}
+                    <option value="rif-en" {% if app.request.query.get('lang') == 'rif-en' %} selected {% endif %}>Riffian</option>
+                    <option value="en-rif" {% if app.request.query.get('lang') == 'en-rif' %} selected {% endif %}>English</option>
+                {% else %}
+                    <option value="rif-fr" {% if app.request.query.get('lang') == 'rif-fr' %} selected {% endif %}>Rifain</option>
+                    <option value="fr-rif" {% if app.request.query.get('lang') == 'fr-rif' %} selected {% endif %}>Français</option>
+                {% endif %}
+            </select>
+            <input type="hidden" id="searchTypeVerb" value="verb">
+            <input type="text" name="terme" id="search-input-verb" class="autocomplete-input-verb" autocomplete="off" placeholder="{{ 'home.search_bar'|trans }}..." maxlength="60" value="">
+            <button type="button" class="keyboard-icon" id="toggle-keyboard-verb">
+                <i class="bi bi-keyboard"></i>
+            </button>
+            <div class="rifain-characters" id="rifain-characters-verb">
+                <span>ɛ</span>
+                <span>ḍ</span>
+                <span>ṣ</span>
+                <span>ḥ</span>
+                <span>ɣ</span>
+                <span>ǧ</span>
+                <span>ẓ</span>
+                <span>ṭ</span>
+                <span>ř</span>
+                <span>č</span>
+            </div>
+            <button type="button" class="search-button">
+                <i class="bi bi-search"></i>
+            </button>
+        </div>
+    </form>
+</div>
 		</div>
 
 		<div class="container mt-5">

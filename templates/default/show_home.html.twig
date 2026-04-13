@@ -25,44 +25,42 @@
 
 
 		{#--------------- BARRE DE RECHERCHE -----------------------#}
-		<div class="barrederecherche">
-			<form id="searchForm" method="GET" action="{{ path('show_home') }}" class="search-form">
-				<div style="position: relative;">
-					<select name="lang" id="lang">
-						{% if app.request.locale == 'en' %}
-							<option value="en-rif" {% if app.request.query.get('lang') == 'en-rif' %} selected {% endif %}>EN - RIF</option>
-							<option value="rif-en" {% if app.request.query.get('lang') == 'rif-en' %} selected {% endif %}>RIF - EN</option>
-						{% else %}
-							<option value="fr-rif" {% if app.request.query.get('lang') == 'fr-rif' %} selected {% endif %}>FR - RIF</option>
-							<option value="rif-fr" {% if app.request.query.get('lang') == 'rif-fr' %} selected {% endif %}>RIF - FR</option>
-						{% endif %}
-					</select>
-
-
-					<input type="hidden" id="searchType" value="dictionary">
-					<input type="text" name="q" id="search-input" class="autocomplete-input" autocomplete="off" placeholder="{{ 'home.search_bar'|trans }}..." maxlength="60" value="{{ sanitizedSearchTerm|raw }}" required>
-					<button type="button" class="keyboard-icon" id="toggle-keyboard">
-						<i class="bi bi-keyboard"></i>
-					</button>
-					<div class="rifain-characters" id="rifain-characters">
-						<span>ɛ</span>
-						<span>ḍ</span>
-						<span>ṛ</span>
-						<span>ṣ</span>
-						<span>ḥ</span>
-						<span>ɣ</span>
-						<span>ǧ</span>
-						<span>ẓ</span>
-						<span>ṭ</span>
-						<span>ř</span>
-						<span>č</span>
-					</div>
-					<button type="submit" class="search-button">
-						<i class="bi bi-search"></i>
-					</button>
-				</div>
-			</form>
-		</div>
+<div class="barrederecherche">
+    <form id="searchForm" method="GET" action="{{ path('show_home') }}" class="search-form">
+        <div style="position: relative;">
+            <select name="lang" id="lang">
+                {% if app.request.locale == 'en' %}
+                    <option value="en-rif" {% if app.request.query.get('lang') == 'en-rif' %} selected {% endif %}>EN - RIF</option>
+                    <option value="rif-en" {% if app.request.query.get('lang') == 'rif-en' %} selected {% endif %}>RIF - EN</option>
+                {% else %}
+                    <option value="fr-rif" {% if app.request.query.get('lang') == 'fr-rif' %} selected {% endif %}>FR - RIF</option>
+                    <option value="rif-fr" {% if app.request.query.get('lang') == 'rif-fr' %} selected {% endif %}>RIF - FR</option>
+                {% endif %}
+            </select>
+            <input type="hidden" id="searchType" value="dictionary">
+            <input type="text" name="q" id="search-input" class="autocomplete-input" autocomplete="off" placeholder="{{ 'home.search_bar'|trans }}..." maxlength="60" value="{{ sanitizedSearchTerm|raw }}" required>
+            <button type="button" class="keyboard-icon" id="toggle-keyboard">
+                <i class="bi bi-keyboard"></i>
+            </button>
+            <div class="rifain-characters" id="rifain-characters">
+                <span>ɛ</span>
+                <span>ḍ</span>
+                <span>ṛ</span>
+                <span>ṣ</span>
+                <span>ḥ</span>
+                <span>ɣ</span>
+                <span>ǧ</span>
+                <span>ẓ</span>
+                <span>ṭ</span>
+                <span>ř</span>
+                <span>č</span>
+            </div>
+            <button type="submit" class="search-button">
+                <i class="bi bi-search"></i>
+            </button>
+        </div>
+    </form>
+</div>
 		{% if error %}
 			<div style="color:#F26766;" class="mt-2 error-message text-center">{{ error }}</div>
 		{% endif %}
@@ -149,62 +147,73 @@
                     </p>
                     
                     <h5 class="card-title">
-                        {% if currentLang == 'fr-rif' %}
-                            {{ traduction.wordFR }}
-                        {% elseif currentLang in ['rif-fr', 'rif-en'] %}
-                            {% if traduction.plural %}
-                                <span>
-                                    {{ 'home.singular'|trans }}: {{ traduction.singular }}
-                                    {% if traduction.hasRifainSingularRecord %}
-                                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                                            <a href="{{ path('audio_serve', { id: traduction.id, field: 'rifainSingularRecord' }) }}" class="audio-trigger" data-audio-url="{{ path('audio_serve', { id: traduction.id, field: 'rifainSingularRecord' }) }}">
-                                                <i class="fa-solid fa-volume-high recorder-player"></i>
-                                            </a>
-                                        {% else %}
-                                            <a href="#" class="audio-trigger" onclick="alert('Veuillez vous connecter pour accéder à cette fonctionnalité.'); return false;">
-                                                <i class="fa-solid fa-volume-high recorder-player"></i>
-                                            </a>
-                                        {% endif %}
-                                    {% endif %}
-                                </span>
-                                <br>
-                                <span style="margin-top: 10px; display: block;">
-                                    {{ 'home.plural'|trans }}: {{ traduction.plural }}
-                                    {% if traduction.hasRifainPluralRecord %}
-                                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                                            <a href="{{ path('audio_serve', { id: traduction.id, field: 'rifainPluralRecord' }) }}" class="audio-trigger" data-audio-url="{{ path('audio_serve', { id: traduction.id, field: 'rifainPluralRecord' }) }}">
-                                                <i class="fa-solid fa-volume-high recorder-player"></i>
-                                            </a>
-                                        {% else %}
-                                            <a href="#" class="audio-trigger" onclick="alert('Veuillez vous connecter pour accéder à cette fonctionnalité.'); return false;">
-                                                <i class="fa-solid fa-volume-high recorder-player"></i>
-                                            </a>
-                                        {% endif %}
-                                    {% endif %}
-                                </span>
-                            {% else %}
-                                <span>{{ traduction.singular }}
-                                    {% if traduction.hasRifainSingularRecord %}
-                                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                                            <a href="{{ path('audio_serve', { id: traduction.id, field: 'rifainSingularRecord' }) }}" class="audio-trigger" data-audio-url="{{ path('audio_serve', { id: traduction.id, field: 'rifainSingularRecord' }) }}">
-                                                <i class="fa-solid fa-volume-high recorder-player"></i>
-                                            </a>
-                                        {% else %}
-                                            <a href="#" class="audio-trigger" onclick="alert('Veuillez vous connecter pour accéder à cette fonctionnalité.'); return false;">
-                                                <i class="fa-solid fa-volume-high recorder-player"></i>
-                                            </a>
-                                        {% endif %}
-                                    {% endif %}
-                                </span>
-                            {% endif %}
-                        {% elseif currentLang in ['en-rif'] %}
-                            {{ traduction.wordEN }}
-                        {% else %}
-                            {# Affichage par défaut pour recherche par lettre #}
-                            {{ traduction.wordFR }}
-                        {% endif %}
-                    </h5>
-                    
+    {% if currentLang == 'fr-rif' %}
+        <span>{{ traduction.wordFR }}</span>
+        
+    {% elseif currentLang in ['rif-fr', 'rif-en'] %}
+        {% if traduction.singular and traduction.plural %}
+            <span>
+                {{ 'home.singular'|trans }}: {{ traduction.singular }}
+                {% if traduction.hasRifainSingularRecord %}
+                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                        <a href="{{ path('audio_serve', { id: traduction.id, field: 'rifainSingularRecord' }) }}" class="audio-trigger" data-audio-url="{{ path('audio_serve', { id: traduction.id, field: 'rifainSingularRecord' }) }}">
+                            <i class="fa-solid fa-volume-high recorder-player"></i>
+                        </a>
+                    {% else %}
+                        <a href="#" class="audio-trigger" onclick="alert('Veuillez vous connecter pour accéder à cette fonctionnalité.'); return false;">
+                            <i class="fa-solid fa-volume-high recorder-player"></i>
+                        </a>
+                    {% endif %}
+                {% endif %}
+            </span>
+            <br>
+            <span style="margin-top: 10px; display: block;">
+                {{ 'home.plural'|trans }}: {{ traduction.plural }}
+                {% if traduction.hasRifainPluralRecord %}
+                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                        <a href="{{ path('audio_serve', { id: traduction.id, field: 'rifainPluralRecord' }) }}" class="audio-trigger" data-audio-url="{{ path('audio_serve', { id: traduction.id, field: 'rifainPluralRecord' }) }}">
+                            <i class="fa-solid fa-volume-high recorder-player"></i>
+                        </a>
+                    {% else %}
+                        <a href="#" class="audio-trigger" onclick="alert('Veuillez vous connecter pour accéder à cette fonctionnalité.'); return false;">
+                            <i class="fa-solid fa-volume-high recorder-player"></i>
+                        </a>
+                    {% endif %}
+                {% endif %}
+            </span>
+            
+        {% elseif traduction.singular %}
+            <span>
+                {{ traduction.singular }}
+                {% if traduction.hasRifainSingularRecord %}
+                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                        <a href="{{ path('audio_serve', { id: traduction.id, field: 'rifainSingularRecord' }) }}" class="audio-trigger" data-audio-url="{{ path('audio_serve', { id: traduction.id, field: 'rifainSingularRecord' }) }}">
+                            <i class="fa-solid fa-volume-high recorder-player"></i>
+                        </a>
+                    {% else %}
+                        <a href="#" class="audio-trigger" onclick="alert('Veuillez vous connecter pour accéder à cette fonctionnalité.'); return false;">
+                            <i class="fa-solid fa-volume-high recorder-player"></i>
+                        </a>
+                    {% endif %}
+                {% endif %}
+            </span>
+            
+        {% elseif traduction.plural %}
+            <span>{{ traduction.plural }}</span>
+            
+        {% else %}
+            <span>{{ traduction.wordFR|default(traduction.wordEN|default('-')) }}</span>
+        {% endif %}
+        
+    {% elseif currentLang in ['en-rif'] %}
+        <span>{{ traduction.wordEN }}</span>
+        
+    {% else %}
+        <span>{{ traduction.wordFR }}</span>
+    {% endif %}
+</h5>
+
+
                     <h6 class="card-subtitle mb-2" style="color: #dec5a5;">
                         <div class="switchable-content" id="content-{{ traduction.id }}">
                             {# CONTENU LATIN (par défaut) #}
@@ -291,6 +300,14 @@
             
                     </h6>
                     
+                    <div style="display: flex; align-items: center;">
+                    {# Bouton Voir la fiche #}
+{% if traduction.singular %}
+    <a href="{{ path('traduction_show', {mot: traduction.singular}) }}" class="btn-voir-fiche">
+        <i class="bi bi-file-text"></i> {{ 'button.voir_fiche'|trans|default('Voir la fiche') }}
+    </a>
+{% endif %}
+
                     {# BOUTON TOGGLE TIFINAGH/LATIN #}
                     {% if traduction.phoneticSingular %}
                         <button type="button" class="tifinagh-toggle" data-target="content-{{ traduction.id }}" title="Voir en Tifinagh">
@@ -298,71 +315,11 @@
                             <span class="icon-latin">Aa</span>
                         </button>
                     {% endif %}
-
-                    {#--------------- MODAL INFO -----------------------#}
-                    {% if traduction.source is not empty or traduction.origin is not empty or traduction.example is not empty or traduction.racine is not empty %}
-                        <button type="button" class="btn btn-outline-info btn-sm mt-2" data-bs-toggle="modal" data-bs-target="#infoModal{{ traduction.id }}">
-                            <i class="bi bi-info-circle"></i>
-                        </button>
-                    {% endif %}
+</div>
+        
 
                 </div>
             </div>
-
-            {#--------------- MODAL INFO -----------------------#}
-            {% if traduction.source is not empty or traduction.origin is not empty or traduction.example is not empty or traduction.racine is not empty %}
-                <div class="modal fade" id="infoModal{{ traduction.id }}" tabindex="-1" aria-labelledby="infoModalLabel{{ traduction.id }}" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-scrollable modal-sm modal-dialog-centered">
-                        <div class="modal-content modal-information">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="infoModalLabel{{ traduction.id }}">
-                                    <i class="bi bi-info-circle-fill me-2"></i>
-                                    {{ 'Informations sur la traduction'|trans }}
-                                </h5>
-                                <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-label="{{ 'Fermer'|trans }}"></button>
-                            </div>
-                            <div class="modal-body">
-                                <ul class="list-group list-group-flush small">
-                                    {% if traduction.origin %}
-                                        <li class="list-group-item">
-                                            <i class="bi bi-geo-alt-fill me-2"></i>
-                                            <strong>{{ 'Origine'|trans }}:</strong>
-                                            {{ traduction.origin|e }}
-                                        </li>
-                                    {% endif %}
-                                    {% if traduction.racine %}
-                                        <li class="list-group-item">
-                                            <i class="bi bi-diagram-3-fill me-2"></i>
-                                            <strong>{{ 'Racine'|trans }}:</strong>
-                                            {{ traduction.racine|e }}
-                                        </li>
-                                    {% endif %}
-                                    {% if traduction.example %}
-                                        <li class="list-group-item">
-                                            <i class="bi bi-chat-left-text-fill me-2"></i>
-                                            <strong>{{ 'Exemple'|trans }}:</strong>
-                                            {{ traduction.example|e }}
-                                        </li>
-                                    {% endif %}
-                                    {% if traduction.source %}
-                                        <li class="list-group-item">
-                                            <i class="bi bi-globe-americas me-2"></i>
-                                            <strong>{{ 'Source'|trans }}:</strong>
-                                            {{ traduction.source|e }}
-                                        </li>
-                                    {% endif %}
-                                </ul>
-                            </div>
-                            <div class="modal-footer pt-0">
-                                <button type="button" class="btn btn-outline-light btn-sm" data-bs-dismiss="modal">
-                                    <i class="bi bi-x-circle"></i>
-                                    {{ 'Fermer'|trans }}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            {% endif %}
 
             <!-- Confirmation suppression traduction -->
             <div class="modal fade" id="confirmDeleteModal{{ traduction.id }}" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
@@ -462,10 +419,13 @@
                     <div class="counter-icon">
                         <i class="bi bi-book"></i>
                     </div>
-                    <div class="counter-content">
-                        <span class="counter-number" id="wordCount">0</span>
-                        <span class="counter-label">{{ 'post.countword'|trans }} {{ 'post.countword2'|trans }}</span>
-                    </div>
+                 <div class="counter-content">
+    <span class="counter-label">
+        {{ 'post.countword'|trans }} 
+        <span class="counter-number" id="wordCount">0</span> 
+        {{ 'post.countword2'|trans }}
+    </span>
+</div>
                     <div class="counter-decoration"></div>
                 </div>
             </div>

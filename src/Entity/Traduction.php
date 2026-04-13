@@ -317,4 +317,13 @@ class Traduction
         return $this;
     }
 
+    public function hasRifainSingularRecord(): bool
+{
+    return $this->rifainSingularRecord !== null;
+}
+
+public function hasRifainPluralRecord(): bool
+{
+    return $this->rifainPluralRecord !== null;
+}
 }

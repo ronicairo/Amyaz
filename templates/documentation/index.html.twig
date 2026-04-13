@@ -137,6 +137,12 @@
     padding: 0 20px 60px;
 }
 
+.doc-cards-container .doc-card:only-child {
+    grid-column: 1 / -1;
+    max-width: 550px;
+    justify-self: center;
+}
+
 /* ========================================
    CARD DOCUMENTATION
    ======================================== */
@@ -148,7 +154,6 @@
     overflow: hidden;
     box-shadow: 0 10px 40px rgba(26, 40, 77, 0.25);
     transition: all 0.3s ease;
-    min-height: 280px;
     display: flex;
     flex-direction: column;
 }
@@ -310,10 +315,6 @@
     line-height: 1.7;
     margin-bottom: 20px;
     flex: 1;
-    display: -webkit-box;
-    -webkit-line-clamp: 4;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
 }
 
 /* Catégorie tag */
@@ -431,7 +432,11 @@
     .documentation-header {
         padding: 40px 15px 30px;
     }
-    
+
+       .doc-cards-container .doc-card:only-child {
+       
+        max-width: 100%;
+    }
     .documentation-header h1 {
         font-size: 1.8rem;
     }
@@ -454,7 +459,6 @@
     
     .doc-card {
         padding: 30px 25px;
-        min-height: auto;
     }
     
     .doc-card .doc-card-title {
@@ -474,7 +478,6 @@
     
     .doc-card .doc-card-text {
         font-size: 0.9rem;
-        -webkit-line-clamp: 3;
     }
     
     .doc-card .doc-download {

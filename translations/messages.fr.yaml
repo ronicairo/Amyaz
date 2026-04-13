@@ -51,6 +51,8 @@ navigation:
     game: 'Mots croisés'
     du_verbe: 'du verbe'
     verbe_conjugue: "verbes conjugués"
+    next: "Mot suivant"
+    previous: "Mot précédent"
 
 post:
     rifain_word: "Rifain"
@@ -104,6 +106,8 @@ documentation:
     resume: "Découvrez une collection riche et diversifiée de documents et d'ouvrages, incluant des dictionnaires, des textes littéraires, des ressources linguistiques, historiques, et bien plus encore. Ce centre de ressources est dédié à l'exploration de la culture amazighe du Rif, en mettant un accent particulier sur la langue. Plongez également dans des études approfondies, des articles académiques, des récits traditionnels et des recherches modernes sur le Rif pour enrichir vos connaissances et célébrer la richesse du patrimoine rifain."
 
 button:
+    voir_fiche: "Voir la fiche"
+    back_dictionary: "Retour au dictionnaire"
     back_list: "Revenir à la liste"
     create_new: "Créer"
     edit: "Modifier"
@@ -319,3 +323,9 @@ table_headers:
 
 grammaire:
     description: "Découvrez les règles de grammaire essentielles pour maîtriser le rifain. Nos fiches de grammaire détaillées couvrent les aspects fondamentaux de la langue, accompagnées d'exemples concrets pour faciliter votre apprentissage."
+
+word:
+    racine: "Racine"
+    example: "Exemple"
+    origin: "Origine"
+    source: "Source"

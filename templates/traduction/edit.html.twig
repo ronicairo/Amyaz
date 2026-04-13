@@ -29,16 +29,6 @@
     position: relative;
 }
 
-.edit-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 5px;
-    background: linear-gradient(90deg, #1a284d, #b3e2ec);
-}
-
 /* Header */
 .edit-title {
     text-align: center;
@@ -96,16 +86,42 @@
     align-items: center;
     font-weight: 600;
     color: #1a284d;
+    margin-bottom: 10px;
 }
 
-.record-icons i {
+.record-icons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.record-icons button {
+    background: none;
+    border: none;
     font-size: 20px;
     cursor: pointer;
-    margin-left: 10px;
+    padding: 5px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
 }
 
-.record-icons i:hover {
-    opacity: 0.7;
+.record-icons button:hover:not(:disabled) {
+    background: rgba(26,40,77,0.1);
+}
+
+.record-icons button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.record-icons input[type="file"] {
+    font-size: 12px;
+    max-width: 150px;
+}
+
+.record-section audio {
+    width: 100%;
+    margin-top: 10px;
 }
 
 /* Submit button */
@@ -118,11 +134,14 @@
     color: white;
     font-weight: 600;
     font-size: 1rem;
+    cursor: pointer;
     transition: all 0.3s ease;
+    margin-top: 20px;
 }
 
 .submit-btn:hover {
     transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(26,40,77,0.3);
 }
 
 /* Bottom links */
@@ -146,183 +165,164 @@
     .edit-card {
         padding: 25px;
     }
+    
+    .record-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
 }
 </style>
 
-	<div class="col-6 mx-auto">
-		{% include 'include/flashes.html.twig' %}
-	</div>
+<div class="col-6 mx-auto">
+    {% include 'include/flashes.html.twig' %}
+</div>
 
 <div class="edit-page">
     <div class="edit-card">
-	<div class="edit-title">
-    <h1>{{ 'title.edit_traduction'|trans }}</h1>
-</div>
-
-<div class="required-text">
-    {{ 'post.champ_obligatoire'|trans }}
-</div>
-
-		{{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
-
-		{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MODERATOR') %}
-			<div class="form-group-modern">
-				{{ form_row(form.wordFR) }}
-			</div>
-			<div class="form-group-modern">
-				{{ form_row(form.grammarFR) }}
-			</div>
-			<div class="form-group-modern">
-				{{ form_row(form.wordEN) }}
-			</div>
-			<div class="form-group-modern">
-				{{ form_row(form.grammarEN) }}
-			</div>
-			<div class="form-group-modern">
-				{{ form_row(form.singular) }}
-			</div>
-	<div class="record-section">
-    <div class="record-header">
-        <span>Enregistrement Rifain singulier</span>
-        <div class="record-icons">
-            <i class="bi bi-trash text-danger"></i>
-            <i class="bi bi-mic"></i>
+        <div class="edit-title">
+            <h1>{{ 'title.edit_traduction'|trans }}</h1>
         </div>
-    </div>
 
- 
-</div>
-			<div class="form-group-modern">
-				{{ form_row(form.plural) }}
-			</div>
-			<div class="mb-1 recordLang">
-				<div style="justify-content: space-between;" class="d-flex d-inline-flex w-100 text-white">
-					<div>Enregistrement Rifain pluriel</div>
-					<div style="font-size: 24px;cursor: pointer;" class="text-right text-white">
-						<i id="deleteRiffianSingularBtn" class="bi bi-trash text-danger"></i>
-						<i id="startRiffianPluralBtn" class="bi bi-mic record-icon"></i>
-					</div>
-				</div>
-			</div>
-			<div class="form-group-modern">
-				{{ form_row(form.phoneticSingular) }}
-			</div>
-		<div class="form-group-modern">
-				{{ form_row(form.phoneticPlural) }}
-			</div>
-			<div class="form-group-modern">
-				{{ form_row(form.origin) }}
-			</div>
-	<div class="form-group-modern">
-				{{ form_row(form.racine) }}
-			</div>
-	<div class="form-group-modern">
-				{{ form_row(form.example) }}
-			</div>
-		<div class="form-group-modern">
-				{{ form_row(form.source) }}
-			</div>
-		{% else %}
-			{% if locale == 'fr' %}
-	<div class="form-group-modern">
-					{{ form_row(form.wordFR) }}
-				</div>
-	<div class="form-group-modern">
-					{{ form_row(form.grammarFR) }}
-				</div>
-			{% elseif locale == 'en' %}
-			<div class="form-group-modern">
-					{{ form_row(form.wordEN) }}
-				</div>
-	<div class="form-group-modern">
-					{{ form_row(form.grammarEN) }}
-				</div>
-			{% endif %}
-	<div class="form-group-modern">
-				{{ form_row(form.singular) }}
-			</div>
-<div class="form-group-modern">
-				{{ form_row(form.plural) }}
-			</div>
-<div class="form-group-modern">
-				{{ form_row(form.phoneticSingular) }}
-			</div>
-	<div class="form-group-modern">
-				{{ form_row(form.phoneticPlural) }}
-			</div>
-		{% endif %}
-	
-	{# ================= AUDIO SINGULIER ================= #}
-<div class="record-section">
-    <div class="record-header">
-        <span>Rifain Singulier (audio)</span>
-        <div class="record-icons">
-            <button type="button" id="startSingular">🎤</button>
-            <button type="button" id="stopSingular" disabled>⏹</button>
-            <input type="file" accept="audio/*" id="uploadSingular">
+        <div class="required-text">
+            {{ 'post.champ_obligatoire'|trans }}
         </div>
-    </div>
 
-    {{ form_widget(form.rifainSingularRecord, {
-        attr: { style: 'display:none;' }
-    }) }}
+        {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
 
-    {% if hasRifainSingularRecord %}
-        <audio id="previewSingular" controls>
-            <source src="{{ path('audio_serve', { id: traduction.id, field: 'rifainSingularRecord' }) }}">
-        </audio>
-    {% else %}
-        <audio id="previewSingular" controls style="display:none;"></audio>
-        <p id="noSingular">Aucun enregistrement</p>
-    {% endif %}
-</div>
+        {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MODERATOR') %}
+            <div class="form-group-modern">
+                {{ form_row(form.wordFR) }}
+            </div>
+            <div class="form-group-modern">
+                {{ form_row(form.grammarFR) }}
+            </div>
+            <div class="form-group-modern">
+                {{ form_row(form.wordEN) }}
+            </div>
+            <div class="form-group-modern">
+                {{ form_row(form.grammarEN) }}
+            </div>
+            <div class="form-group-modern">
+                {{ form_row(form.singular) }}
+            </div>
+            <div class="form-group-modern">
+                {{ form_row(form.plural) }}
+            </div>
+            <div class="form-group-modern">
+                {{ form_row(form.phoneticSingular) }}
+            </div>
+            <div class="form-group-modern">
+                {{ form_row(form.phoneticPlural) }}
+            </div>
+            <div class="form-group-modern">
+                {{ form_row(form.origin) }}
+            </div>
+            <div class="form-group-modern">
+                {{ form_row(form.racine) }}
+            </div>
+            <div class="form-group-modern">
+                {{ form_row(form.example) }}
+            </div>
+            <div class="form-group-modern">
+                {{ form_row(form.source) }}
+            </div>
+        {% else %}
+            {% if locale == 'fr' %}
+                <div class="form-group-modern">
+                    {{ form_row(form.wordFR) }}
+                </div>
+                <div class="form-group-modern">
+                    {{ form_row(form.grammarFR) }}
+                </div>
+            {% elseif locale == 'en' %}
+                <div class="form-group-modern">
+                    {{ form_row(form.wordEN) }}
+                </div>
+                <div class="form-group-modern">
+                    {{ form_row(form.grammarEN) }}
+                </div>
+            {% endif %}
+            <div class="form-group-modern">
+                {{ form_row(form.singular) }}
+            </div>
+            <div class="form-group-modern">
+                {{ form_row(form.plural) }}
+            </div>
+            <div class="form-group-modern">
+                {{ form_row(form.phoneticSingular) }}
+            </div>
+            <div class="form-group-modern">
+                {{ form_row(form.phoneticPlural) }}
+            </div>
+        {% endif %}
+    
+        {# ================= AUDIO SINGULIER ================= #}
+        <div class="record-section">
+            <div class="record-header">
+                <span>🎙️ Rifain Singulier (audio)</span>
+                <div class="record-icons">
+                    <button type="button" id="startSingular" title="Enregistrer">🎤</button>
+                    <button type="button" id="stopSingular" disabled title="Arrêter">⏹</button>
+                    <input type="file" accept="audio/*" id="uploadSingular">
+                </div>
+            </div>
 
+            {{ form_widget(form.rifainSingularRecord, { attr: { style: 'display:none;' } }) }}
 
-{# ================= AUDIO PLURIEL ================= #}
-<div class="record-section">
-    <div class="record-header">
-        <span>Rifain Pluriel (audio)</span>
-        <div class="record-icons">
-            <button type="button" id="startPlural">🎤</button>
-            <button type="button" id="stopPlural" disabled>⏹</button>
-            <input type="file" accept="audio/*" id="uploadPlural">
+            {% if hasRifainSingularRecord %}
+                <audio id="previewSingular" controls>
+                    <source src="{{ path('audio_serve', { id: traduction.id, field: 'rifainSingularRecord' }) }}">
+                </audio>
+            {% else %}
+                <audio id="previewSingular" controls style="display:none;"></audio>
+                <p id="noSingular" style="color: #888; font-size: 0.9rem; margin-top: 10px;">Aucun enregistrement</p>
+            {% endif %}
         </div>
+
+        {# ================= AUDIO PLURIEL ================= #}
+        <div class="record-section">
+            <div class="record-header">
+                <span>🎙️ Rifain Pluriel (audio)</span>
+                <div class="record-icons">
+                    <button type="button" id="startPlural" title="Enregistrer">🎤</button>
+                    <button type="button" id="stopPlural" disabled title="Arrêter">⏹</button>
+                    <input type="file" accept="audio/*" id="uploadPlural">
+                </div>
+            </div>
+
+            {{ form_widget(form.rifainPluralRecord, { attr: { style: 'display:none;' } }) }}
+
+            {% if hasRifainPluralRecord %}
+                <audio id="previewPlural" controls>
+                    <source src="{{ path('audio_serve', { id: traduction.id, field: 'rifainPluralRecord' }) }}">
+                </audio>
+            {% else %}
+                <audio id="previewPlural" controls style="display:none;"></audio>
+                <p id="noPlural" style="color: #888; font-size: 0.9rem; margin-top: 10px;">Aucun enregistrement</p>
+            {% endif %}
+        </div>
+
+        {{ form_end(form) }}
+
+        <div class="bottom-actions">
+            <a href="{{ path('app_traduction_index') }}">
+                ← {{ 'button.back_list'|trans }}
+            </a>
+        </div>
+
+        {% if is_granted('ROLE_ADMIN') %}
+        <div class="bottom-actions" style="margin-top: 15px;">
+            {{ include('traduction/_delete_form.html.twig') }}
+        </div>
+        {% endif %}
     </div>
-
-    {{ form_widget(form.rifainPluralRecord, {
-        attr: { style: 'display:none;' }
-    }) }}
-
-    {% if hasRifainPluralRecord %}
-        <audio id="previewPlural" controls>
-            <source src="{{ path('audio_serve', { id: traduction.id, field: 'rifainPluralRecord' }) }}">
-        </audio>
-    {% else %}
-        <audio id="previewPlural" controls style="display:none;"></audio>
-        <p id="noPlural">Aucun enregistrement</p>
-    {% endif %}
 </div>
 
-
-{{ form_end(form, { 'render_rest': false }) }}
-
-{{ form_end(form) }}
-
-		<div class="bottom-actions">
-    <a href="{{ path('app_traduction_index') }}">
-        ← {{ 'button.back_list'|trans }}
-    </a>
-</div>
-
-<div class="bottom-actions">
-    {{ include('traduction/_delete_form.html.twig') }}
-</div>
-	</div>
-
-	<script>
+<script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    async function setupRecorder(startId, stopId, previewId, uploadId, hiddenId) {
+    async function setupRecorder(startId, stopId, previewId, uploadId, hiddenId, noRecordId) {
 
         let mediaRecorder;
         let chunks = [];
@@ -332,12 +332,12 @@ document.addEventListener('DOMContentLoaded', function () {
         const preview = document.getElementById(previewId);
         const upload = document.getElementById(uploadId);
         const hiddenInput = document.getElementById(hiddenId);
+        const noRecord = document.getElementById(noRecordId);
 
         if (!startBtn) return;
 
         // 🎤 ENREGISTREMENT MICRO
         startBtn.addEventListener('click', async () => {
-
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
@@ -352,12 +352,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 mediaRecorder.ondataavailable = e => chunks.push(e.data);
 
                 mediaRecorder.onstop = () => {
-
                     const blob = new Blob(chunks, { type: 'audio/webm' });
                     const url = URL.createObjectURL(blob);
 
                     preview.src = url;
                     preview.style.display = 'block';
+                    if (noRecord) noRecord.style.display = 'none';
 
                     // Injecter dans le FileType Symfony
                     const file = new File([blob], "record.webm", { type: 'audio/webm' });
@@ -382,13 +382,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // 📁 UPLOAD MANUEL
         upload.addEventListener('change', function () {
-
             const file = this.files[0];
             if (!file) return;
 
             const url = URL.createObjectURL(file);
             preview.src = url;
             preview.style.display = 'block';
+            if (noRecord) noRecord.style.display = 'none';
 
             const dt = new DataTransfer();
             dt.items.add(file);
@@ -401,7 +401,8 @@ document.addEventListener('DOMContentLoaded', function () {
         "stopSingular",
         "previewSingular",
         "uploadSingular",
-        "{{ form.rifainSingularRecord.vars.id }}"
+        "{{ form.rifainSingularRecord.vars.id }}",
+        "noSingular"
     );
 
     setupRecorder(
@@ -409,7 +410,8 @@ document.addEventListener('DOMContentLoaded', function () {
         "stopPlural",
         "previewPlural",
         "uploadPlural",
-        "{{ form.rifainPluralRecord.vars.id }}"
+        "{{ form.rifainPluralRecord.vars.id }}",
+        "noPlural"
     );
 
 });

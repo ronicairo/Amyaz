@@ -51,6 +51,8 @@ navigation:
     game: 'Crossword'
     du_verbe: 'of verb'
     verbe_conjugue: "conjugated verbs"
+    next: "Next word"
+    previous: "Previous word"
 
 post:
     rifain_word: "Riffian word"
@@ -104,6 +106,8 @@ documentation:
     resume: "Discover a rich and diverse collection of documents and works, including dictionaries, literary texts, linguistic and historical resources, and much more. This resource center is dedicated to exploring Amazigh culture from the Rif, with a special emphasis on the language. Dive into in-depth studies, academic articles, traditional narratives, and modern research on the Rif to expand your knowledge and celebrate the richness of Rifian heritage."
 
 button:
+    voir_fiche: "View the entry"
+    back_dictionary: "Back to dictionary"
     back_list: "Back to list"
     create_new: "Create New"
     edit: "Edit"
@@ -319,3 +323,9 @@ table_headers:
 
 grammaire:
     description: "Discover the essential grammar rules to master Riffian. Our detailed grammar sheets cover the fundamental aspects of the language, accompanied by concrete examples to facilitate your learning."
+
+word:
+    racine: "Root"
+    example: "Example"
+    origin: "Origin"
+    source: "Source"

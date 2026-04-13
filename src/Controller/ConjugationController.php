@@ -52,6 +52,7 @@ class ConjugationController extends AbstractController
             'verbExists' => false,
             'lang' => $lang ?? 'fr-rif',
             'englishVerbs' => false,
+            'conjugations' => []
         ]);
     }
         // Mappage des langues vers les champs de la base de données
@@ -77,6 +78,7 @@ class ConjugationController extends AbstractController
                 'verbExists' => false,
                 'lang' => $lang,
                 'englishVerbs' => false,
+                'conjugations' => []
             ]);
         }
     
